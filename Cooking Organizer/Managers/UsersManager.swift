@@ -40,10 +40,7 @@ class UsersManager: NSObject {
         
         usersDBReference.child(uuid).setValue(["email": email, "password": password]) { (error, ref) in
             if error == nil {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd-MMM-yyyy HH:mm"
-                
-                Database.database().reference().child("usersData").child(uuid).setValue(["signUpDate": dateFormatter.string(from: Date())], withCompletionBlock: completion)
+                Database.database().reference().child("usersData").child(uuid).setValue(["signUpDate": UtilsManager.shared.dateFormatter.string(from: Date())], withCompletionBlock: completion)
             }
         }
     }

@@ -99,8 +99,11 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
                         UserDefaults.standard.set(userId, forKey: "loggedInUser")
                         UsersManager.shared.currentLoggedInUser = user
                         
-                        self.spinnerView.isHidden = true
-                        self.performSegue(withIdentifier: "logInSegue", sender: self)
+                        UserDataManager.shared.observeHomeIngredientsAdded(forUserId: user.id!) {
+                            self.spinnerView.isHidden = true
+                            
+                            self.performSegue(withIdentifier: "logInSegue", sender: self)
+                        }
                     }
                 }
             }
@@ -133,8 +136,11 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
                     
                     UsersManager.shared.currentLoggedInUser = currentUser
                     
-                    self.spinnerView.isHidden = true
-                    self.performSegue(withIdentifier: "logInSegue", sender: self)
+                   UserDataManager.shared.observeHomeIngredientsAdded(forUserId: currentUser.id!) {
+                        self.spinnerView.isHidden = true
+                        
+                        self.performSegue(withIdentifier: "logInSegue", sender: self)
+                    }
                 }
             }
         }
