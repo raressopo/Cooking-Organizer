@@ -12,11 +12,13 @@ import FirebaseDatabase
 protocol UserDataManagerDelegate: class {
     func userDataDidFetch()
     func homeIngredientsChanged()
+    func homeIngredientsAdded()
 }
 
 extension UserDataManagerDelegate {
     func userDataDidFetch() {}
     func homeIngredientsChanged() {}
+    func homeIngredientsAdded() {}
 }
 
 class UserDataManager: NSObject {
@@ -24,10 +26,6 @@ class UserDataManager: NSObject {
     weak var delegate: UserDataManagerDelegate?
     
     var isInitialHomeIngredientsfetchFinished = false
-    
-    override init() {
-        super.init()
-    }
     
     func fetchUserDataForUserID(id: String, completion: @escaping (_ succes: Bool) -> Void) {
         Database.database().reference().child("usersData").child(id).observe(.value) { (snapshot) in
@@ -40,7 +38,6 @@ class UserDataManager: NSObject {
             }
             
             guard let currentUserDetails = snapshot.value as? [String: Any], let currentUser = existingCurrentUser else {
-                // ALERT
                 completion(false)
                 return
             }
@@ -55,7 +52,7 @@ class UserDataManager: NSObject {
         }
     }
     
-    func observeHomeIngredientsAdded(forUserId id: String, ingredientAdded: @escaping () -> Void) {
+    func observeHomeIngredientsAdded(forUserId id: String, ingredientAdded: @escaping () -> Void, onFailure: @escaping () -> Void) {
         Database.database().reference().child("usersData").child(id).child("homeIngredients").observe(.childAdded) { (snapshot) in
             let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
                 if let userId = user.id {
@@ -68,11 +65,14 @@ class UserDataManager: NSObject {
             if existingCurrentUser?.homeIngredients.contains(where: { (ingredient) -> Bool in
                 return ingredient.id == snapshot.key
             }) ?? false {
+                onFailure()
+                
                 return
             }
             
             guard let currentUser = existingCurrentUser else {
-                // ALERT
+                onFailure()
+                
                 return
             }
             
@@ -91,10 +91,11 @@ class UserDataManager: NSObject {
             currentUser.homeIngredients.append(homeIngredient)
             
             ingredientAdded()
+            self.delegate?.homeIngredientsAdded()
         }
     }
     
-    func observeHomeIngredientChanged(forUserId id: String) {
+    func observeHomeIngredientChanged(forUserId id: String, onFailure: @escaping () -> Void) {
         Database.database().reference().child("usersData").child(id).child("homeIngredients").observe(.childChanged) { (snapshot) in
             let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
                 if let userId = user.id {
@@ -105,19 +106,22 @@ class UserDataManager: NSObject {
             }
             
             guard let currentUser = existingCurrentUser else {
-                // ALERT
+                onFailure()
+                
                 return
             }
             
             guard let changedIngredient = currentUser.homeIngredients.first(where: { (ingredient) -> Bool in
                 return ingredient.id == snapshot.key
             }) else {
-                // ERROR
+                onFailure()
+                
                 return
             }
             
             guard let changes = snapshot.value as? [String:Any] else {
-                // ERROR
+                onFailure()
+                
                 return
             }
             

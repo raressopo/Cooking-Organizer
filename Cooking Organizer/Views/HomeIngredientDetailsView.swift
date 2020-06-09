@@ -79,19 +79,23 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
     
     @IBAction func createChangedPressed(_ sender: Any) {
         if createButton.titleLabel?.text == "Create" {
-            guard let ingredientName = ingredientNameTextField.text else {
-                // ERROR
+            guard let ingredientName = ingredientNameTextField.text, !ingredientName.isEmpty else {
+                if let rootVC = window?.rootViewController?.presentedViewController {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC, title: "Invalid Ingredient Name", message: "Please choose a valid name and don't let the field empty")
+                }
+                
                 return
             }
             
-            guard let ingredientQuantity = quantityTextField.text else {
-                // ERROR
-                return
-            }
-            
-            guard let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity), let quantity = ingredientQuantityAsNumber as? Double else {
-                // ERROR
-                return
+            guard let ingredientQuantity = quantityTextField.text,
+                !ingredientQuantity.isEmpty,
+                let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity),
+                let quantity = ingredientQuantityAsNumber as? Double else {
+                    if let rootVC = window?.rootViewController?.presentedViewController {
+                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC, title: "Invalid Quantity", message: "Please choose a valid quantity and don't let the field empty")
+                    }
+                    
+                    return
             }
             
             if let loggedInUser = UsersManager.shared.currentLoggedInUser, let userId = loggedInUser.id {
@@ -113,16 +117,23 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                     }
                 }
                 
-                Database.database().reference().child("usersData").child(userId).child("homeIngredients").child(uuid).setValue(["name": ingredientName,
-                                                                                                                                "expirationDate": UtilsManager.shared.dateFormatter.string(from: expirationdate ?? Date(timeIntervalSince1970: 0)),
-                                                                                                                                "quantity": quantity,
-                                                                                                                                "unit": selectedUnit ?? "",
-                                                                                                                                "categories": categoriesAsString]) { (error, ref) in
-                                                                                                                                    if error == nil {
-                                                                                                                                        self.removeFromSuperview()
-                                                                                                                                    } else {
-                                                                                                                                        // ERROR
-                                                                                                                                    }
+                Database.database().reference().child("usersData")
+                    .child(userId).child("homeIngredients")
+                    .child(uuid)
+                    .setValue(["name": ingredientName,
+                               "expirationDate": UtilsManager.shared.dateFormatter.string(from: expirationdate ?? Date(timeIntervalSince1970: 0)),
+                               "quantity": quantity,
+                               "unit": selectedUnit ?? "",
+                               "categories": categoriesAsString]) { (error, ref) in
+                                if error == nil {
+                                    self.removeFromSuperview()
+                                } else {
+                                    if let vc = self.window?.rootViewController?.presentedViewController {
+                                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: vc,
+                                                                                          title: "Ingredient Creation Failed",
+                                                                                          message: "Something went wrong creating new ingredient. Please try again later!")
+                                    }
+                                }
                 }
             }
         } else {
@@ -131,7 +142,12 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
             var changedDataDictionary = [String:Any]()
             
             guard let ingredient = homeIngredient else {
-                // ERROR
+                if let vc = window?.rootViewController?.presentedViewController {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: vc,
+                                                                      title: "Ingredient missing",
+                                                                      message: "Selected ingredient is not valid or it doesn't exist anymore.")
+                }
+                
                 return
             }
             
@@ -175,7 +191,11 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                         }
                     )}
             } else {
-                // ALERT
+                if let vc = window?.rootViewController?.presentedViewController {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: vc,
+                                                                      title: "Update Failed",
+                                                                      message: "You didn't change any of presented details for selected ingredient")
+                }
                 
                 return
             }
@@ -287,6 +307,10 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                 
                 tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             }
+            
+            selectedUnit = copyOfSelectedUnit
+            
+            hideUnitView(hide: true)
         }
     }
     

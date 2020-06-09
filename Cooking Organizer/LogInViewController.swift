@@ -81,9 +81,9 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
     }
     
     @IBAction func logInPressed(_ sender: Any) {
-        guard let email = emailTextField.text, email.count > 0,
-            let password = passTextField.text, password.count > 0 else {
-            // ALERT
+        guard let email = emailTextField.text, !email.isEmpty,
+            let password = passTextField.text, !password.isEmpty else {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Invalid E-Mail and Password", message: "Please introduce valid E-mail and Password")
             
             return
         }
@@ -99,10 +99,12 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
                         UserDefaults.standard.set(userId, forKey: "loggedInUser")
                         UsersManager.shared.currentLoggedInUser = user
                         
-                        UserDataManager.shared.observeHomeIngredientsAdded(forUserId: user.id!) {
+                        UserDataManager.shared.observeHomeIngredientsAdded(forUserId: user.id!, ingredientAdded: {
                             self.spinnerView.isHidden = true
                             
                             self.performSegue(withIdentifier: "logInSegue", sender: self)
+                        }) {
+                            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Home Ingredients Fetch Failed", message: "Something went wrong while fetching Home Ingredients")
                         }
                     }
                 }
@@ -130,16 +132,18 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
                             return false
                         }
                     }) else {
-                        // ALERT
+                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Users fetch Failed", message: "Something went wrong fetching users from DB")
                         return
                     }
                     
                     UsersManager.shared.currentLoggedInUser = currentUser
                     
-                   UserDataManager.shared.observeHomeIngredientsAdded(forUserId: currentUser.id!) {
+                    UserDataManager.shared.observeHomeIngredientsAdded(forUserId: currentUser.id!, ingredientAdded: {
                         self.spinnerView.isHidden = true
                         
                         self.performSegue(withIdentifier: "logInSegue", sender: self)
+                    }) {
+                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Home Ingredients Fetch Failed", message: "Something went wrong while fetching Home Ingredients")
                     }
                 }
             }

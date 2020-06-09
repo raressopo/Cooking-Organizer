@@ -51,7 +51,11 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         menuButton.layer.borderColor = UIColor.black.cgColor
         
         if let loggedInUserId = UsersManager.shared.currentLoggedInUser?.id {
-            UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId)
+            UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId) {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Ingredients Update Failed",
+                                                                  message: "Something went wrong updating with new ingredient changes")
+            }
         }
     }
     

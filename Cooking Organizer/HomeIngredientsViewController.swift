@@ -126,4 +126,12 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
             homeIngredientsTableView.reloadData()
         }
     }
+    
+    func homeIngredientsAdded() {
+        if let currentUser = UsersManager.shared.currentLoggedInUser {
+            homeIngredients = currentUser.homeIngredients
+            
+            homeIngredientsTableView.reloadData()
+        }
+    }
 }
