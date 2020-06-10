@@ -19,16 +19,21 @@ enum MenuItems: CaseIterable {
     }
 }
 
-class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, HIWidgetTableViewCellDelegate {
+class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, HIWidgetTableViewCellDelegate, UserDataManagerDelegate {
     @IBOutlet weak var signUpDateLabel: UILabel!
     @IBOutlet weak var menuView: UIView!
     @IBOutlet weak var menuButton: UIButton!
+    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dismissMenuButton: UIButton!
     
     @IBOutlet weak var menuTableView: UITableView!
     @IBOutlet weak var homeTableView: UITableView!
     
+    var addSelectionView: AddSelectionView?
+    
     var widgetHomeIngredient: HomeIngredient?
+    
+    // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,12 +48,18 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         homeTableView.delegate = self
         homeTableView.dataSource = self
         
+        UserDataManager.shared.delegate = self
+        
         homeTableView.register(UINib(nibName: "HIWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "hiWidgetCell")
         
         menuButton.backgroundColor = UIColor.white
         menuButton.layer.cornerRadius = 25
         menuButton.layer.borderWidth = 1
         menuButton.layer.borderColor = UIColor.black.cgColor
+        
+        addButton.layer.cornerRadius = 25
+        addButton.layer.borderWidth = 1
+        addButton.layer.borderColor = UIColor.black.cgColor
         
         if let loggedInUserId = UsersManager.shared.currentLoggedInUser?.id {
             UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId) {
@@ -87,6 +98,8 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // MARK: - IBActions
+    
     @IBAction func logOutPressed(_ sender: Any) {
         self.dismiss(animated: true) {
             UserDefaults.standard.removeObject(forKey: "loggedInUser")
@@ -99,11 +112,30 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         menuView.isHidden = false
     }
     
+    @IBAction func addPressed(_ sender: Any) {
+        addSelectionView = AddSelectionView()
+        
+        guard let addSelectionView = addSelectionView else { return }
+        
+        view.addSubview(addSelectionView)
+        
+        addSelectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([addSelectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0.0),
+                                     addSelectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
+                                     addSelectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
+                                     addSelectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
+        
+        addSelectionView.homeIngredientButton.addTarget(self, action: #selector(addNewHomeIngredient(_:)), for: .touchUpInside)
+    }
+    
     @IBAction func dismissMenuPressed(_ sender: Any) {
         menuButton.isHidden = false
         dismissMenuButton.isHidden = true
         menuView.isHidden = true
     }
+    
+    // MARK: - Table View Delegate and DataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == homeTableView {
@@ -146,9 +178,41 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // MARK: - Home Ingredients Widget Delegate
+    
     func homeIngredientPressed(withHomeIngredient hi: HomeIngredient) {
         widgetHomeIngredient = hi
         
         performSegue(withIdentifier: "homeIngredients", sender: self)
+    }
+    
+    // MARK: - Selectors
+    
+    @objc func addNewHomeIngredient(_ sender: UIButton) {
+        let ingredientDetailsView = HomeIngredientDetailsView()
+        
+        view.addSubview(ingredientDetailsView)
+        
+        ingredientDetailsView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([ingredientDetailsView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0.0),
+                                     ingredientDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
+                                     ingredientDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
+                                     ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
+        
+        guard let selectionView = addSelectionView else { return }
+        
+        selectionView.removeFromSuperview()
+        addSelectionView = nil
+    }
+    
+    // MARK: - User Data Manager Delegate
+    
+    func homeIngredientsAdded() {
+        homeTableView.reloadData()
+    }
+    
+    func homeIngredientsChanged() {
+        homeTableView.reloadData()
     }
 }

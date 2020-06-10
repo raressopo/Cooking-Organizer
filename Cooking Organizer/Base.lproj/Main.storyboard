@@ -216,6 +216,18 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="unu-zw-pRw">
+                                <rect key="frame" x="344" y="801" width="50" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="0pj-Cu-1DL"/>
+                                    <constraint firstAttribute="height" constant="50" id="hj8-ho-MH5"/>
+                                </constraints>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="addPressed:" destination="oTX-5u-b2b" eventType="touchUpInside" id="3MC-06-Atn"/>
+                                </connections>
+                            </button>
                             <button hidden="YES" opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D3Y-ac-bya">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -300,8 +312,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="KLM-nI-hma" firstAttribute="top" secondItem="j71-9N-yNV" secondAttribute="top" id="1sX-Th-lkc"/>
+                            <constraint firstItem="j71-9N-yNV" firstAttribute="bottom" secondItem="unu-zw-pRw" secondAttribute="bottom" constant="11" id="849-za-kle"/>
                             <constraint firstItem="p5T-Mh-fiP" firstAttribute="leading" secondItem="j71-9N-yNV" secondAttribute="leading" constant="15" id="9on-aW-WJ6"/>
                             <constraint firstAttribute="bottom" secondItem="KLM-nI-hma" secondAttribute="bottom" id="EzR-9x-itC"/>
+                            <constraint firstItem="j71-9N-yNV" firstAttribute="trailing" secondItem="unu-zw-pRw" secondAttribute="trailing" constant="20" id="HyH-82-Ay4"/>
                             <constraint firstItem="p5T-Mh-fiP" firstAttribute="top" secondItem="j71-9N-yNV" secondAttribute="top" constant="15" id="P8U-ya-lVc"/>
                             <constraint firstItem="KLM-nI-hma" firstAttribute="leading" secondItem="j71-9N-yNV" secondAttribute="leading" id="Pgl-T3-2ds"/>
                             <constraint firstItem="bpV-4q-QIu" firstAttribute="top" secondItem="f5r-Xb-fJj" secondAttribute="top" id="RTq-dz-Osi"/>
@@ -314,6 +328,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Xfk-AZ-ajP"/>
                     <connections>
+                        <outlet property="addButton" destination="unu-zw-pRw" id="Vtr-ti-Onr"/>
                         <outlet property="dismissMenuButton" destination="D3Y-ac-bya" id="Ka6-Gw-tTE"/>
                         <outlet property="homeTableView" destination="KLM-nI-hma" id="5EQ-6J-mXx"/>
                         <outlet property="menuButton" destination="p5T-Mh-fiP" id="JyE-f5-TS8"/>
