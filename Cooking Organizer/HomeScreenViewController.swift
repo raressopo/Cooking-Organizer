@@ -10,11 +10,23 @@ import UIKit
 
 enum MenuItems: CaseIterable {
     case HomeIngredients
+    case Cookbook
     
     var index: Int {
         switch self {
         case .HomeIngredients:
             return 0
+        case .Cookbook:
+            return 1
+        }
+    }
+    
+    var string: String {
+        switch self {
+        case .HomeIngredients:
+            return "Home Ingredients"
+        case .Cookbook:
+            return "Cookbook"
         }
     }
 }
@@ -158,15 +170,26 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell")
         
-            cell?.textLabel?.text = "Home Ingredients"
+            cell?.textLabel?.text = MenuItems.allCases[indexPath.row].string
         
             return cell!
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == MenuItems.HomeIngredients.index {
-            performSegue(withIdentifier: "homeIngredients", sender: self)
+        if tableView == menuTableView {
+            switch indexPath.row {
+            case MenuItems.HomeIngredients.index:
+                performSegue(withIdentifier: "homeIngredients", sender: self)
+                
+                return
+            case MenuItems.Cookbook.index:
+                performSegue(withIdentifier: "cookbookSegue", sender: self)
+                
+                return
+            default:
+                return
+            }
         }
     }
     

@@ -189,3 +189,176 @@ class IngredientCategory: NSObject {
         }
     }
 }
+
+public enum RecipeCategories: CaseIterable {
+    case Breakfast
+    case Lunch
+    case Beverages
+    case Appetizers
+    case Soups
+    case Salads
+    case MainDishesBeef
+    case MainDishesPoultry
+    case MainDishesPork
+    case MainDishesSeafood
+    case MainDishesVegetarian
+    case MainDishesVegetables
+    case Desserts
+    case Breads
+    case Holidays
+    case Traditional
+    
+    var index: Int {
+        switch self {
+        case .Breakfast:
+            return 0
+        case .Lunch:
+            return 1
+        case .Beverages:
+            return 2
+        case .Appetizers:
+            return 3
+        case .Soups:
+            return 4
+        case .Salads:
+            return 5
+        case .MainDishesBeef:
+            return 6
+        case .MainDishesPoultry:
+            return 7
+        case .MainDishesPork:
+            return 8
+        case .MainDishesSeafood:
+            return 9
+        case .MainDishesVegetarian:
+            return 10
+        case .MainDishesVegetables:
+            return 11
+        case .Desserts:
+            return 12
+        case .Breads:
+            return 13
+        case .Holidays:
+            return 14
+        case .Traditional:
+            return 15
+        }
+    }
+    
+    var string: String {
+        switch self {
+        case .Breakfast:
+            return "Breakfast"
+        case .Lunch:
+            return "Lunch"
+        case .Beverages:
+            return "Beverages"
+        case .Appetizers:
+            return "Appetizers"
+        case .Soups:
+            return "Soups"
+        case .Salads:
+            return "Salads"
+        case .MainDishesBeef:
+            return "Main Dishes: Beef"
+        case .MainDishesPoultry:
+            return "Main Dishes: Poultry"
+        case .MainDishesPork:
+            return "Main Dishes: Pork"
+        case .MainDishesSeafood:
+            return "Main Dishes: Seafood"
+        case .MainDishesVegetarian:
+            return "Main Dishes: Vegetarian"
+        case .MainDishesVegetables:
+            return "Main Dishes: Vegetables"
+        case .Desserts:
+            return "Desserts"
+        case .Breads:
+            return "Breads"
+        case .Holidays:
+            return "Holidays"
+        case .Traditional:
+            return "Traditional"
+        }
+    }
+}
+
+class RecipeCategory: NSObject {
+    class func categoryNameForIndex(index: Int) -> String {
+        switch index {
+        case RecipeCategories.Breakfast.index:
+            return "Breakfast"
+        case RecipeCategories.Lunch.index:
+            return "Lunch"
+        case RecipeCategories.Beverages.index:
+            return "Beverages"
+        case RecipeCategories.Appetizers.index:
+            return "Appetizers"
+        case RecipeCategories.Soups.index:
+            return "Soups"
+        case RecipeCategories.Salads.index:
+            return "Salads"
+        case RecipeCategories.MainDishesBeef.index:
+            return "Main Dishes: Beef"
+        case RecipeCategories.MainDishesPoultry.index:
+            return "Main Dishes: Poultry"
+        case RecipeCategories.MainDishesPork.index:
+            return "Main Dishes: Pork"
+        case RecipeCategories.MainDishesSeafood.index:
+            return "Main Dishes: Seafood"
+        case RecipeCategories.MainDishesVegetarian.index:
+            return "Main Dishes: Vegetarian"
+        case RecipeCategories.MainDishesVegetables.index:
+            return "Main Dishes: Vegetables"
+        case RecipeCategories.Desserts.index:
+            return "Desserts"
+        case RecipeCategories.Breads.index:
+            return "Breads"
+        case RecipeCategories.Holidays.index:
+            return "Holidays"
+        case RecipeCategories.Traditional.index:
+            return "Traditional"
+        default:
+            return ""
+        }
+    }
+    
+    class func categoryIndexForIndex(index: Int) -> Int {
+        switch index {
+        case RecipeCategories.Breakfast.index:
+            return 0
+        case RecipeCategories.Lunch.index:
+            return 1
+        case RecipeCategories.Beverages.index:
+            return 2
+        case RecipeCategories.Appetizers.index:
+            return 3
+        case RecipeCategories.Soups.index:
+            return 4
+        case RecipeCategories.Salads.index:
+            return 5
+        case RecipeCategories.MainDishesBeef.index:
+            return 6
+        case RecipeCategories.MainDishesPoultry.index:
+            return 7
+        case RecipeCategories.MainDishesPork.index:
+            return 8
+        case RecipeCategories.MainDishesSeafood.index:
+            return 9
+        case RecipeCategories.MainDishesVegetarian.index:
+            return 10
+        case RecipeCategories.MainDishesVegetables.index:
+            return 11
+        case RecipeCategories.Desserts.index:
+            return 12
+        case RecipeCategories.Breads.index:
+            return 13
+        case RecipeCategories.Holidays.index:
+            return 14
+        case RecipeCategories.Traditional.index:
+            return 15
+        default:
+            return -1
+        }
+    }
+}
