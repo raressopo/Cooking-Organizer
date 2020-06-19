@@ -571,6 +571,9 @@
                                     <constraint firstAttribute="height" constant="45" id="FL8-p6-Ggh"/>
                                 </constraints>
                                 <state key="normal" title="Create Recipe"/>
+                                <connections>
+                                    <action selector="createRecipePressed:" destination="FxB-Yw-tKW" eventType="touchUpInside" id="NOu-NW-S97"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>

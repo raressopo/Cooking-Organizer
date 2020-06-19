@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate, UnitPickerViewDelegate, CookingTimePickerViewDelegate, DificultyPickerViewDelegate, LastCookDatePickerViewDelegate, CategoriesViewDelegate, NewRecipeStepViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -24,10 +25,15 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
     @IBOutlet weak var dificultyButton: UIButton!
     @IBOutlet weak var lastCookButton: UIButton!
     
+    private var dificulty: String?
+    private var lastCookDateString: String?
+    
     // MARK: - Categories View
     @IBOutlet weak var categoriesButton: UIButton!
     
     var selectedCategories = [RecipeCategories]()
+    
+    private var categoriesAsString: String?
     
     // MARK: - Ingredients View
     @IBOutlet weak var ingredientsView: UIView!
@@ -57,39 +63,11 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
     // MARK: - IBActions
     
     @IBAction func addIngredientPressed(_ sender: Any) {
-        if ingredients.isEmpty,
-            ingredientsStackView.subviews.isEmpty
-        {
-            addIngredientViewToStackView()
-        } else if ingredients.isEmpty,
-            let view = ingredientsStackView.subviews[0] as? NewRecipeIngredientView,
-            let ingredientName = view.nameTextField.text,
-            !ingredientName.isEmpty,
-            let quantity = view.quantitytextField.text,
-            !quantity.isEmpty,
-            let unit = view.selectedUnit
-        {
-            addIngredientToIngredients(ingredientName: ingredientName, quantity: quantity, unit: unit)
-        } else if let view = ingredientsStackView.subviews[ingredients.count] as? NewRecipeIngredientView,
-            let ingredientName = view.nameTextField.text,
-            !ingredientName.isEmpty,
-            let quantity = view.quantitytextField.text,
-            !quantity.isEmpty,
-            let unit = view.selectedUnit
-        {
-            addIngredientToIngredients(ingredientName: ingredientName, quantity: quantity, unit: unit)
-        }
+        addIngredientViewToStackView()
     }
     
     @IBAction func addStepPressed(_ sender: Any) {
-        if steps.isEmpty,
-            stepsStackView.subviews.isEmpty {
-            addStepViewToStackView()
-        } else if steps.isEmpty, let view = stepsStackView.subviews[0] as? NewRecipeStepView, let step = view.stepTextView.text, !step.isEmpty {
-            addStepToSteps(stepDescription: step)
-        } else if let view = stepsStackView.subviews[steps.count] as? NewRecipeStepView, let step = view.stepTextView.text, !step.isEmpty {
-            addStepToSteps(stepDescription: step)
-        }
+        addStepViewToStackView()
     }
     
     @IBAction func addPhotoPressed(_ sender: Any) {
@@ -162,7 +140,187 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
                                      categoriesView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
     }
     
+    @IBAction func createRecipePressed(_ sender: Any) {
+        guard let image = recipeImageView.image,
+            let imageData = image.jpegData(compressionQuality: 0.0) else
+        {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Image Unavailable",
+                                                              message: "Please check that you selected a image for this recipe. If not please choose one!")
+            
+            return
+        }
+
+        guard let recipeName = recipeNameTextField.text,
+            !recipeName.isEmpty else
+        {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Recipe Name Unavailable",
+                                                              message: "Please check that you enetered a valid recipe name!")
+
+            return
+        }
+
+        guard let portionsString = portionsTextField.text,
+            let portionsNumber = NumberFormatter().number(from: portionsString) else
+        {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Portions Unavailable",
+                                                              message: "Please check that you enetered a valid portions value. (Ex. 1, 4, 11, 20 etc.)")
+            
+            return
+        }
+
+        if cookingTimeHours == 0, cookingTimeMinutes == 0 {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Cooking Time Unavailable",
+                                                              message: "Please check that you selected a valid cooking time!")
+            
+            return
+        }
+
+        let cookingTime = "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes"
+
+        guard let dificulty = dificulty else {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Dificulty Unavailable",
+                                                              message: "Please check that you selected a valid dificulty!")
+            
+            return
+        }
+
+        guard let lastCook = lastCookDateString else {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Last Cook Unavailable",
+                                                              message: "Please check that you selected a last cook date!")
+            
+            return
+        }
+
+        guard let selectedCategoriesString = categoriesAsString else {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Categories Unavailable",
+                                                              message: "Please check that you selected at least one category!")
+            
+            return
+        }
+        
+        validateNewRecipeIngredients()
+        
+        if ingredients.count == 0 {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Ingredients Unavailable",
+                                                              message: "Please check that you add at least one ingredient!")
+            
+            return
+        }
+        
+        validateNewRecipeSteps()
+        
+        if steps.count == 0 {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Steps Unavailable",
+                                                              message: "Please check that you add at least one step!")
+            
+            return
+        }
+        
+        let recipeDictionary = ["name": recipeName,
+                                "imageData": imageData.base64EncodedString(),
+                                "portions": portionsNumber,
+                                "cookingTime": cookingTime,
+                                "dificulty": dificulty,
+                                "lastCook": lastCook,
+                                "categories": selectedCategoriesString,
+                                "ingredients": createIngredientsDictionary(),
+                                "steps": createStepsDictionary()] as [String:Any]
+        
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.id else { return }
+
+        Database.database().reference().child("usersData")
+            .child(loggedInUserId)
+            .child("recipes")
+            .child(UUID().uuidString)
+            .setValue(recipeDictionary) { (error, ref) in
+                if error == nil {
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                      title: "Recipe Adding Failed",
+                                                                      message: "Something went wrong ")
+                }
+        }
+    }
+    
     // MARK: - View private helpers
+    
+    private func createIngredientsDictionary() -> [String:Any] {
+        var ingredientsDictionary = [String:Any]()
+        
+        ingredients.forEach { ingredientsDictionary["\(ingredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
+        
+        return ingredientsDictionary
+    }
+    
+    private func createStepsDictionary() -> [String:Any] {
+        var stepsDictionary = [String:Any]()
+        
+        steps.forEach { stepsDictionary["\(steps.firstIndex(of: $0) ?? 0)"] = $0 }
+        
+        return stepsDictionary
+    }
+    
+    private func validateNewRecipeIngredients() {
+        ingredients.removeAll()
+        
+        ingredientsStackView.subviews.forEach { view in
+            guard let view = view as? NewRecipeIngredientView else { return }
+            
+            if let ingredientViewName = view.nameTextField.text,
+                let ingredientViewQuantity = view.quantitytextField.text,
+                let ingredientViewUnit = view.unitButton.titleLabel?.text
+            {
+                if ingredientViewName.isEmpty ||
+                    ingredientViewQuantity.isEmpty ||
+                    ingredientViewUnit == "Unit"
+                {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                      title: "Incomplete Ingredients",
+                                                                      message: "Please check that you completed all ingredients fields. If you left one incomplete either remove it or complete it will all dteails!")
+                    
+                    return
+                }
+                
+                let ingredient = NewRecipeIngredient()
+                
+                ingredient.name = ingredientViewName
+                ingredient.quantityAsString = ingredientViewQuantity
+                ingredient.unit = ingredientViewUnit
+                
+                ingredients.append(ingredient)
+            }
+        }
+    }
+    
+    private func validateNewRecipeSteps() {
+        steps.removeAll()
+        
+        stepsStackView.subviews.forEach { view in
+            guard let view = view as? NewRecipeStepView else { return }
+            
+            if let stepViewDescription = view.stepTextView.text {
+                if stepViewDescription.isEmpty {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                      title: "Incomplete Steps",
+                                                                      message: "Please check that you completed step description field. If you left one incomplete either remove it or complete it with description!")
+                    
+                    return
+                }
+                
+                steps.append(stepViewDescription)
+            }
+        }
+    }
     
     private func addBorderToLayer(layer: CALayer) {
         layer.cornerRadius = 5.0
@@ -203,23 +361,15 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
             }
         }
         
+        if selectedCategories.count > 0 {
+            categoriesAsString = categoriesButtonTitle
+        }
+        
         categoriesButton.setTitle(categoriesButtonTitle, for: .normal)
         categoriesButton.titleLabel?.textAlignment = .center
     }
     
     // MARK: - Ingredients and Steps Private Helper Functions
-    
-    private func addIngredientToIngredients(ingredientName: String, quantity: String, unit: String) {
-        let ingredient = NewRecipeIngredient()
-        
-        ingredient.name = ingredientName
-        ingredient.quantityAsString = quantity
-        ingredient.unit = unit
-        
-        ingredients.append(ingredient)
-        
-        addIngredientViewToStackView()
-    }
     
     private func addIngredientViewToStackView() {
         let ingredientView = NewRecipeIngredientView()
@@ -230,44 +380,24 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
         
         ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant + 60.0
     }
-    
-    private func addStepToSteps(stepDescription description: String) {
-        steps.append(description)
-        
-        addStepViewToStackView()
-    }
-    
+
     private func addStepViewToStackView() {
         let stepView = NewRecipeStepView()
         
         stepsStackView.addArrangedSubview(stepView)
         
         stepView.delegate = self
-        stepView.stepNumberLabel.text = "\(steps.count + 1)."
+        stepView.stepNumberLabel.text = "\(stepsStackView.subviews.count)."
         
         stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant + 80
     }
     
     // MARK: - NewRecipeIngredientView Delegate
     
-    func deletePressed(withIngredientName name: String) {
-        if let view = ingredientsStackView.subviews.first(where: { (view) -> Bool in
-            if let view = view as? NewRecipeIngredientView, view.nameTextField.text == name {
-                return true
-            } else {
-                return false
-            }
-        }) {
-            ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant - 60.0
-            
-            view.removeFromSuperview()
-            
-            if let ingredientIndex = ingredients.firstIndex(where: { (ingredient) -> Bool in
-                return ingredient.name == name
-            }) {
-                ingredients.remove(at: ingredientIndex)
-            }
-        }
+    func deletePressed(fromView: NewRecipeIngredientView) {
+        ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant - 60.0
+        
+        fromView.removeFromSuperview()
     }
     
     func unitPressed(withView view: NewRecipeIngredientView) {
@@ -295,13 +425,16 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
     
     // MARK: - NewRecipeStepView delegate
     
-    func deletedPressed(withStepNumber stepNr: Int, fromView view: NewRecipeStepView) {
-        if steps.count >= stepNr {
-            stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant - 80
+    func deletedPressed(fromView view: NewRecipeStepView) {
+        stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant - 80
             
-            steps.remove(at: stepNr - 1)
+        view.removeFromSuperview()
+        
+        stepsStackView.subviews.forEach { stepView in
+            guard let stepView = stepView as? NewRecipeStepView,
+                let stepViewIndex = stepsStackView.subviews.firstIndex(of: stepView) else { return }
             
-            view.removeFromSuperview()
+            stepView.stepNumberLabel.text = "\(stepViewIndex + 1)."
         }
     }
     
@@ -331,6 +464,8 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
     // MARK: - Dificulty Picker View delegate
     
     func didSelectDificulty(dificulty: String) {
+        self.dificulty = dificulty
+        
         dificultyButton.setTitle(dificulty, for: .normal)
     }
     
@@ -338,6 +473,8 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
     
     func didSelectLastCookDate(date: Date) {
         let dateString = UtilsManager.shared.dateFormatter.string(from: date)
+        
+        lastCookDateString = dateString
         
         lastCookButton.setTitle(dateString, for: .normal)
     }

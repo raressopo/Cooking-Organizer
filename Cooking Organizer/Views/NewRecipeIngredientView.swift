@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NewRecipeIngredientViewDelegate: class {
-    func deletePressed(withIngredientName name: String)
+    func deletePressed(fromView view: NewRecipeIngredientView)
     func unitPressed(withView view: NewRecipeIngredientView)
 }
 
@@ -56,9 +56,7 @@ class NewRecipeIngredientView: UIView {
     }
     
     @IBAction func deletePressed(_ sender: Any) {
-        if let name = nameTextField.text, !name.isEmpty {
-            delegate?.deletePressed(withIngredientName: name)
-        }
+        delegate?.deletePressed(fromView: self)
     }
     
     @IBAction func unitPressed(_ sender: Any) {

@@ -10,7 +10,18 @@ import UIKit
 
 class NewRecipeIngredient: NSObject {
     var name: String?
-    var quantityAsString: String?
+    var quantityAsString: String? {
+        didSet {
+            if let qtAsString = quantityAsString,
+                let quantityAsNumber = NumberFormatter().number(from: qtAsString) {
+                quantity = quantityAsNumber.doubleValue
+            }
+        }
+    }
     var quantity: Double?
     var unit: String?
+    
+    func asDictionary() -> [String:Any] {
+        return ["name": name ?? "", "quantity": quantityAsString ?? "", "unit": unit ?? ""]
+    }
 }

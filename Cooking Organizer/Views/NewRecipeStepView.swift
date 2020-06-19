@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NewRecipeStepViewDelegate: class {
-    func deletedPressed(withStepNumber stepNr: Int, fromView view: NewRecipeStepView)
+    func deletedPressed(fromView view: NewRecipeStepView)
 }
 
 class NewRecipeStepView: UIView {
@@ -48,7 +48,7 @@ class NewRecipeStepView: UIView {
     
     @IBAction func deletePressed(_ sender: Any) {
         if let stepNumberAsString = stepNumberLabel.text, let stepNumber = NumberFormatter().number(from: stepNumberAsString) {
-            delegate?.deletedPressed(withStepNumber: stepNumber.intValue, fromView: self)
+            delegate?.deletedPressed(fromView: self)
         }
     }
 }

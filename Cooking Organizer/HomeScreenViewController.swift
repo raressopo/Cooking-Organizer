@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 enum MenuItems: CaseIterable {
     case HomeIngredients
@@ -74,6 +75,12 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         addButton.layer.borderColor = UIColor.black.cgColor
         
         if let loggedInUserId = UsersManager.shared.currentLoggedInUser?.id {
+            UserDataManager.shared.observeRecipeAdded(forUserId: loggedInUserId, onSuccess: {
+                
+            }) {
+                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Recipes Fetch Failed", message: "Something went wrong while fetching recipes")
+            }
+            
             UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId) {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                                   title: "Ingredients Update Failed",

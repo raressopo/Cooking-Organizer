@@ -11,6 +11,8 @@ import UIKit
 class CookbookViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var recipesTableView: UITableView!
     
+    private var recipes = [Recipe]()
+    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -20,16 +22,29 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         recipesTableView.dataSource = self
         
         recipesTableView.register(UINib(nibName: "RecipeTableViewCell", bundle: nil), forCellReuseIdentifier: "recipeCell")
+        
+        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
+            recipes = userRecipes
+        }
     }
     
     // MARK: - TableView Delegate and Datasource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return recipes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "recipeCell", for: indexPath) as! RecipeTableViewCell
+        
+        let recipe = recipes[indexPath.row]
+        
+        cell.nameLabel.text = recipe.name
+        cell.categoriesLabel.text = recipe.categoriesAsString
+        cell.cookingTimeLabel.text = recipe.cookingTime
+        cell.lastCookLabel.text = recipe.lastCook
+        cell.nrOfIngredientsLabel.text = "\(recipe.ingredients.count) ingr."
+        cell.portionsLabel.text = "\(recipe.portions) portions"
         
         return cell
     }

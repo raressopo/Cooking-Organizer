@@ -13,12 +13,16 @@ protocol UserDataManagerDelegate: class {
     func userDataDidFetch()
     func homeIngredientsChanged()
     func homeIngredientsAdded()
+    
+    func recipeAdded()
 }
 
 extension UserDataManagerDelegate {
     func userDataDidFetch() {}
     func homeIngredientsChanged() {}
     func homeIngredientsAdded() {}
+    
+    func recipeAdded() {}
 }
 
 class UserDataManager: NSObject {
@@ -146,6 +150,90 @@ class UserDataManager: NSObject {
             }
             
             self.delegate?.homeIngredientsChanged()
+        }
+    }
+    
+    func observeRecipeAdded(forUserId id: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
+        Database.database().reference().child("usersData").child(id).child("recipes").observe(.childAdded) { snapshot in
+            let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
+                if let userId = user.id {
+                    return userId == id
+                } else {
+                    return false
+                }
+            }
+            
+            if existingCurrentUser?.recipes.contains(where: { recipe -> Bool in
+                return recipe.id == snapshot.key
+            }) ?? false {
+                onFailure()
+                
+                return
+            }
+            
+            guard let currentUser = existingCurrentUser else {
+                onFailure()
+                
+                return
+            }
+            
+            let recipe = Recipe()
+            
+            recipe.id = snapshot.key
+            
+            guard let recipeDetails = snapshot.value as? [String:Any] else {
+                onFailure()
+                
+                return
+            }
+            
+            if let recipeImageData = recipeDetails["imageData"] as? String {
+                let dataDecode = Data(base64Encoded: recipeImageData, options: .ignoreUnknownCharacters)
+                
+                if let imageData = dataDecode {
+                    let decodedImage = UIImage(data: imageData)
+                    
+                    recipe.image = decodedImage
+                }
+            }
+            
+            recipe.name = recipeDetails["name"] as? String ?? nil
+            
+            if let portions = recipeDetails["portions"] as? NSNumber {
+                recipe.portions = portions.intValue
+            }
+            
+            recipe.cookingTime = recipeDetails["cookingTime"] as? String ?? nil
+            recipe.dificulty = recipeDetails["dificulty"] as? String ?? nil
+            recipe.lastCook = recipeDetails["lastCook"] as? String ?? nil
+            recipe.categoriesAsString = recipeDetails["categories"] as? String ?? nil
+            
+            if let ingredientsDetails = recipeDetails["ingredients"] as? [Any] {
+                ingredientsDetails.forEach { value in
+                    if let ingredientDict = value as? [String:Any] {
+                        let ingredient = NewRecipeIngredient()
+                        
+                        ingredient.name = ingredientDict["name"] as? String
+                        ingredient.quantityAsString = ingredientDict["quantity"] as? String
+                        ingredient.unit = ingredientDict["unit"] as? String
+                        
+                        recipe.ingredients.append(ingredient)
+                    }
+                }
+            }
+            
+            if let stepsDetails = recipeDetails["steps"] as? [String] {
+                stepsDetails.forEach { value in
+                    if let index = stepsDetails.firstIndex(of: value) {
+                        recipe.steps.insert(value, at: index)
+                    }
+                }
+            }
+            
+            currentUser.recipes.append(recipe)
+            self.delegate?.recipeAdded()
+            
+            onSuccess()
         }
     }
 }

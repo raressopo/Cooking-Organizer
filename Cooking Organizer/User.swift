@@ -17,4 +17,5 @@ class User: NSObject {
     var signUpDate: String? // TODO: Transform it into Date later
     
     var homeIngredients = [HomeIngredient]()
+    var recipes = [Recipe]()
 }
