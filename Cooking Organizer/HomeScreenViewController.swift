@@ -146,6 +146,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                                      addSelectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
         
         addSelectionView.homeIngredientButton.addTarget(self, action: #selector(addNewHomeIngredient(_:)), for: .touchUpInside)
+        addSelectionView.recipeButton.addTarget(self, action: #selector(addNewRecipe), for: .touchUpInside)
     }
     
     @IBAction func dismissMenuPressed(_ sender: Any) {
@@ -234,6 +235,12 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         
         selectionView.removeFromSuperview()
         addSelectionView = nil
+    }
+    
+    @objc func addNewRecipe() {
+        addSelectionView?.removeFromSuperview()
+        
+        performSegue(withIdentifier: "addNewRecipeSegue", sender: self)
     }
     
     // MARK: - User Data Manager Delegate

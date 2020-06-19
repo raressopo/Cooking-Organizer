@@ -9,14 +9,21 @@
 import UIKit
 
 class Recipe: NSObject {
-    var name: String?
     var image: UIImage?
+    
+    var name: String?
+    
     var portions: Int = 0
     var cookingTime: String?
+    
     var dificulty: String?
     var lastCook: String?
+    
     var categoriesAsString: String?
+    
     var ingredients = [NewRecipeIngredient]()
+    
     var steps = [String]()
+    
     var id: String?
 }

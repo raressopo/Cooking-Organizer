@@ -8,10 +8,12 @@
 
 import UIKit
 
-class CookbookViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CookbookViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserDataManagerDelegate {
     @IBOutlet weak var recipesTableView: UITableView!
     
     private var recipes = [Recipe]()
+    
+    private var selectedRecipe: Recipe?
     
     // MARK: - View Lifecycle
     
@@ -25,6 +27,14 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         
         if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
             recipes = userRecipes
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "recipeDetailsSegue", let destinationVC = segue.destination as? RecipeDetailsViewController {
+            destinationVC.recipe = selectedRecipe
+            
+            selectedRecipe = nil
         }
     }
     
@@ -51,5 +61,15 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedRecipe = recipes[indexPath.row]
+        
+        performSegue(withIdentifier: "recipeDetailsSegue", sender: self)
+    }
+    
+    func recipeAdded() {
+        recipesTableView.reloadData()
     }
 }

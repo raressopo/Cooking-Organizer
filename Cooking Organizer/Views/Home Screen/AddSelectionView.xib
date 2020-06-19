@@ -12,6 +12,7 @@
                 <outlet property="contentView" destination="iN0-l3-epB" id="T8N-vx-8So"/>
                 <outlet property="dismissSelectionViewButton" destination="gh7-JE-LUQ" id="VuI-7R-Cem"/>
                 <outlet property="homeIngredientButton" destination="Flp-AD-dJc" id="xyW-Cm-Q3V"/>
+                <outlet property="recipeButton" destination="V6o-RC-vxs" id="qz5-ad-YeZ"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -27,30 +28,36 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3g-hk-cjq">
-                    <rect key="frame" x="93" y="311.5" width="240" height="47"/>
+                    <rect key="frame" x="89" y="260" width="244" height="87"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Flp-AD-dJc">
-                            <rect key="frame" x="8" y="8" width="224" height="31"/>
+                            <rect key="frame" x="8" y="8" width="228" height="30"/>
                             <state key="normal" title="Home Ingredient"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6o-RC-vxs">
+                            <rect key="frame" x="8" y="49" width="228" height="30"/>
+                            <state key="normal" title="Recipe"/>
                         </button>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="47" id="7fX-x1-hqx"/>
-                        <constraint firstAttribute="trailing" secondItem="Flp-AD-dJc" secondAttribute="trailing" constant="8" id="NNK-7E-HDC"/>
-                        <constraint firstAttribute="width" constant="240" id="S0f-XK-1bb"/>
+                        <constraint firstAttribute="height" constant="87" id="7fX-x1-hqx"/>
+                        <constraint firstAttribute="width" constant="244" id="S0f-XK-1bb"/>
+                        <constraint firstItem="V6o-RC-vxs" firstAttribute="leading" secondItem="T3g-hk-cjq" secondAttribute="leading" constant="8" id="SaW-Nx-19d"/>
+                        <constraint firstAttribute="trailing" secondItem="V6o-RC-vxs" secondAttribute="trailing" constant="8" id="ZJM-ys-nH6"/>
                         <constraint firstItem="Flp-AD-dJc" firstAttribute="top" secondItem="T3g-hk-cjq" secondAttribute="top" constant="8" id="gVf-b1-bnf"/>
                         <constraint firstItem="Flp-AD-dJc" firstAttribute="leading" secondItem="T3g-hk-cjq" secondAttribute="leading" constant="8" id="gVj-0t-ZoQ"/>
-                        <constraint firstAttribute="bottom" secondItem="Flp-AD-dJc" secondAttribute="bottom" constant="8" id="mnL-Gq-Yda"/>
+                        <constraint firstAttribute="trailing" secondItem="Flp-AD-dJc" secondAttribute="trailing" constant="8" id="nC1-Jr-bTQ"/>
+                        <constraint firstAttribute="bottom" secondItem="V6o-RC-vxs" secondAttribute="bottom" constant="8" id="wrb-Td-18p"/>
                     </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="T3g-hk-cjq" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Uab-w1-bZ7"/>
+                <constraint firstItem="T3g-hk-cjq" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-31.5" id="Uab-w1-bZ7"/>
                 <constraint firstItem="gh7-JE-LUQ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="b34-ZN-K16"/>
                 <constraint firstItem="gh7-JE-LUQ" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="mIj-dW-ep1"/>
-                <constraint firstItem="T3g-hk-cjq" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="oB7-Ww-kbM"/>
+                <constraint firstItem="T3g-hk-cjq" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="-2" id="oB7-Ww-kbM"/>
                 <constraint firstAttribute="bottom" secondItem="gh7-JE-LUQ" secondAttribute="bottom" id="rgE-nK-nVA"/>
                 <constraint firstItem="gh7-JE-LUQ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ziy-T6-ERq"/>
             </constraints>
