@@ -9,13 +9,26 @@
 import UIKit
 
 class User: NSObject {
-    var email: String?
-    var password: String?
+    var loginData: UserLoginData
+    var data: UserData
     
-    var id: String?
-    
-    var signUpDate: String? // TODO: Transform it into Date later
-    
-    var homeIngredients = [HomeIngredient]()
     var recipes = [Recipe]()
+    
+    init(loginData: UserLoginData, data: UserData) {
+        self.loginData = loginData
+        self.data = data
+    }
+}
+
+struct UserLoginData: Codable {
+    let id: String
+    let email: String
+    let password: String
+}
+
+struct UserData: Codable {
+    let email: String
+    let signUpDate: String
+    
+    let homeIngredients: [String:HomeIngredient]?
 }

@@ -7,140 +7,42 @@
 //
 
 import UIKit
-import FirebaseDatabase
-
-protocol UsersManagerDelegate: class {
-    func usersDidFetched()
-}
-
-extension UsersManagerDelegate {
-    func usersDidFetched() {}
-}
+import Firebase
 
 class UsersManager: NSObject {
     static let shared = UsersManager()
-    weak var delegate: UsersManagerDelegate?
     
-    var allUsers = [User]()
-    var isInitialFetchFinished = false
     var currentLoggedInUser: User?
     
-    override init() {
-        super.init()
+    func createUser(withEmail email: String, password: String, andCompletionHandler completion: @escaping (Bool) -> Void) {
+        let id = UUID().uuidString
         
-        observeUserAdded()
-        observeUserRemoved()
-        observeUserChanged()
+        let details = ["email": email,
+                       "signUpDate": UtilsManager.shared.dateFormatter.string(from: Date())]
+        
+        let loginDetails = ["email": email,
+                            "password": password,
+                            "id": id]
+        
+        FirebaseAPIManager.sharedInstance.createUser(withDetails: details,
+                                                     andLoginDetails: loginDetails,
+                                                     success: completion)
     }
     
-    func addUserToDB(with email: String, password: String, completion: @escaping (Error?, DatabaseReference) -> Void) {
-        let usersDBReference = Database.database().reference().child("users")
-        
-        let uuid = UUID().uuidString
-        
-        usersDBReference.child(uuid).setValue(["email": email, "password": password]) { (error, ref) in
-            if error == nil {
-                Database.database().reference().child("usersData").child(uuid).setValue(["signUpDate": UtilsManager.shared.dateFormatter.string(from: Date())], withCompletionBlock: completion)
+    func validateUserAndLogIn(withEmail email: String, password: String, andCompletionHandler completion: @escaping (_ id: String?) -> Void) {
+        FirebaseAPIManager.sharedInstance.validateUser(withEmail: email) { loginData in
+            guard let loginData = loginData, loginData.password == password else {
+                completion(nil)
+                return
             }
-        }
-    }
-    
-    func fetchUsersFromDB() {
-        Database.database().reference().observeSingleEvent(of: .value) { (snapshot) in
-            guard let database = snapshot.value as? [String:Any] else { return }
             
-            if let users = database["users"] as? [String: Any] {
-                for dbUser in users.keys {
-                    let user = User()
+            FirebaseAPIManager.sharedInstance.getUser(withId: loginData.id, loginData: loginData) { user in
+                if let user = user {
+                    self.currentLoggedInUser = user
                     
-                    user.id = dbUser
-                    
-                    guard let userDetails = users[dbUser] as? [String:Any] else { return }
-                    
-                    if let email = userDetails["email"] as? String {
-                        user.email = email
-                    }
-                    
-                    if let password = userDetails["password"] as? String {
-                        user.password = password
-                    }
-                    
-                    self.allUsers.append(user)
-                    
-                    if users.count == self.allUsers.count {
-                        self.delegate?.usersDidFetched()
-                        
-                        self.isInitialFetchFinished = true
-                    }
-                }
-            }
-        }
-    }
-    
-    func observeUserAdded() {
-        Database.database().reference().child("users").observe(.childAdded) { (snapshot) in
-            if self.isInitialFetchFinished, !self.allUsers.contains(where: { (user) -> Bool in
-                if let userId = user.id {
-                    return userId == snapshot.key
+                    completion(loginData.id)
                 } else {
-                    return false
-                }
-            }) {
-                let user = User()
-                
-                user.id = snapshot.key
-                
-                guard let userDetails = snapshot.value as? [String:Any] else { return }
-                
-                if let email = userDetails["email"] as? String {
-                    user.email = email
-                }
-                
-                if let password = userDetails["password"] as? String {
-                    user.password = password
-                }
-                
-                self.allUsers.append(user)
-            }
-        }
-    }
-    
-    func observeUserRemoved() {
-        Database.database().reference().child("users").observe(.childRemoved) { (snapshot) in
-            if let removedUser = self.allUsers.first(where: { (user) -> Bool in
-                if let userId = user.id {
-                    return snapshot.key == userId
-                } else {
-                    return false
-                }
-            }) {
-                if let removedUserIndex = self.allUsers.firstIndex(of: removedUser) {
-                    self.allUsers.remove(at: removedUserIndex)
-                }
-            }
-        }
-    }
-    
-    func observeUserChanged() {
-        Database.database().reference().child("users").observe(.childChanged) { (snapshot) in
-            if self.isInitialFetchFinished {
-                let changedUser = self.allUsers.first { (user) -> Bool in
-                    if let userId = user.id {
-                        return snapshot.key == userId
-                    } else {
-                        return false
-                    }
-                }
-                
-                guard let user = changedUser,
-                    let userDetails = snapshot.value as? [String:Any] else { return }
-                
-                if let email = userDetails["email"] as? String {
-                    user.email = email
-                }
-                
-                if let password = userDetails["password"] as? String {
-                    user.password = password
+                    completion(nil)
                 }
             }
         }

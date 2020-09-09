@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseDatabase
+import Firebase
 
 enum MenuItems: CaseIterable {
     case HomeIngredients
@@ -51,8 +51,8 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let user = UsersManager.shared.currentLoggedInUser, let signUpDate = user.signUpDate {
-            signUpDateLabel.text = signUpDate
+        if let user = UsersManager.shared.currentLoggedInUser  {
+            signUpDateLabel.text = user.data.signUpDate
         }
         
         menuTableView.delegate = self
@@ -74,18 +74,18 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         addButton.layer.borderWidth = 1
         addButton.layer.borderColor = UIColor.black.cgColor
         
-        if let loggedInUserId = UsersManager.shared.currentLoggedInUser?.id {
+        if let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id {
             UserDataManager.shared.observeRecipeAdded(forUserId: loggedInUserId, onSuccess: {
                 
             }) {
                  AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Recipes Fetch Failed", message: "Something went wrong while fetching recipes")
             }
             
-            UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId) {
-                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                  title: "Ingredients Update Failed",
-                                                                  message: "Something went wrong updating with new ingredient changes")
-            }
+//            UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId) {
+//                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+//                                                                  title: "Ingredients Update Failed",
+//                                                                  message: "Something went wrong updating with new ingredient changes")
+//            }
         }
     }
     
@@ -121,7 +121,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func logOutPressed(_ sender: Any) {
         self.dismiss(animated: true) {
-            UserDefaults.standard.removeObject(forKey: "loggedInUser")
+            UserDefaults.standard.removeObject(forKey: "loggedInUserId")
         }
     }
     

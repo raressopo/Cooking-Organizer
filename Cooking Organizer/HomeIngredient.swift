@@ -8,16 +8,16 @@
 
 import UIKit
 
-class HomeIngredient: NSObject {
-    var id: String?
+class HomeIngredient: Codable {
+    let id: String?
     var name: String?
     var expirationDate: String?
     var quantity: Double?
     var unit: String?
-    var categoriesAsString: String?
+    var categories: String?
     
-    var categories: [IngredientCategories] {
-        if let categoriesAsString = categoriesAsString {
+    var ingredientCategories: [IngredientCategories] {
+        if let categoriesAsString = categories {
             let categoriesStringArray = categoriesAsString.components(separatedBy: ", ")
             
             var result = [IngredientCategories]()

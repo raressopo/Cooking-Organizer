@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LogInViewController: UIViewController, UsersManagerDelegate {
+class LogInViewController: UIViewController {
     // MARK: - Log In
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passTextField: UITextField!
@@ -24,14 +24,6 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
     @IBOutlet weak var dismissSignUpViewButton: UIButton!
     
     @IBOutlet weak var spinnerView: UIView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        spinnerView.isHidden = false
-        
-        UsersManager.shared.delegate = self
-    }
     
     @IBAction func cancelPressed(_ sender: Any) {
         signUpView.isHidden = true
@@ -57,8 +49,8 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
             return
         }
         
-        UsersManager.shared.addUserToDB(with: email, password: password) { (error, ref) in
-            if error == nil {
+        UsersManager.shared.createUser(withEmail: email, password: password) { success in
+            if success {
                 self.spinnerView.isHidden = true
                 
                 self.signUpEmailTextField.text = ""
@@ -83,31 +75,26 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
     @IBAction func logInPressed(_ sender: Any) {
         guard let email = emailTextField.text, !email.isEmpty,
             let password = passTextField.text, !password.isEmpty else {
-                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Invalid E-Mail and Password", message: "Please introduce valid E-mail and Password")
-            
-            return
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Invalid E-Mail and Password",
+                                                                  message: "Please introduce valid E-mail and Password")
+                
+                return
         }
         
-        for user in UsersManager.shared.allUsers {
-            if let userEmail = user.email, userEmail == email,
-                let userPass = user.password, userPass == password,
-                let userId = user.id {
-                spinnerView.isHidden = false
+        spinnerView.isHidden = false
+        
+        UsersManager.shared.validateUserAndLogIn(withEmail: email, password: password) { userId in
+            self.spinnerView.isHidden = true
+            
+            if let id = userId {
+                 UserDefaults.standard.set(id, forKey: "loggedInUserId")
                 
-                UserDataManager.shared.fetchUserDataForUserID(id: userId) { (success) in
-                    if success {
-                        UserDefaults.standard.set(userId, forKey: "loggedInUser")
-                        UsersManager.shared.currentLoggedInUser = user
-                        
-                        UserDataManager.shared.observeHomeIngredientsAdded(forUserId: user.id!, ingredientAdded: {
-                            self.spinnerView.isHidden = true
-                            
-                            self.performSegue(withIdentifier: "logInSegue", sender: self)
-                        }) {
-                            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Home Ingredients Fetch Failed", message: "Something went wrong while fetching Home Ingredients")
-                        }
-                    }
-                }
+                self.performSegue(withIdentifier: "logInSegue", sender: self)
+            } else {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Home Ingredients Fetch Failed",
+                                                                  message: "Something went wrong while fetching Home Ingredients")
             }
         }
     }
@@ -115,39 +102,6 @@ class LogInViewController: UIViewController, UsersManagerDelegate {
     @IBAction func dismissSignUpPressed(_ sender: Any) {
         signUpView.isHidden = true
         dismissSignUpViewButton.isHidden = true
-    }
-    
-    func usersDidFetched() {
-        spinnerView.isHidden = true
-        
-        if let loggedInUserId = UserDefaults.standard.value(forKey: "loggedInUser") as? String {
-            spinnerView.isHidden = false
-            
-            UserDataManager.shared.fetchUserDataForUserID(id: loggedInUserId) { (success) in
-                if success {
-                    guard let currentUser = UsersManager.shared.allUsers.first(where: { (user) -> Bool in
-                        if let userId = user.id {
-                            return userId == loggedInUserId
-                        } else {
-                            return false
-                        }
-                    }) else {
-                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Users fetch Failed", message: "Something went wrong fetching users from DB")
-                        return
-                    }
-                    
-                    UsersManager.shared.currentLoggedInUser = currentUser
-                    
-                    UserDataManager.shared.observeHomeIngredientsAdded(forUserId: currentUser.id!, ingredientAdded: {
-                        self.spinnerView.isHidden = true
-                        
-                        self.performSegue(withIdentifier: "logInSegue", sender: self)
-                    }) {
-                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Home Ingredients Fetch Failed", message: "Something went wrong while fetching Home Ingredients")
-                    }
-                }
-            }
-        }
     }
 }
 

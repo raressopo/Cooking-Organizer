@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseDatabase
+import Firebase
 
 class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserDataManagerDelegate {
     @IBOutlet weak var addHomeIngrButton: UIButton!
@@ -32,8 +32,8 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
         
         homeIngredientsTableView.register(UINib(nibName: "HomeIngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "homeIngredientCell")
         
-        if let currentUser = UsersManager.shared.currentLoggedInUser {
-            homeIngredients = currentUser.homeIngredients
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.data.homeIngredients {
+            //homeIngredients = ingredients
             
             homeIngredientsTableView.reloadData()
         }
@@ -119,16 +119,16 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func homeIngredientsChanged() {
-        if let currentUser = UsersManager.shared.currentLoggedInUser {
-            homeIngredients = currentUser.homeIngredients
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.data.homeIngredients {
+            //homeIngredients = ingredients
             
             homeIngredientsTableView.reloadData()
         }
     }
     
     func homeIngredientsAdded() {
-        if let currentUser = UsersManager.shared.currentLoggedInUser {
-            homeIngredients = currentUser.homeIngredients
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.data.homeIngredients {
+            //homeIngredients = ingredients
             
             homeIngredientsTableView.reloadData()
         }

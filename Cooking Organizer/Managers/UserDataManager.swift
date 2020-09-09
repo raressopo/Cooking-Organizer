@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseDatabase
+import Firebase
 
 protocol UserDataManagerDelegate: class {
     func userDataDidFetch()
@@ -31,147 +31,98 @@ class UserDataManager: NSObject {
     
     var isInitialHomeIngredientsfetchFinished = false
     
-    func fetchUserDataForUserID(id: String, completion: @escaping (_ succes: Bool) -> Void) {
-        Database.database().reference().child("usersData").child(id).observe(.value) { (snapshot) in
-            let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
-                if let userId = user.id {
-                    return userId == id
-                } else {
-                    return false
-                }
-            }
-            
-            guard let currentUserDetails = snapshot.value as? [String: Any], let currentUser = existingCurrentUser else {
-                completion(false)
-                return
-            }
-            
-            if let signUpDate = currentUserDetails["signUpDate"] as? String {
-                currentUser.signUpDate = signUpDate
-            }
-            
-            completion(true)
-            
-            self.isInitialHomeIngredientsfetchFinished = true
-        }
-    }
-    
-    func observeHomeIngredientsAdded(forUserId id: String, ingredientAdded: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        Database.database().reference().child("usersData").child(id).child("homeIngredients").observe(.childAdded) { (snapshot) in
-            let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
-                if let userId = user.id {
-                    return userId == id
-                } else {
-                    return false
-                }
-            }
-            
-            if existingCurrentUser?.homeIngredients.contains(where: { (ingredient) -> Bool in
-                return ingredient.id == snapshot.key
-            }) ?? false {
-                onFailure()
-                
-                return
-            }
-            
-            guard let currentUser = existingCurrentUser else {
-                onFailure()
-                
-                return
-            }
-            
-            let homeIngredient = HomeIngredient()
-            
-            homeIngredient.id = snapshot.key
-            
-            if let homeIngredientDetails = snapshot.value as? [String:Any] {
-                homeIngredient.name = homeIngredientDetails["name"] as? String
-                homeIngredient.expirationDate = homeIngredientDetails["expirationDate"] as? String
-                homeIngredient.quantity = homeIngredientDetails["quantity"] as? Double
-                homeIngredient.unit = homeIngredientDetails["unit"] as? String
-                homeIngredient.categoriesAsString = homeIngredientDetails["categories"] as? String
-            }
-            
-            currentUser.homeIngredients.append(homeIngredient)
-            
-            ingredientAdded()
-            self.delegate?.homeIngredientsAdded()
-        }
-    }
-    
-    func observeHomeIngredientChanged(forUserId id: String, onFailure: @escaping () -> Void) {
-        Database.database().reference().child("usersData").child(id).child("homeIngredients").observe(.childChanged) { (snapshot) in
-            let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
-                if let userId = user.id {
-                    return userId == id
-                } else {
-                    return false
-                }
-            }
-            
-            guard let currentUser = existingCurrentUser else {
-                onFailure()
-                
-                return
-            }
-            
-            guard let changedIngredient = currentUser.homeIngredients.first(where: { (ingredient) -> Bool in
-                return ingredient.id == snapshot.key
-            }) else {
-                onFailure()
-                
-                return
-            }
-            
-            guard let changes = snapshot.value as? [String:Any] else {
-                onFailure()
-                
-                return
-            }
-            
-            if let name = changes["name"] as? String {
-                changedIngredient.name = name
-            }
-            
-            if let expirationDate = changes["expirationDate"] as? String {
-                changedIngredient.expirationDate = expirationDate
-            }
-            
-            if let quantity = changes["quantity"] as? Double {
-                changedIngredient.quantity = quantity
-            }
-            
-            if let unit = changes["unit"] as? String {
-                changedIngredient.unit = unit
-            }
-            
-            if let categories = changes["categories"] as? String {
-                changedIngredient.categoriesAsString = categories
-            }
-            
-            self.delegate?.homeIngredientsChanged()
-        }
-    }
+//    func observeHomeIngredientsAdded(forUserId id: String, ingredientAdded: @escaping () -> Void, onFailure: @escaping () -> Void) {
+//        Database.database().reference().child("usersData").child(id).child("homeIngredients").observe(.childAdded) { (snapshot) in
+//            guard let currentUser = UsersManager.shared.currentLoggedInUser else {
+//                onFailure()
+//                
+//                return
+//            }
+//            
+//            if currentUser.homeIngredients.contains(where: { (ingredient) -> Bool in
+//                return ingredient.id == snapshot.key
+//            }) {
+//                onFailure()
+//                
+//                return
+//            }
+//            
+//            let homeIngredient = HomeIngredient()
+//            
+//            homeIngredient.id = snapshot.key
+//            
+//            if let homeIngredientDetails = snapshot.value as? [String:Any] {
+//                homeIngredient.name = homeIngredientDetails["name"] as? String
+//                homeIngredient.expirationDate = homeIngredientDetails["expirationDate"] as? String
+//                homeIngredient.quantity = homeIngredientDetails["quantity"] as? Double
+//                homeIngredient.unit = homeIngredientDetails["unit"] as? String
+//                homeIngredient.categoriesAsString = homeIngredientDetails["categories"] as? String
+//            }
+//            
+//            currentUser.homeIngredients.append(homeIngredient)
+//            
+//            ingredientAdded()
+//            self.delegate?.homeIngredientsAdded()
+//        }
+//    }
+//    
+//    func observeHomeIngredientChanged(forUserId id: String, onFailure: @escaping () -> Void) {
+//        Database.database().reference().child("usersData").child(id).child("homeIngredients").observe(.childChanged) { (snapshot) in
+//            guard let currentUser = UsersManager.shared.currentLoggedInUser else {
+//                onFailure()
+//                
+//                return
+//            }
+//            
+//            guard let changedIngredient = currentUser.homeIngredients.first(where: { (ingredient) -> Bool in
+//                return ingredient.id == snapshot.key
+//            }) else {
+//                onFailure()
+//                
+//                return
+//            }
+//            
+//            guard let changes = snapshot.value as? [String:Any] else {
+//                onFailure()
+//                
+//                return
+//            }
+//            
+//            if let name = changes["name"] as? String {
+//                changedIngredient.name = name
+//            }
+//            
+//            if let expirationDate = changes["expirationDate"] as? String {
+//                changedIngredient.expirationDate = expirationDate
+//            }
+//            
+//            if let quantity = changes["quantity"] as? Double {
+//                changedIngredient.quantity = quantity
+//            }
+//            
+//            if let unit = changes["unit"] as? String {
+//                changedIngredient.unit = unit
+//            }
+//            
+//            if let categories = changes["categories"] as? String {
+//                changedIngredient.categoriesAsString = categories
+//            }
+//            
+//            self.delegate?.homeIngredientsChanged()
+//        }
+//    }
     
     func observeRecipeAdded(forUserId id: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
         Database.database().reference().child("usersData").child(id).child("recipes").observe(.childAdded) { snapshot in
-            let existingCurrentUser = UsersManager.shared.allUsers.first { (user) -> Bool in
-                if let userId = user.id {
-                    return userId == id
-                } else {
-                    return false
-                }
-            }
-            
-            if existingCurrentUser?.recipes.contains(where: { recipe -> Bool in
-                return recipe.id == snapshot.key
-            }) ?? false {
+            guard let currentUser = UsersManager.shared.currentLoggedInUser else {
                 onFailure()
                 
                 return
             }
             
-            guard let currentUser = existingCurrentUser else {
+            if currentUser.recipes.contains(where: { recipe -> Bool in
+                return recipe.id == snapshot.key
+            }) {
                 onFailure()
                 
                 return

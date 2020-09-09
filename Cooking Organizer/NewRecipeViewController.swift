@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseDatabase
+import Firebase
 
 class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate, UnitPickerViewDelegate, CookingTimePickerViewDelegate, DificultyPickerViewDelegate, LastCookDatePickerViewDelegate, CategoriesViewDelegate, NewRecipeStepViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -235,7 +235,7 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
                                 "ingredients": createIngredientsDictionary(),
                                 "steps": createStepsDictionary()] as [String:Any]
         
-        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.id else { return }
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
 
         Database.database().reference().child("usersData")
             .child(loggedInUserId)

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		80E3B0B96BED8F308277F8E9 /* Pods_Cooking_Organizer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D712FB267A9401C4E24703D8 /* Pods_Cooking_Organizer.framework */; };
+		0E42E6CE3C5433E4D688EC2A /* libPods-Cooking Organizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A042F1FBF23B5F4C25AE6768 /* libPods-Cooking Organizer.a */; };
 		8E0F01D0248A616D00CBA319 /* HomeIngredientDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F01CF248A616D00CBA319 /* HomeIngredientDetailsView.swift */; };
 		8E0F01D2248A617700CBA319 /* HomeIngredientDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0F01D1248A617700CBA319 /* HomeIngredientDetailsView.xib */; };
 		8E1AECE1247E75FF0041B6C4 /* Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1AECE0247E75FF0041B6C4 /* Categories.swift */; };
@@ -31,6 +31,7 @@
 		8EB02E70249CFECE0013D1B2 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB02E6F249CFECE0013D1B2 /* Checkbox.swift */; };
 		8EB9BC66249B3DD900FF76F6 /* NewRecipeStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9BC65249B3DD900FF76F6 /* NewRecipeStepView.swift */; };
 		8EB9BC68249B3DE100FF76F6 /* NewRecipeStepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EB9BC67249B3DE100FF76F6 /* NewRecipeStepView.xib */; };
+		8EB9DD632508D1DC0020BCA9 /* FirebaseAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */; };
 		8ED3A9992490C43300922BB2 /* AddSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED3A9982490C43300922BB2 /* AddSelectionView.swift */; };
 		8ED3A99B2490C43F00922BB2 /* AddSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ED3A99A2490C43F00922BB2 /* AddSelectionView.xib */; };
 		8ED3A99E2490D6BD00922BB2 /* RecipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED3A99C2490D6BD00922BB2 /* RecipeTableViewCell.swift */; };
@@ -79,6 +80,7 @@
 		8EB02E6F249CFECE0013D1B2 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		8EB9BC65249B3DD900FF76F6 /* NewRecipeStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRecipeStepView.swift; sourceTree = "<group>"; };
 		8EB9BC67249B3DE100FF76F6 /* NewRecipeStepView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewRecipeStepView.xib; sourceTree = "<group>"; };
+		8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPIManager.swift; sourceTree = "<group>"; };
 		8ED3A9982490C43300922BB2 /* AddSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSelectionView.swift; sourceTree = "<group>"; };
 		8ED3A99A2490C43F00922BB2 /* AddSelectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddSelectionView.xib; sourceTree = "<group>"; };
 		8ED3A99C2490D6BD00922BB2 /* RecipeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTableViewCell.swift; sourceTree = "<group>"; };
@@ -102,7 +104,7 @@
 		8EF5BFDD2475231200C44646 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8EF5BFDF2475231200C44646 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8EF5BFE52475280E00C44646 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		D712FB267A9401C4E24703D8 /* Pods_Cooking_Organizer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cooking_Organizer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A042F1FBF23B5F4C25AE6768 /* libPods-Cooking Organizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Cooking Organizer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA96B64C257E41F72BCC4D5C /* Pods-Cooking Organizer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cooking Organizer.release.xcconfig"; path = "Target Support Files/Pods-Cooking Organizer/Pods-Cooking Organizer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,7 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80E3B0B96BED8F308277F8E9 /* Pods_Cooking_Organizer.framework in Frameworks */,
+				0E42E6CE3C5433E4D688EC2A /* libPods-Cooking Organizer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +123,7 @@
 		83CCF7C7BCD23AE71C4E9A14 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D712FB267A9401C4E24703D8 /* Pods_Cooking_Organizer.framework */,
+				A042F1FBF23B5F4C25AE6768 /* libPods-Cooking Organizer.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -133,6 +135,7 @@
 				8E8E203524756DFB00AF2F49 /* AlertManager.swift */,
 				8E9984352476BF4300C10B4F /* UserDataManager.swift */,
 				8EEC0BD9247F9D29005BFA24 /* UtilsManager.swift */,
+				8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -280,7 +283,6 @@
 				8EF5BFCA2475230F00C44646 /* Sources */,
 				8EF5BFCB2475230F00C44646 /* Frameworks */,
 				8EF5BFCC2475230F00C44646 /* Resources */,
-				EBC88A0AAA796C75EA6B3534 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -372,23 +374,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EBC88A0AAA796C75EA6B3534 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Cooking Organizer/Pods-Cooking Organizer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Cooking Organizer/Pods-Cooking Organizer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Cooking Organizer/Pods-Cooking Organizer-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -408,6 +393,7 @@
 				8EEC0BDD247FCE9C005BFA24 /* HomeIngredient.swift in Sources */,
 				8E93469B249A4D7C0048F5B1 /* CategoriesView.swift in Sources */,
 				8EF5BFD62475230F00C44646 /* LogInViewController.swift in Sources */,
+				8EB9DD632508D1DC0020BCA9 /* FirebaseAPIManager.swift in Sources */,
 				8EF5BFD22475230F00C44646 /* AppDelegate.swift in Sources */,
 				8EE3941C249795D000DE2C9B /* NewRecipeViewController.swift in Sources */,
 				8E8E203624756DFB00AF2F49 /* AlertManager.swift in Sources */,

@@ -31,27 +31,33 @@ class HIWidgetTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return UsersManager.shared.currentLoggedInUser!.homeIngredients.count
+        guard let homeIngredientsCount = UsersManager.shared.currentLoggedInUser?.data.homeIngredients else {
+            return 0
+        }
+        
+        return homeIngredientsCount.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeIngredientCell") as! HomeIngredientTableViewCell
-            
-        let homeIngredient = UsersManager.shared.currentLoggedInUser!.homeIngredients[indexPath.row]
         
-        cell.selectionStyle = .none
-
-        cell.name.text = homeIngredient.name
-        cell.expirationDate.text = homeIngredient.expirationDate
-        cell.quantityAndUnit.text = "\(homeIngredient.quantity ?? 0.0) \(homeIngredient.unit ?? "")"
+//        if let homeIngredient = UsersManager.shared.currentLoggedInUser?.data.homeIngredients?[indexPath.row] {
+//            let ingredient = homeIngredient.values
+//            
+//            cell.selectionStyle = .none
+//            
+//            cell.name.text = homeIngredient.name
+//            cell.expirationDate.text = homeIngredient.expirationDate
+//            cell.quantityAndUnit.text = "\(homeIngredient.quantity ?? 0.0) \(homeIngredient.unit ?? "")"
+//        }
 
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let homeIngredient = UsersManager.shared.currentLoggedInUser!.homeIngredients[indexPath.row]
-        
-        delegate?.homeIngredientPressed(withHomeIngredient: homeIngredient)
+       // if let homeIngredient = UsersManager.shared.currentLoggedInUser?.data.homeIngredients?[indexPath.row] {
+            //delegate?.homeIngredientPressed(withHomeIngredient: homeIngredient)
+        //}
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

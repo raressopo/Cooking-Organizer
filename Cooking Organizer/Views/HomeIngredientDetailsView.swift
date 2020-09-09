@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseDatabase
+import Firebase
 
 class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var dismissIngredientDetailsButton: UIButton!
@@ -98,7 +98,7 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                     return
             }
             
-            if let loggedInUser = UsersManager.shared.currentLoggedInUser, let userId = loggedInUser.id {
+            if let loggedInUser = UsersManager.shared.currentLoggedInUser {
                 let uuid = UUID().uuidString
                 
                 var categoriesAsString = ""
@@ -118,7 +118,7 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                 }
                 
                 Database.database().reference().child("usersData")
-                    .child(userId).child("homeIngredients")
+                    .child(loggedInUser.loginData.id).child("homeIngredients")
                     .child(uuid)
                     .setValue(["name": ingredientName,
                                "expirationDate": UtilsManager.shared.dateFormatter.string(from: expirationdate ?? Date(timeIntervalSince1970: 0)),
@@ -175,16 +175,16 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                 ingredientChanged = true
             }
             
-            if let categoriesAsString = allIngredientCategoriesAsString, ingredient.categoriesAsString != categoriesAsString {
+            if let categoriesAsString = allIngredientCategoriesAsString, ingredient.categories != categoriesAsString {
                 changedDataDictionary["categories"] = categoriesAsString
                 
                 ingredientChanged = true
             }
             
             if ingredientChanged {
-                if let loggedInUser = UsersManager.shared.currentLoggedInUser, let userId = loggedInUser.id, let ingredientId = ingredient.id {
+                if let loggedInUser = UsersManager.shared.currentLoggedInUser, let ingredientId = ingredient.id {
                     Database.database().reference().child("usersData")
-                        .child(userId).child("homeIngredients")
+                        .child(loggedInUser.loginData.id).child("homeIngredients")
                         .child(ingredientId)
                         .updateChildValues(changedDataDictionary, withCompletionBlock: { (error, ref) in
                             self.removeFromSuperview()
@@ -477,8 +477,8 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
             unitButton.setTitle(unit, for: .normal)
         }
         
-        selectedCategories = ingredient.categories
-        allIngredientCategoriesAsString = ingredient.categoriesAsString
-        categoriesButton.setTitle("\(ingredient.categoriesAsString ?? "Categories")", for: .normal)
+        selectedCategories = ingredient.ingredientCategories
+        allIngredientCategoriesAsString = ingredient.categories
+        categoriesButton.setTitle("\(ingredient.categories ?? "Categories")", for: .normal)
     }
 }
