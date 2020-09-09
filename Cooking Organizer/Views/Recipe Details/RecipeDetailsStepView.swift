@@ -1,19 +1,19 @@
 //
-//  RecipeDetailsIngredientView.swift
+//  RecipeDetailsStepView.swift
 //  Cooking Organizer
 //
-//  Created by Rares Soponar on 19/06/2020.
+//  Created by Rares Soponar on 22/06/2020.
 //  Copyright © 2020 Rares Soponar. All rights reserved.
 //
 
 import UIKit
 
-class RecipeDetailsIngredientView: UIView {
+class RecipeDetailsStepView: UIView {
     @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var checkbox: Checkbox!
-    @IBOutlet weak var ingredientName: UILabel!
-    @IBOutlet weak var quantityAndUnit: UILabel!
+    @IBOutlet weak var stepNr: UILabel!
+    @IBOutlet weak var stepDescription: UITextView!
     
     @IBOutlet weak var checkboxCheckedBlockView: UIView!
     
@@ -30,7 +30,7 @@ class RecipeDetailsIngredientView: UIView {
     }
     
     func commonInit() {
-        Bundle.main.loadNibNamed("RecipeDetailsIngredientView", owner: self, options: nil)
+        Bundle.main.loadNibNamed("RecipeDetailsStepView", owner: self, options: nil)
         
         addSubview(contentView)
         contentView.frame = self.bounds
@@ -39,7 +39,7 @@ class RecipeDetailsIngredientView: UIView {
         checkbox.borderStyle = .circle
         checkbox.checkedBorderColor = .systemGray5
         checkbox.checkmarkColor = .darkGray
-        
+
         checkbox.addTarget(self, action: #selector(checkboxChanged), for: .valueChanged)
     }
     

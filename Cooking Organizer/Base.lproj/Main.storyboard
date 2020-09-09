@@ -684,7 +684,7 @@
                                 <rect key="frame" x="0.0" y="325" width="414" height="571"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VRd-Eq-HwM">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="192"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="194"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Recipe Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MDe-of-gjx">
                                                 <rect key="frame" x="8" y="8" width="398" height="34"/>
@@ -703,77 +703,73 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Cooking Time" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ikM-JC-Umd">
-                                                <rect key="frame" x="136" y="50" width="270" height="34"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="34" id="e3R-aC-jcJ"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Dificulty" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hgE-vP-wKg">
-                                                <rect key="frame" x="8" y="92" width="120" height="34"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="34" id="6tH-Fo-p8B"/>
-                                                    <constraint firstAttribute="width" constant="120" id="gee-1O-bzw"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Cook" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dMO-Dp-uKc">
-                                                <rect key="frame" x="136" y="92" width="270" height="34"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="34" id="cPI-UK-T3G"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Categories" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YQC-bC-Z31">
-                                                <rect key="frame" x="8" y="134" width="398" height="34"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="34" id="CIc-jU-FTH"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TT1-eP-7uY">
-                                                <rect key="frame" x="8" y="176" width="398" height="0.0"/>
+                                                <rect key="frame" x="8" y="178" width="398" height="0.0"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="ebt-c3-Nqi"/>
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TcQ-u9-neM">
-                                                <rect key="frame" x="8" y="184" width="398" height="0.0"/>
+                                                <rect key="frame" x="8" y="186" width="398" height="0.0"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="ZcN-gv-B2Z"/>
                                                 </constraints>
                                             </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cxk-57-mAY">
+                                                <rect key="frame" x="8" y="92" width="120" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="8oT-jA-PYZ"/>
+                                                    <constraint firstAttribute="width" constant="120" id="wXY-ai-U87"/>
+                                                </constraints>
+                                                <state key="normal" title="Dificulty"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jsw-44-eLp">
+                                                <rect key="frame" x="136" y="50" width="270" height="34"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="34" id="CC7-MB-JEr"/>
+                                                </constraints>
+                                                <state key="normal" title="Cooking Time"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1WJ-u3-o4y">
+                                                <rect key="frame" x="136" y="92" width="270" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="oWZ-45-De9"/>
+                                                </constraints>
+                                                <state key="normal" title="Last Cook"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kc-hF-NnS">
+                                                <rect key="frame" x="8" y="130" width="398" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="DNn-no-7PM"/>
+                                                </constraints>
+                                                <state key="normal" title="Categories"/>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
-                                            <constraint firstItem="ikM-JC-Umd" firstAttribute="top" secondItem="MDe-of-gjx" secondAttribute="bottom" constant="8" id="3kc-Gf-1J0"/>
-                                            <constraint firstItem="dMO-Dp-uKc" firstAttribute="top" secondItem="ikM-JC-Umd" secondAttribute="bottom" constant="8" id="4Zy-rB-gcZ"/>
+                                            <constraint firstAttribute="trailing" secondItem="1WJ-u3-o4y" secondAttribute="trailing" constant="8" id="1iF-Ha-FMC"/>
                                             <constraint firstItem="MDe-of-gjx" firstAttribute="top" secondItem="VRd-Eq-HwM" secondAttribute="top" constant="8" id="5KO-Cm-d65"/>
-                                            <constraint firstItem="hgE-vP-wKg" firstAttribute="top" secondItem="Jch-fd-mbK" secondAttribute="bottom" constant="8" id="C8S-rh-rLQ"/>
+                                            <constraint firstAttribute="trailing" secondItem="Jsw-44-eLp" secondAttribute="trailing" constant="8" id="Ax6-pE-ndR"/>
                                             <constraint firstItem="Jch-fd-mbK" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="FEB-Eb-KBU"/>
-                                            <constraint firstItem="ikM-JC-Umd" firstAttribute="leading" secondItem="Jch-fd-mbK" secondAttribute="trailing" constant="8" id="HCP-uE-ptc"/>
-                                            <constraint firstAttribute="trailing" secondItem="ikM-JC-Umd" secondAttribute="trailing" constant="8" id="Hw7-Wh-XQv"/>
                                             <constraint firstItem="TcQ-u9-neM" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="Ml9-cr-oMf"/>
-                                            <constraint firstItem="TT1-eP-7uY" firstAttribute="top" secondItem="YQC-bC-Z31" secondAttribute="bottom" constant="8" id="TB8-ax-fhL"/>
+                                            <constraint firstItem="1WJ-u3-o4y" firstAttribute="top" secondItem="Jsw-44-eLp" secondAttribute="bottom" constant="8" id="SHp-Gy-sWr"/>
                                             <constraint firstAttribute="trailing" secondItem="TT1-eP-7uY" secondAttribute="trailing" constant="8" id="Taq-aS-zxz"/>
-                                            <constraint firstItem="YQC-bC-Z31" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="TkL-Gl-07A"/>
-                                            <constraint firstAttribute="trailing" secondItem="YQC-bC-Z31" secondAttribute="trailing" constant="8" id="UBI-Jx-AoV"/>
+                                            <constraint firstItem="2Kc-hF-NnS" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="VUd-bY-aSP"/>
                                             <constraint firstAttribute="trailing" secondItem="TcQ-u9-neM" secondAttribute="trailing" constant="8" id="WYG-NI-cBb"/>
+                                            <constraint firstItem="Jsw-44-eLp" firstAttribute="leading" secondItem="Jch-fd-mbK" secondAttribute="trailing" constant="8" id="X5n-3b-8gD"/>
                                             <constraint firstItem="TT1-eP-7uY" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="Xzb-dO-hhk"/>
                                             <constraint firstItem="Jch-fd-mbK" firstAttribute="top" secondItem="MDe-of-gjx" secondAttribute="bottom" constant="8" id="ZRr-eP-dBc"/>
+                                            <constraint firstItem="2Kc-hF-NnS" firstAttribute="top" secondItem="Cxk-57-mAY" secondAttribute="bottom" constant="8" id="bpD-i8-kZz"/>
                                             <constraint firstAttribute="bottom" secondItem="TcQ-u9-neM" secondAttribute="bottom" priority="999" constant="8" id="cP8-uw-GeG"/>
+                                            <constraint firstItem="1WJ-u3-o4y" firstAttribute="leading" secondItem="Cxk-57-mAY" secondAttribute="trailing" constant="8" id="eHp-Hx-Ez2"/>
+                                            <constraint firstItem="Cxk-57-mAY" firstAttribute="top" secondItem="Jch-fd-mbK" secondAttribute="bottom" constant="8" id="f1E-Ap-OZL"/>
                                             <constraint firstItem="TcQ-u9-neM" firstAttribute="top" secondItem="TT1-eP-7uY" secondAttribute="bottom" constant="8" id="fPn-K7-eAt"/>
+                                            <constraint firstAttribute="trailing" secondItem="2Kc-hF-NnS" secondAttribute="trailing" constant="8" id="fRC-HC-Dhc"/>
                                             <constraint firstAttribute="trailing" secondItem="MDe-of-gjx" secondAttribute="trailing" constant="8" id="gHA-wj-YrP"/>
                                             <constraint firstItem="MDe-of-gjx" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="mkt-hV-Tp6"/>
-                                            <constraint firstItem="dMO-Dp-uKc" firstAttribute="leading" secondItem="hgE-vP-wKg" secondAttribute="trailing" constant="8" id="qfQ-Fc-f2d"/>
-                                            <constraint firstItem="hgE-vP-wKg" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="v1Q-Q6-2x8"/>
-                                            <constraint firstItem="YQC-bC-Z31" firstAttribute="top" secondItem="hgE-vP-wKg" secondAttribute="bottom" constant="8" id="vhb-RN-gvz"/>
-                                            <constraint firstAttribute="trailing" secondItem="dMO-Dp-uKc" secondAttribute="trailing" constant="8" id="xuM-mR-hmV"/>
+                                            <constraint firstItem="TT1-eP-7uY" firstAttribute="top" secondItem="2Kc-hF-NnS" secondAttribute="bottom" constant="8" id="nLu-0t-Juc"/>
+                                            <constraint firstItem="Cxk-57-mAY" firstAttribute="leading" secondItem="VRd-Eq-HwM" secondAttribute="leading" constant="8" id="waA-m3-ggm"/>
+                                            <constraint firstItem="Jsw-44-eLp" firstAttribute="top" secondItem="MDe-of-gjx" secondAttribute="bottom" constant="8" id="wfG-h8-diI"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -801,16 +797,17 @@
                     </view>
                     <navigationItem key="navigationItem" id="jya-Dn-Nf7"/>
                     <connections>
-                        <outlet property="categoriesTextField" destination="YQC-bC-Z31" id="Zuu-SC-nWx"/>
-                        <outlet property="cookingTimeTextField" destination="ikM-JC-Umd" id="75Q-dd-phQ"/>
-                        <outlet property="dificultyTextField" destination="hgE-vP-wKg" id="zcu-ws-fB1"/>
+                        <outlet property="categoriesButton" destination="2Kc-hF-NnS" id="Pa0-JG-KzN"/>
+                        <outlet property="cookingTimeButton" destination="Jsw-44-eLp" id="HnL-D4-3XH"/>
+                        <outlet property="difiicultyButton" destination="Cxk-57-mAY" id="kkc-fV-5KR"/>
                         <outlet property="ingredientsStackView" destination="TT1-eP-7uY" id="fUk-3C-zlB"/>
                         <outlet property="ingredientsStackViewHeightConstraint" destination="ebt-c3-Nqi" id="OwC-W5-RDC"/>
-                        <outlet property="lastCookTextField" destination="dMO-Dp-uKc" id="HLp-oI-PAb"/>
+                        <outlet property="lastCookButton" destination="1WJ-u3-o4y" id="y5x-jn-HWw"/>
                         <outlet property="portionsTextField" destination="Jch-fd-mbK" id="rRc-xO-Xfy"/>
                         <outlet property="recipeImageView" destination="DfQ-tC-vnV" id="g2S-JS-cD2"/>
                         <outlet property="recipeNametextField" destination="MDe-of-gjx" id="yuC-qB-hTk"/>
                         <outlet property="stepsStackView" destination="TcQ-u9-neM" id="Jfa-V5-zj6"/>
+                        <outlet property="stepsStackViewHeightConstraint" destination="ZcN-gv-B2Z" id="z3b-uk-SPT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xtL-Lg-KKs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

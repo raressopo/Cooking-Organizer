@@ -50,7 +50,7 @@ class NewRecipeIngredientView: UIView {
         addSubview(contentView)
         contentView.frame = self.bounds
         
-        layer.borderWidth = 0.5
+        layer.borderWidth = 0.2
         layer.borderColor = UIColor.black.cgColor
         layer.cornerRadius = 5.0
     }
