@@ -25,6 +25,27 @@ class LogInViewController: UIViewController {
     
     @IBOutlet weak var spinnerView: UIView!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let currentUserEmail = UserDefaults.standard.string(forKey: "currentUserEmail"),
+            let currentUserPassword = UserDefaults.standard.string(forKey: "currentUserPassword") {
+            spinnerView.isHidden = false
+            
+            UsersManager.shared.validateUserAndLogIn(withEmail: currentUserEmail, password: currentUserPassword) { userId in
+                self.spinnerView.isHidden = true
+                
+                if let _ = userId {
+                    self.performSegue(withIdentifier: "logInSegue", sender: self)
+                } else {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                      title: "Home Ingredients Fetch Failed",
+                                                                      message: "Something went wrong while fetching Home Ingredients")
+                }
+            }
+        }
+    }
+    
     @IBAction func cancelPressed(_ sender: Any) {
         signUpView.isHidden = true
         dismissSignUpViewButton.isHidden = true
@@ -88,7 +109,14 @@ class LogInViewController: UIViewController {
             self.spinnerView.isHidden = true
             
             if let id = userId {
-                 UserDefaults.standard.set(id, forKey: "loggedInUserId")
+                UserDataManager.shared.observeHomeIngredientAdded(forUserId: id)
+                UserDataManager.shared.observeHomeIngredientChanged(forUserId: id)
+                
+                UserDataManager.shared.observeRecipeAdded(forUserId: id)
+                UserDataManager.shared.observeRecipeChanged(forUserId: id)
+                
+                UserDefaults.standard.set(email, forKey: "currentUserEmail")
+                UserDefaults.standard.set(password, forKey: "currentUserPassword")
                 
                 self.performSegue(withIdentifier: "logInSegue", sender: self)
             } else {

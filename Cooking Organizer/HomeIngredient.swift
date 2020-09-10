@@ -9,7 +9,7 @@
 import UIKit
 
 class HomeIngredient: Codable {
-    let id: String?
+    let id: String
     var name: String?
     var expirationDate: String?
     var quantity: Double?

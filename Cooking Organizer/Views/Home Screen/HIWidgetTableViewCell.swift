@@ -25,7 +25,7 @@ class HIWidgetTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
         
         HIWidgetTableView.register(UINib(nibName: "HomeIngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "homeIngredientCell")
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -41,23 +41,21 @@ class HIWidgetTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeIngredientCell") as! HomeIngredientTableViewCell
         
-//        if let homeIngredient = UsersManager.shared.currentLoggedInUser?.data.homeIngredients?[indexPath.row] {
-//            let ingredient = homeIngredient.values
-//            
-//            cell.selectionStyle = .none
-//            
-//            cell.name.text = homeIngredient.name
-//            cell.expirationDate.text = homeIngredient.expirationDate
-//            cell.quantityAndUnit.text = "\(homeIngredient.quantity ?? 0.0) \(homeIngredient.unit ?? "")"
-//        }
-
+        if let homeIngredient = UsersManager.shared.currentLoggedInUser?.homeIngredients?[indexPath.row] {
+            cell.selectionStyle = .none
+            
+            cell.name.text = homeIngredient.name
+            cell.expirationDate.text = homeIngredient.expirationDate
+            cell.quantityAndUnit.text = "\(homeIngredient.quantity ?? 0.0) \(homeIngredient.unit ?? "")"
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       // if let homeIngredient = UsersManager.shared.currentLoggedInUser?.data.homeIngredients?[indexPath.row] {
-            //delegate?.homeIngredientPressed(withHomeIngredient: homeIngredient)
-        //}
+        if let homeIngredient = UsersManager.shared.currentLoggedInUser?.homeIngredients?[indexPath.row] {
+            delegate?.homeIngredientPressed(withHomeIngredient: homeIngredient)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

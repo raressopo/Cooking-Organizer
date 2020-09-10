@@ -8,18 +8,24 @@
 
 import UIKit
 
-class NewRecipeIngredient: NSObject {
-    var name: String?
-    var quantityAsString: String? {
-        didSet {
-            if let qtAsString = quantityAsString,
-                let quantityAsNumber = NumberFormatter().number(from: qtAsString) {
-                quantity = quantityAsNumber.doubleValue
-            }
-        }
+class NewRecipeIngredient: Codable, Equatable {
+    static func == (lhs: NewRecipeIngredient, rhs: NewRecipeIngredient) -> Bool {
+        return lhs.name == rhs.name && lhs.quantity == rhs.quantity && lhs.unit == rhs.unit
     }
-    var quantity: Double?
+    
+    var name: String?
+    var quantity: String?
     var unit: String?
+    
+    var quantityAsString: String?
+//    {
+//        didSet {
+//            if let qtAsString = quantityAsString,
+//                let quantityAsNumber = NumberFormatter().number(from: qtAsString) {
+//                quantity = quantityAsNumber.doubleValue
+//            }
+//        }
+//    }
     
     func asDictionary() -> [String:Any] {
         return ["name": name ?? "", "quantity": quantityAsString ?? "", "unit": unit ?? ""]

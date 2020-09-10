@@ -101,4 +101,64 @@ class FirebaseAPIManager {
             success(false)
         }
     }
+    
+    func observeHomeIngredientAdded(forUserId id: String, completion: @escaping (HomeIngredient?) -> Void) {
+        usersDataRef.child(id).child("homeIngredients").observe(.childAdded) { snapshot in
+            self.parseHomeIngredientDetails(fromSnapshot: snapshot, withCompletionHandler: completion)
+        }
+    }
+    
+    func observeHomeIngredientChanged(forUserId id: String, completion: @escaping (HomeIngredient?) -> Void) {
+        usersDataRef.child(id).child("homeIngredients").observe(.childChanged) { snapshot in
+            self.parseHomeIngredientDetails(fromSnapshot: snapshot, withCompletionHandler: completion)
+        }
+    }
+    
+    private func parseHomeIngredientDetails(fromSnapshot snapshot: DataSnapshot, withCompletionHandler completion: @escaping (HomeIngredient?) -> Void) {
+        guard let homeIngredientDetails = snapshot.value else {
+            completion(nil)
+            
+            return
+        }
+        
+        do {
+            let homeIngredient = try FirebaseDecoder().decode(HomeIngredient.self, from: homeIngredientDetails)
+            
+            completion(homeIngredient)
+        } catch let error {
+            completion(nil)
+            
+            print(error)
+        }
+    }
+    
+    func observeRecipeAdded(forUserId id: String, completion: @escaping (Recipe?) -> Void) {
+        usersDataRef.child(id).child("recipes").observe(.childAdded) { snapshot in
+            self.parseRecipeDetails(fromSnapshot: snapshot, withCompletionHandler: completion)
+        }
+    }
+    
+    func observeRecipeChanged(forUserId id: String, completion: @escaping (Recipe?) -> Void) {
+        usersDataRef.child(id).child("recipes").observe(.childChanged) { snapshot in
+            self.parseRecipeDetails(fromSnapshot: snapshot, withCompletionHandler: completion)
+        }
+    }
+    
+    private func parseRecipeDetails(fromSnapshot snapshot: DataSnapshot, withCompletionHandler completion: @escaping (Recipe?) -> Void) {
+        guard let recipeDetails = snapshot.value else {
+            completion(nil)
+            
+            return
+        }
+        
+        do {
+            let recipe = try FirebaseDecoder().decode(Recipe.self, from: recipeDetails)
+            
+            completion(recipe)
+        } catch let error {
+            completion(nil)
+            
+            print(error)
+        }
+    }
 }

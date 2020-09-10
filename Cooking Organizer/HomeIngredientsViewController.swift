@@ -32,8 +32,8 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
         
         homeIngredientsTableView.register(UINib(nibName: "HomeIngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "homeIngredientCell")
         
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.data.homeIngredients {
-            //homeIngredients = ingredients
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            homeIngredients = ingredients
             
             homeIngredientsTableView.reloadData()
         }
@@ -119,16 +119,16 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func homeIngredientsChanged() {
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.data.homeIngredients {
-            //homeIngredients = ingredients
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            homeIngredients = ingredients
             
             homeIngredientsTableView.reloadData()
         }
     }
     
     func homeIngredientsAdded() {
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.data.homeIngredients {
-            //homeIngredients = ingredients
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            homeIngredients = ingredients
             
             homeIngredientsTableView.reloadData()
         }

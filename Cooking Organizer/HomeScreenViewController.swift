@@ -73,20 +73,6 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         addButton.layer.cornerRadius = 25
         addButton.layer.borderWidth = 1
         addButton.layer.borderColor = UIColor.black.cgColor
-        
-        if let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id {
-            UserDataManager.shared.observeRecipeAdded(forUserId: loggedInUserId, onSuccess: {
-                
-            }) {
-                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Recipes Fetch Failed", message: "Something went wrong while fetching recipes")
-            }
-            
-//            UserDataManager.shared.observeHomeIngredientChanged(forUserId: loggedInUserId) {
-//                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-//                                                                  title: "Ingredients Update Failed",
-//                                                                  message: "Something went wrong updating with new ingredient changes")
-//            }
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -122,6 +108,9 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBAction func logOutPressed(_ sender: Any) {
         self.dismiss(animated: true) {
             UserDefaults.standard.removeObject(forKey: "loggedInUserId")
+            
+            UserDefaults.standard.removeObject(forKey: "currentUserEmail")
+            UserDefaults.standard.removeObject(forKey: "currentUserPassword")
         }
     }
     

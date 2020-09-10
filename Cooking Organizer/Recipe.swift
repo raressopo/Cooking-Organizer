@@ -8,22 +8,17 @@
 
 import UIKit
 
-class Recipe: NSObject {
-    var image: UIImage?
+class Recipe: Codable {
+    let id: String
     
-    var name: String?
-    
-    var portions: Int = 0
+    var categories: String?
     var cookingTime: String?
-    
     var dificulty: String?
+    var imageData: String?
     var lastCook: String?
+    var name: String?
+    var portions: Int = 0
     
-    var categoriesAsString: String?
-    
-    var ingredients = [NewRecipeIngredient]()
-    
-    var steps = [String]()
-    
-    var id: String?
+    var ingredients: [NewRecipeIngredient]?
+    var steps: [String]?
 }

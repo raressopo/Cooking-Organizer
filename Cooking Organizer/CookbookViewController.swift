@@ -23,6 +23,8 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         recipesTableView.delegate = self
         recipesTableView.dataSource = self
         
+        UserDataManager.shared.delegate = self
+        
         recipesTableView.register(UINib(nibName: "RecipeTableViewCell", bundle: nil), forCellReuseIdentifier: "recipeCell")
         
         if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
@@ -50,10 +52,14 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         let recipe = recipes[indexPath.row]
         
         cell.nameLabel.text = recipe.name
-        cell.categoriesLabel.text = recipe.categoriesAsString
+        cell.categoriesLabel.text = recipe.categories
         cell.cookingTimeLabel.text = recipe.cookingTime
         cell.lastCookLabel.text = recipe.lastCook
-        cell.nrOfIngredientsLabel.text = "\(recipe.ingredients.count) ingr."
+        
+        if let ingredients = recipe.ingredients {
+            cell.nrOfIngredientsLabel.text = "\(ingredients.count) ingr."
+        }
+        
         cell.portionsLabel.text = "\(recipe.portions) portions"
         
         return cell
@@ -70,6 +76,10 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recipeAdded() {
+        recipesTableView.reloadData()
+    }
+    
+    func recipeChanged() {
         recipesTableView.reloadData()
     }
 }

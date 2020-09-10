@@ -124,7 +124,8 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
                                "expirationDate": UtilsManager.shared.dateFormatter.string(from: expirationdate ?? Date(timeIntervalSince1970: 0)),
                                "quantity": quantity,
                                "unit": selectedUnit ?? "",
-                               "categories": categoriesAsString]) { (error, ref) in
+                               "categories": categoriesAsString,
+                               "id": uuid]) { (error, ref) in
                                 if error == nil {
                                     self.removeFromSuperview()
                                 } else {
@@ -182,10 +183,10 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
             }
             
             if ingredientChanged {
-                if let loggedInUser = UsersManager.shared.currentLoggedInUser, let ingredientId = ingredient.id {
+                if let loggedInUser = UsersManager.shared.currentLoggedInUser {
                     Database.database().reference().child("usersData")
                         .child(loggedInUser.loginData.id).child("homeIngredients")
-                        .child(ingredientId)
+                        .child(ingredient.id)
                         .updateChildValues(changedDataDictionary, withCompletionBlock: { (error, ref) in
                             self.removeFromSuperview()
                         }

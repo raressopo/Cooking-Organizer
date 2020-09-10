@@ -12,7 +12,21 @@ class User: NSObject {
     var loginData: UserLoginData
     var data: UserData
     
-    var recipes = [Recipe]()
+    var recipes: [Recipe]? {
+        if let recipes = data.recipes {
+            return Array(recipes.values)
+        } else {
+            return nil
+        }
+    }
+    
+    var homeIngredients: [HomeIngredient]? {
+        if let ingredients = data.homeIngredients {
+            return Array(ingredients.values)
+        } else {
+            return nil
+        }
+    }
     
     init(loginData: UserLoginData, data: UserData) {
         self.loginData = loginData
@@ -26,9 +40,10 @@ struct UserLoginData: Codable {
     let password: String
 }
 
-struct UserData: Codable {
+class UserData: Codable {
     let email: String
     let signUpDate: String
     
-    let homeIngredients: [String:HomeIngredient]?
+    var homeIngredients: [String:HomeIngredient]?
+    var recipes: [String:Recipe]?
 }

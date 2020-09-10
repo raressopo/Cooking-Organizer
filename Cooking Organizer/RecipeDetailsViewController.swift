@@ -57,17 +57,16 @@ class RecipeDetailsViewController: UIViewController {
         ingredientsStackView.spacing = 4.0
         stepsStackView.spacing = 4.0
         
-        if let ingredients = recipe?.ingredients, ingredients.count > 0 {
+        if let recipeIngredients = recipe?.ingredients, recipeIngredients.count > 0 {
+            ingredients = recipeIngredients
+            
             ingredientsViewSetup()
         }
         
-        if let steps = recipe?.ingredients, steps.count > 0 {
-            stepsViewSetup()
-        }
-        
-        if let recipeIngredients = recipe?.ingredients, let recipeSteps = recipe?.steps {
-            ingredients = recipeIngredients
+        if let recipeSteps = recipe?.steps, recipeSteps.count > 0 {
             steps = recipeSteps
+            
+            stepsViewSetup()
         }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
@@ -76,14 +75,22 @@ class RecipeDetailsViewController: UIViewController {
     // MARK: - Private Helper Methods
     
     private func viewsAndFieldsSetup() {
-        recipeImageView.image = recipe?.image
+        if let data = recipe?.imageData {
+            let dataDecode = Data(base64Encoded: data, options: .ignoreUnknownCharacters)
+            
+            if let imageData = dataDecode {
+                let decodedImage = UIImage(data: imageData)
+                
+                recipeImageView.image = decodedImage
+            }
+        }
         
         recipeNametextField.text = recipe?.name
         portionsTextField.text = "\(recipe?.portions ?? 0)"
         cookingTimeButton.setTitle(recipe?.cookingTime, for: .normal)
         difiicultyButton.setTitle(recipe?.dificulty, for: .normal)
         lastCookButton.setTitle(recipe?.lastCook, for: .normal)
-        categoriesButton.setTitle(recipe?.categoriesAsString, for: .normal)
+        categoriesButton.setTitle(recipe?.categories, for: .normal)
         
         categoriesButton.setTitleColor(UIColor.darkGray, for: .disabled)
         cookingTimeButton.setTitleColor(UIColor.darkGray, for: .disabled)
@@ -260,7 +267,7 @@ class RecipeDetailsViewController: UIViewController {
             changedRecipeDictionary["lastCook"] = lastCook
         }
         
-        if let categories = categoriesAsString, categories != recipe.categoriesAsString {
+        if let categories = categoriesAsString, categories != recipe.categories {
             changedRecipeDictionary["categories"] = categories
         }
         

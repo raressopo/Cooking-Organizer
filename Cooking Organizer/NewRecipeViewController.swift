@@ -225,6 +225,8 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
             return
         }
         
+        let id = UUID().uuidString
+        
         let recipeDictionary = ["name": recipeName,
                                 "imageData": imageData.base64EncodedString(),
                                 "portions": portionsNumber,
@@ -233,14 +235,15 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
                                 "lastCook": lastCook,
                                 "categories": selectedCategoriesString,
                                 "ingredients": createIngredientsDictionary(),
-                                "steps": createStepsDictionary()] as [String:Any]
+                                "steps": createStepsDictionary(),
+                                "id": id] as [String:Any]
         
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
 
         Database.database().reference().child("usersData")
             .child(loggedInUserId)
             .child("recipes")
-            .child(UUID().uuidString)
+            .child(id)
             .setValue(recipeDictionary) { (error, ref) in
                 if error == nil {
                     self.navigationController?.popViewController(animated: true)
