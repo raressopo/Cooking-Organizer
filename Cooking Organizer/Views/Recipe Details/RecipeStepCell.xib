@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="stepCell" rowHeight="83" id="95A-Iz-fE0" customClass="RecipeStepCell" customModule="Cooking_Organizer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="424" height="83"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="95A-Iz-fE0" id="XxV-1E-sLV">
+                <rect key="frame" x="0.0" y="0.0" width="424" height="83"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wcN-FU-vls" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                        <rect key="frame" x="8" y="31.5" width="20" height="20"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="A0s-hR-lQ7"/>
+                            <constraint firstAttribute="width" constant="20" id="d7C-si-wzQ"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ggt-a6-Uxw">
+                        <rect key="frame" x="36" y="8" width="30" height="67"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="30y-Lp-eyR"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="abx-fy-dqd">
+                        <rect key="frame" x="74" y="8" width="342" height="67"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="abx-fy-dqd" secondAttribute="trailing" constant="8" id="586-KR-kdF"/>
+                    <constraint firstItem="wcN-FU-vls" firstAttribute="centerY" secondItem="XxV-1E-sLV" secondAttribute="centerY" id="HNE-wg-XEP"/>
+                    <constraint firstItem="abx-fy-dqd" firstAttribute="top" secondItem="XxV-1E-sLV" secondAttribute="top" constant="8" id="KL1-Pa-KTP"/>
+                    <constraint firstItem="wcN-FU-vls" firstAttribute="leading" secondItem="XxV-1E-sLV" secondAttribute="leading" constant="8" id="NNX-d5-Gb7"/>
+                    <constraint firstAttribute="bottom" secondItem="Ggt-a6-Uxw" secondAttribute="bottom" constant="8" id="NPN-c2-NdP"/>
+                    <constraint firstItem="Ggt-a6-Uxw" firstAttribute="leading" secondItem="wcN-FU-vls" secondAttribute="trailing" constant="8" id="OXB-EM-l0e"/>
+                    <constraint firstItem="abx-fy-dqd" firstAttribute="leading" secondItem="Ggt-a6-Uxw" secondAttribute="trailing" constant="8" id="Y8t-5h-dR2"/>
+                    <constraint firstAttribute="bottom" secondItem="abx-fy-dqd" secondAttribute="bottom" constant="8" id="loL-fn-1ka"/>
+                    <constraint firstItem="Ggt-a6-Uxw" firstAttribute="top" secondItem="XxV-1E-sLV" secondAttribute="top" constant="8" id="ncQ-5v-2tf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="checkbox" destination="wcN-FU-vls" id="zAD-0W-axl"/>
+                <outlet property="stepDetailsTextView" destination="abx-fy-dqd" id="n9a-6l-pWO"/>
+                <outlet property="stepNrLabel" destination="Ggt-a6-Uxw" id="46c-36-n6E"/>
+            </connections>
+            <point key="canvasLocation" x="144.92753623188406" y="159.04017857142856"/>
+        </tableViewCell>
+    </objects>
+</document>

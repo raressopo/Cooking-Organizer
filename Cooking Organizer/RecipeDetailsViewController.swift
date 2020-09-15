@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import Firebase
 
 class RecipeDetailsViewController: UIViewController {
     var recipe: Recipe?
-
+    var changedRecipe = ChangedRecipe()
+    
+    @IBOutlet weak var changeImageButton: UIButton!
+    @IBOutlet weak var recipeImageView: UIImageView!
+    
     @IBOutlet weak var recipeNametextField: UITextField!
     @IBOutlet weak var portionsTextField: UITextField!
     
@@ -24,8 +29,6 @@ class RecipeDetailsViewController: UIViewController {
     
     @IBOutlet weak var ingredientsStackViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var stepsStackViewHeightConstraint: NSLayoutConstraint!
-    
-    @IBOutlet weak var recipeImageView: UIImageView!
     
     private var cookingTimeHours = 0
     private var cookingTimeMinutes = 0
@@ -44,35 +47,36 @@ class RecipeDetailsViewController: UIViewController {
     var areIngredientsChanged = false
     var areStepsChanged = false
     
+    var selectedCategories = [RecipeCategories]()
+    
+    var ingredientsView: IngredientsView?
+    var stepsView: StepsView?
+    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // First we have to set the ingredients and steps
+        setIngredientsAndSteps()
+        
+        // Secondly we will create and populate the views, fields and buttons
         viewsAndFieldsSetup()
-        
-        ingredientsStackView.distribution = .fillProportionally
-        stepsStackView.distribution = .fillProportionally
-        
-        ingredientsStackView.spacing = 4.0
-        stepsStackView.spacing = 4.0
-        
-        if let recipeIngredients = recipe?.ingredients, recipeIngredients.count > 0 {
-            ingredients = recipeIngredients
-            
-            ingredientsViewSetup()
-        }
-        
-        if let recipeSteps = recipe?.steps, recipeSteps.count > 0 {
-            steps = recipeSteps
-            
-            stepsViewSetup()
-        }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
     }
     
-    // MARK: - Private Helper Methods
+    // MARK: - Views Helpers
+    
+    private func setIngredientsAndSteps() {
+        if let recipeIngredients = recipe?.ingredients, recipeIngredients.count > 0 {
+            ingredients = recipeIngredients
+        }
+        
+        if let recipeSteps = recipe?.steps, recipeSteps.count > 0 {
+            steps = recipeSteps
+        }
+    }
     
     private func viewsAndFieldsSetup() {
         if let data = recipe?.imageData {
@@ -97,85 +101,13 @@ class RecipeDetailsViewController: UIViewController {
         difiicultyButton.setTitleColor(UIColor.darkGray, for: .disabled)
         lastCookButton.setTitleColor(UIColor.darkGray, for: .disabled)
         
+        ingredientsStackViewHeaderSetup()
+        stepsStackViewHeaderSetup()
+        
+        ingredientsViewSetup()
+        stepsViewSetup()
+        
         enableFieldsAndButtons(enable: false)
-    }
-    
-    private func ingredientsViewSetup() {
-        ingredientsStackViewHeaderSetup()
-        
-        ingredients.forEach { (ingredient) in
-            let ingredientView = RecipeDetailsIngredientView()
-            
-            ingredientView.ingredientName.text = ingredient.name
-            
-            if let quantity = ingredient.quantityAsString,
-                let unit = ingredient.unit
-            {
-                ingredientView.quantityAndUnit.text = quantity + unit
-            }
-            
-            ingredientsStackView.addArrangedSubview(ingredientView)
-            ingredientView.heightAnchor.constraint(equalToConstant: 60.0).isActive = true
-            
-            ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 64.0
-        }
-    }
-    
-    private func stepsViewSetup() {
-        stepsStackViewHeaderSetup()
-        
-        if let steps = recipe?.steps {
-            for stepIndex in steps.indices {
-                let step = steps[stepIndex]
-                let stepView = RecipeDetailsStepView()
-                
-                stepView.stepNr.text = "\(stepIndex)."
-                stepView.stepDescription.text = step
-                
-                stepsStackView.addArrangedSubview(stepView)
-                NSLayoutConstraint.activate([stepView.heightAnchor.constraint(equalToConstant: 60.0)])
-                
-                stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 64.0
-            }
-        }
-    }
-    
-    private func editIngredientsViewSetup() {
-        ingredientsStackViewHeaderSetup()
-        
-        if let ingredients = recipe?.ingredients {
-            ingredients.forEach { (ingredient) in
-                let ingredientView = NewRecipeIngredientView()
-                
-                ingredientView.nameTextField.text = ingredient.name
-                ingredientView.quantitytextField.text = ingredient.quantityAsString
-                ingredientView.unitButton.setTitle(ingredient.unit, for: .normal)
-                
-                ingredientsStackView.addArrangedSubview(ingredientView)
-                ingredientView.heightAnchor.constraint(equalToConstant: 60.0).isActive = true
-                
-                ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 64.0
-            }
-        }
-    }
-    
-    private func editStepsViewSetup() {
-        stepsStackViewHeaderSetup()
-        
-        if let steps = recipe?.steps {
-            for stepIndex in steps.indices {
-                let step = steps[stepIndex]
-                let stepView = NewRecipeStepView()
-                
-                stepView.stepNumberLabel.text = "\(stepIndex)."
-                stepView.stepTextView.text = step
-                
-                stepsStackView.addArrangedSubview(stepView)
-                NSLayoutConstraint.activate([stepView.heightAnchor.constraint(equalToConstant: 60.0)])
-                
-                stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 64.0
-            }
-        }
     }
     
     private func enableFieldsAndButtons(enable: Bool) {
@@ -185,6 +117,365 @@ class RecipeDetailsViewController: UIViewController {
         cookingTimeButton.isEnabled = enable
         categoriesButton.isEnabled = enable
         difiicultyButton.isEnabled = enable
+        changeImageButton.isHidden = !enable
+    }
+    
+    private func addStyleToLabel(label: UILabel) {
+        label.textAlignment = .left
+        label.layer.borderWidth = 0.2
+        label.layer.cornerRadius = 5.0
+        label.clipsToBounds = true
+        label.backgroundColor = UIColor.systemGray4
+        
+        label.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+    
+    private func setupViewAfterEditing() {
+        ingredientsViewSetup()
+        stepsViewSetup()
+        
+        navigationItem.hidesBackButton = false
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editPressed))
+        
+        enableFieldsAndButtons(enable: false)
+        
+        changedRecipe = ChangedRecipe()
+    }
+    
+    // MARK: - Data Handle Helpers
+    
+    private func changedRecipeDictionary() -> [String:Any] {
+        var changedRecipeDictionary = [String:Any]()
+        
+        guard let recipe = recipe else { return changedRecipeDictionary }
+        
+        // Recipe Image
+        if let originalImage = recipe.imageData,
+            let changedImage = changedRecipe.imageData,
+            originalImage != changedImage
+        {
+            changedRecipeDictionary["imageData"] = changedImage
+            
+            recipe.imageData = changedImage
+        }
+        
+        // Recipe Name
+        if let name = recipeNametextField.text,
+            !name.isEmpty,
+            name != recipe.name
+        {
+            changedRecipeDictionary["name"] = name
+        }
+        
+        // Portions
+        if let portions = portionsTextField.text,
+            !portions.isEmpty,
+            let portionsAsNumber = NumberFormatter().number(from: portions),
+            portionsAsNumber.intValue != recipe.portions
+        {
+            changedRecipeDictionary["portions"] = portionsAsNumber
+        }
+        
+        // Cooking Time
+        if (cookingTimeHours != 0 || cookingTimeMinutes != 0),
+            "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes" != recipe.cookingTime
+        {
+            changedRecipeDictionary["cookingTime"] = "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes"
+        }
+        
+        // Dificulty
+        if let dificulty = dificulty, dificulty != recipe.dificulty {
+            changedRecipeDictionary["dificulty"] = dificulty
+        }
+        
+        // Last Cook
+        if let lastCook = lastCookDateString, lastCook != recipe.lastCook {
+            changedRecipeDictionary["lastCook"] = lastCook
+        }
+        
+        // Categories
+        if let categories = categoriesAsString, categories != recipe.categories {
+            changedRecipeDictionary["categories"] = categories
+        }
+        
+        // Ingredients
+        validateChangedRecipeIngredients { newIngredients in
+            self.changedIngredients = newIngredients
+            
+            changedRecipeDictionary["ingredients"] = self.createIngredientsDictionary()
+        }
+        
+        // Steps
+        validateChangedRecipeSteps(success: { newSteps in
+            self.changedSteps = newSteps
+            
+            changedRecipeDictionary["steps"] = self.createStepsDictionary()
+        })
+        
+        return changedRecipeDictionary
+    }
+    
+    // MARK: - Selectors
+    
+    @objc
+    func editPressed() {
+        editIngredientsViewSetup()
+        editStepsViewSetup()
+        
+        navigationItem.hidesBackButton = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
+        
+        enableFieldsAndButtons(enable: true)
+    }
+    
+    @objc
+    func donePressed() {
+        ingredientsView?.validateChangedIngredients(validationFailed: { failed in
+            if failed {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Incomplete Ingredients",
+                                                                  message: "Please complete all the info for all the ingredients you have or added.")
+                
+                return
+            } else {
+                self.stepsView?.validateChangedSteps(validationFailed: { failed in
+                    if failed {
+                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Incomplete Steps", message: "Please make sure that you completed all steps details")
+                        
+                        return
+                    } else {
+                        let changedRecipeDetails = self.changedRecipeDictionary()
+                        
+                        if let userId = UsersManager.shared.currentLoggedInUser?.loginData.id,
+                            let recipeId = self.recipe?.id,
+                            !changedRecipeDetails.isEmpty
+                        {
+                            FirebaseAPIManager.sharedInstance.updateRecipe(froUserId: userId,
+                                                                           andForRecipeId: recipeId,
+                                                                           withDetails: changedRecipeDetails) { success in
+                                                                            if success {
+                                                                                self.recipe = UsersManager.shared.currentLoggedInUser!.data.recipes?[recipeId]
+                                                                                
+                                                                                self.setIngredientsAndSteps()
+                                                                                self.setupViewAfterEditing()
+                                                                                //self.viewsAndFieldsSetup()
+                                                                            } else {
+                                                                                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                                                                                  title: "Update Failed",
+                                                                                                                                  message: "Something went wrong updating the recipe. Please try again later!")
+                                                                            }
+                            }
+                        } else {
+                            self.setupViewAfterEditing()
+                        }
+                    }
+                })
+            }
+        })
+    }
+}
+
+// MARK: - Recipe Image
+
+extension RecipeDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    @IBAction func changeImagePressed(_ sender: Any) {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
+            let myPickerController = UIImagePickerController()
+            myPickerController.delegate = self
+            myPickerController.sourceType = .photoLibrary
+            present(myPickerController, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            if let imageData = UtilsManager.resizeImageTo450x450AsData(image: image) {
+                changedRecipe.imageData = imageData.base64EncodedString()
+                
+                recipeImageView.image = image
+            }
+            
+            picker.dismiss(animated: true, completion: nil)
+        } else{
+            print("Something went wrong")
+        }
+    }
+}
+
+// MARK: - Cooking Time
+
+extension RecipeDetailsViewController: CookingTimePickerViewDelegate {
+    @IBAction func cookingTimePressed(_ sender: Any) {
+        let cookingTimePickerView = CookingTimePickerView()
+        
+        cookingTimePickerView.delegate = self
+        
+        self.view.addSubview(cookingTimePickerView)
+        
+        cookingTimePickerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([cookingTimePickerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     cookingTimePickerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     cookingTimePickerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     cookingTimePickerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
+    func didSelectTime(hours: Int, minutes: Int) {
+        cookingTimeHours = hours
+        cookingTimeMinutes = minutes
+        
+        cookingTimeButton.setTitle("\(hours) hours \(minutes) minutes", for: .normal)
+    }
+}
+
+// MARK: - Dificulty
+
+extension RecipeDetailsViewController: DificultyPickerViewDelegate {
+    @IBAction func dificultyPressed(_ sender: Any) {
+        let dificultyPickerView = DificultyPickerView()
+        
+        dificultyPickerView.delegate = self
+        
+        view.addSubview(dificultyPickerView)
+        
+        dificultyPickerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([dificultyPickerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     dificultyPickerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     dificultyPickerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     dificultyPickerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
+    func didSelectDificulty(dificulty: String) {
+        self.dificulty = dificulty
+        
+        difiicultyButton.setTitle(dificulty, for: .normal)
+    }
+}
+
+// MARK: - Last Cook
+
+extension RecipeDetailsViewController: LastCookDatePickerViewDelegate {
+    @IBAction func lastCookPressed(_ sender: Any) {
+        let lastCookDatePickerView = LastCookDatePickerView()
+        
+        lastCookDatePickerView.delegate = self
+        
+        view.addSubview(lastCookDatePickerView)
+        
+        lastCookDatePickerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([lastCookDatePickerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     lastCookDatePickerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     lastCookDatePickerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     lastCookDatePickerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
+    func didSelectLastCookDate(date: Date) {
+        let dateString = UtilsManager.shared.dateFormatter.string(from: date)
+        
+        lastCookDateString = dateString
+        
+        lastCookButton.setTitle(dateString, for: .normal)
+    }
+}
+
+// MARK: - Categories
+
+extension RecipeDetailsViewController: CategoriesViewDelegate {
+    @IBAction func categoriesPressed(_ sender: Any) {
+        let categoriesView = CategoriesView()
+        
+        categoriesView.copyOfSelectedCategories = selectedCategories
+        categoriesView.delegate = self
+        
+        view.addSubview(categoriesView)
+        
+        categoriesView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([categoriesView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     categoriesView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     categoriesView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     categoriesView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
+    func didSelectCategories(categories: [RecipeCategories]) {
+        selectedCategories = categories
+        
+        configureCategoriesButton()
+    }
+    
+    private func configureCategoriesButton() {
+        var categoriesButtonTitle = ""
+        
+        if selectedCategories.count == 0 {
+            categoriesButtonTitle = "Categories"
+        } else if selectedCategories.count == 1 {
+            categoriesButtonTitle = "\(selectedCategories.first!.string)"
+        } else {
+            for category in selectedCategories {
+                if selectedCategories.last! == category {
+                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string)"
+                } else {
+                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string), "
+                }
+            }
+        }
+        
+        if selectedCategories.count > 0 {
+            categoriesAsString = categoriesButtonTitle
+        }
+        
+        categoriesButton.setTitle(categoriesButtonTitle, for: .normal)
+        categoriesButton.titleLabel?.textAlignment = .center
+    }
+}
+
+// MARK: - Ingredients
+
+extension RecipeDetailsViewController {
+    private func ingredientsViewSetup() {
+        if let ingredientsView = ingredientsView {
+            ingredientsView.tableView.setEditing(false, animated: true)
+            
+            ingredientsView.ingredients = ingredients
+            ingredientsView.removeAddIngredientButton()
+            ingredientsView.tableView.reloadData()
+            
+            ingredientsStackViewHeightConstraint.constant = 30 + CGFloat(ingredients.count * 60)
+        } else {
+            ingredientsView = IngredientsView(frame: CGRect(x: 0, y: 0, width: ingredientsStackView.frame.width, height: CGFloat(ingredients.count) * 60.0))
+            
+            if let ingredientsView = ingredientsView {
+                ingredientsView.ingredients = ingredients
+                ingredientsView.delegate = self
+                ingredientsView.addIngredientButton.isHidden = true
+                
+                ingredientsStackView.distribution = .fill
+                
+                ingredientsStackView.addArrangedSubview(ingredientsView)
+                
+                ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + (CGFloat(ingredients.count) * 60.0)
+            }
+        }
+    }
+    
+    private func editIngredientsViewSetup() {
+        if let ingredientsView = ingredientsView {
+            ingredientsView.tableView.setEditing(true, animated: true)
+            
+            ingredientsView.setupAddIngredientButton()
+            ingredientsView.tableView.reloadData()
+            
+            ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 76.0
+            
+            ingredientsView.addIngredientButton.addTarget(self, action: #selector(addNewIngredientPressed), for: .touchUpInside)
+        }
+    }
+    
+    @objc
+    func addNewIngredientPressed() {
+        ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 60.0
     }
     
     private func ingredientsStackViewHeaderSetup() {
@@ -199,6 +490,72 @@ class RecipeDetailsViewController: UIViewController {
         ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 30.0
     }
     
+    private func clearIngredientsStackView() {
+        ingredientsStackViewHeightConstraint.constant = 0
+        
+        ingredientsStackView.subviews.forEach( { $0.removeFromSuperview() } )
+    }
+    
+    private func createIngredientsDictionary() -> [String:Any] {
+        var ingredientsDictionary = [String:Any]()
+        
+        changedIngredients.forEach { ingredientsDictionary["\(changedIngredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
+        
+        return ingredientsDictionary
+    }
+    
+    private func validateChangedRecipeIngredients(success: @escaping ([NewRecipeIngredient]) -> Void) {
+        if let ingredientsView = self.ingredientsView, ingredientsView.areIngredientsChanged() {
+            success(ingredientsView.changingIngredients)
+        }
+    }
+}
+
+// MARK: - Steps
+
+extension RecipeDetailsViewController {
+    private func stepsViewSetup() {
+        if let stepsView = stepsView {
+            stepsView.tableView.setEditing(false, animated: true)
+            
+            stepsView.steps = steps
+            stepsView.removeAddStepButton()
+            stepsView.tableView.reloadData()
+            
+            stepsStackViewHeightConstraint.constant = 30 + CGFloat(steps.count * 60)
+        } else {
+            stepsView = StepsView(frame: CGRect(x: 0, y: 0, width: stepsStackView.frame.width, height: CGFloat(steps.count * 60)))
+            
+            if let stepsView = stepsView {
+                stepsView.steps = steps
+                stepsView.delegate = self
+                
+                stepsStackView.distribution = .fill
+                stepsStackView.addArrangedSubview(stepsView)
+                
+                stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + CGFloat(steps.count * 60)
+            }
+        }
+    }
+    
+    private func editStepsViewSetup() {
+        if let stepsView = stepsView {
+            stepsView.tableView.setEditing(true, animated: true)
+            
+            stepsView.setupAddStepButton()
+            stepsView.tableView.reloadData()
+            
+            stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 76.0
+            
+            stepsView.addStepButton.addTarget(self, action: #selector(addNewStepPressed), for: .touchUpInside)
+        }
+    }
+    
+    @objc
+    func addNewStepPressed() {
+        stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 60.0
+    }
+    
     private func stepsStackViewHeaderSetup() {
         let stepsHeaderTitle = UILabel()
         
@@ -211,91 +568,10 @@ class RecipeDetailsViewController: UIViewController {
         stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 30.0
     }
     
-    private func clearIngredientsStackView() {
-        ingredientsStackViewHeightConstraint.constant = 0
-        
-        ingredientsStackView.subviews.forEach( { $0.removeFromSuperview() } )
-    }
-    
     private func clearStepsStackView() {
         stepsStackViewHeightConstraint.constant = 0
         
         stepsStackView.subviews.forEach( { $0.removeFromSuperview() } )
-    }
-    
-    private func addStyleToLabel(label: UILabel) {
-        label.textAlignment = .left
-        label.layer.borderWidth = 0.2
-        label.layer.cornerRadius = 5.0
-        label.clipsToBounds = true
-        label.backgroundColor = UIColor.systemGray4
-        
-        label.heightAnchor.constraint(equalToConstant: 30).isActive = true
-    }
-    
-    private func changedRecipeDictionary() -> [String:Any]? {
-        var changedRecipeDictionary = [String:Any]()
-        
-        guard let recipe = recipe else { return nil }
-        
-        if let name = recipeNametextField.text,
-            !name.isEmpty,
-            name != recipe.name
-        {
-            changedRecipeDictionary["name"] = name
-        }
-        
-        if let portions = portionsTextField.text,
-            !portions.isEmpty,
-            let portionsAsNumber = NumberFormatter().number(from: portions),
-            portionsAsNumber.intValue != recipe.portions
-        {
-            changedRecipeDictionary["portions"] = portions
-        }
-        
-        if (cookingTimeHours != 0 || cookingTimeMinutes != 0),
-            "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes" != recipe.cookingTime
-        {
-            changedRecipeDictionary["cookingTime"] = "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes"
-        }
-        
-        if let dificulty = dificulty, dificulty != recipe.dificulty {
-            changedRecipeDictionary["dificulty"] = dificulty
-        }
-        
-        if let lastCook = lastCookDateString, lastCook != recipe.lastCook {
-            changedRecipeDictionary["lastCook"] = lastCook
-        }
-        
-        if let categories = categoriesAsString, categories != recipe.categories {
-            changedRecipeDictionary["categories"] = categories
-        }
-        
-        validateChangedRecipeIngredients(success: {
-            changedRecipeDictionary["ingredients"] = self.createIngredientsDictionary()
-        })
-        
-        validateChangedRecipeSteps {
-            changedRecipeDictionary["steps"] = self.createStepsDictionary()
-        }
-        
-        if changedRecipeDictionary.isEmpty {
-            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                              title: "No changes detected",
-                                                              message: "Please check that you changed a detail of the recipe!")
-            
-            return nil
-        } else {
-            return changedRecipeDictionary
-        }
-    }
-    
-    private func createIngredientsDictionary() -> [String:Any] {
-        var ingredientsDictionary = [String:Any]()
-        
-        changedIngredients.forEach { ingredientsDictionary["\(changedIngredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
-        
-        return ingredientsDictionary
     }
     
     private func createStepsDictionary() -> [String:Any] {
@@ -306,114 +582,21 @@ class RecipeDetailsViewController: UIViewController {
         return stepsDictionary
     }
     
-    private func validateChangedRecipeIngredients(success: @escaping () -> Void) {
-        changedIngredients.removeAll()
-        
-        areIngredientsChanged = false
-        
-        ingredientsStackView.subviews.forEach { view in
-            guard let view = view as? NewRecipeIngredientView else { return }
-            guard let viewIndex = ingredientsStackView.subviews.firstIndex(of: view) else { return }
-            
-            let originalIngredient = ingredients[viewIndex]
-            
-            if let changedIngredientViewName = view.nameTextField.text,
-                let changedIngredientViewQuantity = view.quantitytextField.text,
-                let changedIngredientViewUnit = view.unitButton.titleLabel?.text
-            {
-                if changedIngredientViewName.isEmpty ||
-                    changedIngredientViewQuantity.isEmpty ||
-                    changedIngredientViewUnit == "Unit"
-                {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                      title: "Incomplete Ingredients",
-                                                                      message: "Please check that you completed all ingredients fields. If you left one incomplete either remove it or complete it will all dteails!")
-                    
-                    return
-                }
-                
-                if changedIngredientViewName != originalIngredient.name ||
-                    changedIngredientViewQuantity != originalIngredient.quantityAsString ||
-                    changedIngredientViewUnit != originalIngredient.unit
-                {
-                    areIngredientsChanged = true
-                }
-                
-                let ingredient = NewRecipeIngredient()
-                
-                ingredient.name = changedIngredientViewName
-                ingredient.quantityAsString = changedIngredientViewQuantity
-                ingredient.unit = changedIngredientViewUnit
-                
-                changedIngredients.append(ingredient)
-            }
-        }
-        
-        if areIngredientsChanged {
-            success()
+    private func validateChangedRecipeSteps(success: @escaping ([String]) -> Void) {
+        if let stepsView = self.stepsView, stepsView.areStepsChanged() {
+            success(stepsView.changingSteps)
         }
     }
-    
-    private func validateChangedRecipeSteps(success: @escaping () -> Void) {
-        changedSteps.removeAll()
-        
-        areStepsChanged = false
-        
-        stepsStackView.subviews.forEach { view in
-            guard let view = view as? NewRecipeStepView else { return }
-            guard let viewIndex = stepsStackView.subviews.firstIndex(of: view) else { return }
-            
-            let originalStep = steps[viewIndex]
-            
-            if let changedStepViewDescription = view.stepTextView.text {
-                if changedStepViewDescription.isEmpty {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                      title: "Incomplete Steps",
-                                                                      message: "Please check that you completed step description field. If you left one incomplete either remove it or complete it with description!")
-                    
-                    return
-                }
-                
-                if originalStep != changedStepViewDescription {
-                    areStepsChanged = true
-                }
-                
-                changedSteps.append(changedStepViewDescription)
-            }
-        }
-        
-        if areStepsChanged {
-            success()
-        }
+}
+
+extension RecipeDetailsViewController: IngredientsViewDelegate {
+    func ingredientDeleted() {
+        ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant - 60.0
     }
-    
-    // MARK: - Selectors
-    
-    @objc
-    func editPressed() {
-        clearIngredientsStackView()
-        clearStepsStackView()
-        
-        editIngredientsViewSetup()
-        editStepsViewSetup()
-        
-        navigationItem.hidesBackButton = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
-        
-        enableFieldsAndButtons(enable: true)
-    }
-    
-    @objc
-    func donePressed() {
-        clearIngredientsStackView()
-        clearStepsStackView()
-        
-        ingredientsViewSetup()
-        stepsViewSetup()
-        
-        navigationItem.hidesBackButton = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
-        
-        enableFieldsAndButtons(enable: false)
+}
+
+extension RecipeDetailsViewController: StepsViewDelegate {
+    func stepDeleted() {
+        stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant - 60.0
     }
 }

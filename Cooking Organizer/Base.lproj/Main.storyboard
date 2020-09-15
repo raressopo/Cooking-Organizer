@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -680,6 +680,18 @@
                                     <constraint firstAttribute="height" constant="237" id="KDy-F9-1yX"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lpO-AK-QdX">
+                                <rect key="frame" x="284" y="108" width="110" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="36Q-Gx-iy7"/>
+                                    <constraint firstAttribute="width" constant="110" id="6ZK-dF-rZ9"/>
+                                </constraints>
+                                <state key="normal" title="Change Image"/>
+                                <connections>
+                                    <action selector="changeImagePressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="HjW-wZ-0iD"/>
+                                </connections>
+                            </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v8f-o6-8vl">
                                 <rect key="frame" x="0.0" y="325" width="414" height="571"/>
                                 <subviews>
@@ -703,13 +715,13 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TT1-eP-7uY">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="TT1-eP-7uY">
                                                 <rect key="frame" x="8" y="178" width="398" height="0.0"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="ebt-c3-Nqi"/>
                                                 </constraints>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TcQ-u9-neM">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="TcQ-u9-neM">
                                                 <rect key="frame" x="8" y="186" width="398" height="0.0"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" id="ZcN-gv-B2Z"/>
@@ -722,6 +734,9 @@
                                                     <constraint firstAttribute="width" constant="120" id="wXY-ai-U87"/>
                                                 </constraints>
                                                 <state key="normal" title="Dificulty"/>
+                                                <connections>
+                                                    <action selector="dificultyPressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="pOb-sx-ef4"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jsw-44-eLp">
                                                 <rect key="frame" x="136" y="50" width="270" height="34"/>
@@ -729,6 +744,9 @@
                                                     <constraint firstAttribute="height" constant="34" id="CC7-MB-JEr"/>
                                                 </constraints>
                                                 <state key="normal" title="Cooking Time"/>
+                                                <connections>
+                                                    <action selector="cookingTimePressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="2j9-ID-HcA"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1WJ-u3-o4y">
                                                 <rect key="frame" x="136" y="92" width="270" height="30"/>
@@ -736,6 +754,9 @@
                                                     <constraint firstAttribute="height" constant="30" id="oWZ-45-De9"/>
                                                 </constraints>
                                                 <state key="normal" title="Last Cook"/>
+                                                <connections>
+                                                    <action selector="lastCookPressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="XYn-gx-npf"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kc-hF-NnS">
                                                 <rect key="frame" x="8" y="130" width="398" height="40"/>
@@ -743,6 +764,9 @@
                                                     <constraint firstAttribute="height" constant="40" id="DNn-no-7PM"/>
                                                 </constraints>
                                                 <state key="normal" title="Categories"/>
+                                                <connections>
+                                                    <action selector="categoriesPressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="9cd-V4-VRe"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -790,14 +814,17 @@
                             <constraint firstItem="DfQ-tC-vnV" firstAttribute="trailing" secondItem="0W0-35-bwJ" secondAttribute="trailing" id="K8g-Ia-qSJ"/>
                             <constraint firstItem="v8f-o6-8vl" firstAttribute="top" secondItem="DfQ-tC-vnV" secondAttribute="bottom" id="KPG-NZ-NNX"/>
                             <constraint firstItem="DfQ-tC-vnV" firstAttribute="leading" secondItem="0W0-35-bwJ" secondAttribute="leading" id="XSr-ZP-iYn"/>
+                            <constraint firstItem="0W0-35-bwJ" firstAttribute="trailing" secondItem="lpO-AK-QdX" secondAttribute="trailing" constant="20" id="g5B-fL-XsR"/>
                             <constraint firstItem="DfQ-tC-vnV" firstAttribute="top" secondItem="0W0-35-bwJ" secondAttribute="top" id="iAM-de-bEx"/>
                             <constraint firstItem="v8f-o6-8vl" firstAttribute="trailing" secondItem="0W0-35-bwJ" secondAttribute="trailing" id="y5s-xF-qrB"/>
+                            <constraint firstItem="lpO-AK-QdX" firstAttribute="top" secondItem="0W0-35-bwJ" secondAttribute="top" constant="20" id="zvu-FX-iTJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="0W0-35-bwJ"/>
                     </view>
                     <navigationItem key="navigationItem" id="jya-Dn-Nf7"/>
                     <connections>
                         <outlet property="categoriesButton" destination="2Kc-hF-NnS" id="Pa0-JG-KzN"/>
+                        <outlet property="changeImageButton" destination="lpO-AK-QdX" id="A8f-cD-a25"/>
                         <outlet property="cookingTimeButton" destination="Jsw-44-eLp" id="HnL-D4-3XH"/>
                         <outlet property="difiicultyButton" destination="Cxk-57-mAY" id="kkc-fV-5KR"/>
                         <outlet property="ingredientsStackView" destination="TT1-eP-7uY" id="fUk-3C-zlB"/>

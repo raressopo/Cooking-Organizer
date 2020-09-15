@@ -17,17 +17,17 @@ class NewRecipeIngredient: Codable, Equatable {
     var quantity: String?
     var unit: String?
     
-    var quantityAsString: String?
-//    {
-//        didSet {
-//            if let qtAsString = quantityAsString,
-//                let quantityAsNumber = NumberFormatter().number(from: qtAsString) {
-//                quantity = quantityAsNumber.doubleValue
-//            }
-//        }
-//    }
+    func asDictionary() -> [String:Any] {
+        return ["name": name ?? "", "quantity": quantity ?? "", "unit": unit ?? ""]
+    }
+}
+
+struct CopyOfIngredientRecipe {
+    var name: String?
+    var quantity: String?
+    var unit: String?
     
     func asDictionary() -> [String:Any] {
-        return ["name": name ?? "", "quantity": quantityAsString ?? "", "unit": unit ?? ""]
+        return ["name": name ?? "", "quantity": quantity ?? "", "unit": unit ?? ""]
     }
 }

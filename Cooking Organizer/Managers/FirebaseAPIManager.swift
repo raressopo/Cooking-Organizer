@@ -161,4 +161,13 @@ class FirebaseAPIManager {
             print(error)
         }
     }
+    
+    func updateRecipe(froUserId id: String,
+                      andForRecipeId recipeId: String,
+                      withDetails details: [String:Any],
+                      andCompletionHandler completion: @escaping (Bool) -> Void) {
+        usersDataRef.child(id).child("recipes").child(recipeId).updateChildValues(details) { (error, _) in
+            completion(error == nil)
+        }
+    }
 }

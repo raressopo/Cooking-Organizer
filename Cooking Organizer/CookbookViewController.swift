@@ -80,6 +80,10 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recipeChanged() {
+        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
+            recipes = userRecipes
+        }
+        
         recipesTableView.reloadData()
     }
 }

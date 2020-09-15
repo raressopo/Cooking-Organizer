@@ -22,3 +22,16 @@ class Recipe: Codable {
     var ingredients: [NewRecipeIngredient]?
     var steps: [String]?
 }
+
+class ChangedRecipe {
+    var categories: String?
+    var cookingTime: String?
+    var dificulty: String?
+    var imageData: String?
+    var lastCook: String?
+    var name: String?
+    var portions: Int = 0
+    
+    var ingredients: [NewRecipeIngredient]?
+    var steps: [String]?
+}

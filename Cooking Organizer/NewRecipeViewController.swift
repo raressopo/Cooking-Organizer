@@ -297,7 +297,7 @@ class NewRecipeViewController: UIViewController, NewRecipeIngredientViewDelegate
                 let ingredient = NewRecipeIngredient()
                 
                 ingredient.name = ingredientViewName
-                ingredient.quantityAsString = ingredientViewQuantity
+                ingredient.quantity = ingredientViewQuantity
                 ingredient.unit = ingredientViewUnit
                 
                 ingredients.append(ingredient)

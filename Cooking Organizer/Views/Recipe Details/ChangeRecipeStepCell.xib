@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="changeStepCell" rowHeight="93" id="SAf-ae-Osd" customClass="ChangeRecipeStepCell" customModule="Cooking_Organizer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="446" height="93"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SAf-ae-Osd" id="Ta0-RP-P09">
+                <rect key="frame" x="0.0" y="0.0" width="446" height="93"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l1O-jU-UHF">
+                        <rect key="frame" x="8" y="8" width="42" height="77"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="42" id="ZGK-32-4pk"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Step Details" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="t8E-GC-4pr">
+                        <rect key="frame" x="58" y="8" width="380" height="77"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="l1O-jU-UHF" secondAttribute="bottom" constant="8" id="0eX-lv-n3t"/>
+                    <constraint firstItem="t8E-GC-4pr" firstAttribute="leading" secondItem="l1O-jU-UHF" secondAttribute="trailing" constant="8" id="MGi-I6-r6Q"/>
+                    <constraint firstItem="l1O-jU-UHF" firstAttribute="top" secondItem="Ta0-RP-P09" secondAttribute="top" constant="8" id="W5V-cX-YKV"/>
+                    <constraint firstAttribute="bottom" secondItem="t8E-GC-4pr" secondAttribute="bottom" constant="8" id="YdW-Lo-bax"/>
+                    <constraint firstItem="l1O-jU-UHF" firstAttribute="leading" secondItem="Ta0-RP-P09" secondAttribute="leading" constant="8" id="YnS-V4-qM6"/>
+                    <constraint firstAttribute="trailing" secondItem="t8E-GC-4pr" secondAttribute="trailing" constant="8" id="ojT-8B-JyM"/>
+                    <constraint firstItem="t8E-GC-4pr" firstAttribute="top" secondItem="Ta0-RP-P09" secondAttribute="top" constant="8" id="v9V-C3-yMB"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="stepDetailsTextField" destination="t8E-GC-4pr" id="7fV-rm-3oP"/>
+                <outlet property="stepNrLabel" destination="l1O-jU-UHF" id="9xP-CH-ke0"/>
+            </connections>
+            <point key="canvasLocation" x="111.59420289855073" y="175.11160714285714"/>
+        </tableViewCell>
+    </objects>
+</document>

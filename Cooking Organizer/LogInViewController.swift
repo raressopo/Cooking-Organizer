@@ -35,7 +35,13 @@ class LogInViewController: UIViewController {
             UsersManager.shared.validateUserAndLogIn(withEmail: currentUserEmail, password: currentUserPassword) { userId in
                 self.spinnerView.isHidden = true
                 
-                if let _ = userId {
+                if let id = userId {
+                    UserDataManager.shared.observeHomeIngredientAdded(forUserId: id)
+                    UserDataManager.shared.observeHomeIngredientChanged(forUserId: id)
+                    
+                    UserDataManager.shared.observeRecipeAdded(forUserId: id)
+                    UserDataManager.shared.observeRecipeChanged(forUserId: id)
+                    
                     self.performSegue(withIdentifier: "logInSegue", sender: self)
                 } else {
                     AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
