@@ -93,7 +93,7 @@ class RecipeDetailsViewController: UIViewController {
         portionsTextField.text = "\(recipe?.portions ?? 0)"
         cookingTimeButton.setTitle(recipe?.cookingTime, for: .normal)
         difiicultyButton.setTitle(recipe?.dificulty, for: .normal)
-        lastCookButton.setTitle(recipe?.lastCook, for: .normal)
+        lastCookButton.setTitle(recipe?.lastCook ?? "Never Cooked", for: .normal)
         categoriesButton.setTitle(recipe?.categories, for: .normal)
         
         categoriesButton.setTitleColor(UIColor.darkGray, for: .disabled)
@@ -189,8 +189,12 @@ class RecipeDetailsViewController: UIViewController {
         }
         
         // Last Cook
-        if let lastCook = lastCookDateString, lastCook != recipe.lastCook {
-            changedRecipeDictionary["lastCook"] = lastCook
+        if let lastCook = lastCookDateString {
+            if lastCook != recipe.lastCook {
+                changedRecipeDictionary["lastCook"] = lastCook
+            }
+        } else {
+            changedRecipeDictionary["lastCook"] = []
         }
         
         // Categories
@@ -371,12 +375,18 @@ extension RecipeDetailsViewController: LastCookDatePickerViewDelegate {
                                      lastCookDatePickerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
     }
     
-    func didSelectLastCookDate(date: Date) {
-        let dateString = UtilsManager.shared.dateFormatter.string(from: date)
+    func didSelectLastCookDate(date: Date?) {
+        if let date = date {
+            let dateString = UtilsManager.shared.dateFormatter.string(from: date)
         
-        lastCookDateString = dateString
+            lastCookDateString = dateString
         
-        lastCookButton.setTitle(dateString, for: .normal)
+            lastCookButton.setTitle(dateString, for: .normal)
+        } else {
+            lastCookDateString = nil
+            
+            lastCookButton.setTitle("Never Cooked", for: .normal)
+        }
     }
 }
 

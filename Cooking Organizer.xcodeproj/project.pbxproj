@@ -263,10 +263,10 @@
 		8EF5BFD02475230F00C44646 /* Cooking Organizer */ = {
 			isa = PBXGroup;
 			children = (
-				8EEC0BDE247FD238005BFA24 /* Views */,
 				8E8E20322475535900AF2F49 /* Models */,
-				8E8E202F24753F6100AF2F49 /* Managers */,
+				8EEC0BDE247FD238005BFA24 /* Views */,
 				8EF5BFE7247534FC00C44646 /* Controllers */,
+				8E8E202F24753F6100AF2F49 /* Managers */,
 				8EF5BFD12475230F00C44646 /* AppDelegate.swift */,
 				8EF5BFD32475230F00C44646 /* SceneDelegate.swift */,
 				8EF5BFD72475230F00C44646 /* Main.storyboard */,

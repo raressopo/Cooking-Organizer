@@ -184,14 +184,6 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
             return
         }
 
-        guard let lastCook = lastCookDateString else {
-            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                              title: "Last Cook Unavailable",
-                                                              message: "Please check that you selected a last cook date!")
-            
-            return
-        }
-
         guard let selectedCategoriesString = categoriesAsString else {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                               title: "Categories Unavailable",
@@ -239,7 +231,7 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
                                 "portions": portionsNumber,
                                 "cookingTime": cookingTime,
                                 "dificulty": dificulty,
-                                "lastCook": lastCook,
+                                "lastCook": lastCookDateString ?? [],
                                 "categories": selectedCategoriesString,
                                 "ingredients": createIngredientsDictionary(),
                                 "steps": createStepsDictionary(),
@@ -432,12 +424,18 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
     
     // MARK: - Last Cook Picker Date delegate
     
-    func didSelectLastCookDate(date: Date) {
-        let dateString = UtilsManager.shared.dateFormatter.string(from: date)
+    func didSelectLastCookDate(date: Date?) {
+        if let date = date {
+            let dateString = UtilsManager.shared.dateFormatter.string(from: date)
         
-        lastCookDateString = dateString
+            lastCookDateString = dateString
         
-        lastCookButton.setTitle(dateString, for: .normal)
+            lastCookButton.setTitle(dateString, for: .normal)
+        } else {
+            lastCookDateString = nil
+            
+            lastCookButton.setTitle("Never Cooked", for: .normal)
+        }
     }
     
     // MARK: - Categories View delegate

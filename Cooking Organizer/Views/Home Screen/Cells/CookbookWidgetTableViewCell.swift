@@ -57,7 +57,7 @@ extension CookbookWidgetTableViewCell: UITableViewDelegate, UITableViewDataSourc
             cell.cookingTimeLabel.text = recipe.cookingTime
             cell.categoriesLabel.text = recipe.categories
             cell.portionsLabel.text = "\(recipe.portions)"
-            cell.lastCookLabel.text = recipe.lastCook
+            cell.lastCookLabel.text = recipe.lastCook ?? "Never Cooked"
         }
         
         return cell

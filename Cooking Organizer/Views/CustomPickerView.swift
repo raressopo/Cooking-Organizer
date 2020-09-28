@@ -21,7 +21,7 @@ protocol DificultyPickerViewDelegate: class {
 }
 
 protocol LastCookDatePickerViewDelegate: class {
-    func didSelectLastCookDate(date: Date)
+    func didSelectLastCookDate(date: Date?)
 }
 
 class CustomPickerView: UIView {
@@ -231,6 +231,9 @@ class LastCookDatePickerView: CustomPickerView {
         super.commonInit()
         
         datePicker.isHidden = false
+        
+        setupSaveButton()
+        setupNeverCookedButton()
     }
     
     // MARK: - Private Helpers
@@ -250,16 +253,43 @@ class LastCookDatePickerView: CustomPickerView {
         
         NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0.0),
                                      saveButton.heightAnchor.constraint(equalToConstant: 40.0),
-                                     saveButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width),
-                                     saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0.0)])
+                                     saveButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width / 2 - 2),
+                                     saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0.0)])
         
         saveButton.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
+    }
+    
+    private func setupNeverCookedButton() {
+        let neverCookedButton = UIButton()
+        
+        neverCookedButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        neverCookedButton.setTitle("Never Cooked", for: .normal)
+        neverCookedButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        neverCookedButton.backgroundColor = UIColor.white
+        
+        datePicker.backgroundColor = UIColor.white
+        
+        self.contentView.addSubview(neverCookedButton)
+        
+        NSLayoutConstraint.activate([neverCookedButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0.0),
+                                     neverCookedButton.heightAnchor.constraint(equalToConstant: 40.0),
+                                     neverCookedButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width / 2 - 2),
+                                     neverCookedButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: datePicker.frame.width / 2 + 2)])
+        
+        neverCookedButton.addTarget(self, action: #selector(neverCookedPressed), for: .touchUpInside)
     }
     
     // MARK: - Selectors
     
     @objc func savePressed() {
         delegate?.didSelectLastCookDate(date: datePicker.date)
+        
+        removeFromSuperview()
+    }
+    
+    @objc func neverCookedPressed() {
+        delegate?.didSelectLastCookDate(date: nil)
         
         removeFromSuperview()
     }
