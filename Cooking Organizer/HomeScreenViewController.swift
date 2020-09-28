@@ -45,6 +45,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     var addSelectionView: AddSelectionView?
     
     var widgetHomeIngredient: HomeIngredient?
+    var selectedRecipe: Recipe?
     
     // MARK: - View Lifecycle
     
@@ -64,14 +65,9 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         UserDataManager.shared.delegate = self
         
         homeTableView.register(UINib(nibName: "HIWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "hiWidgetCell")
+        homeTableView.register(UINib(nibName: "CookbookWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "cookbookWidgetCell")
         
-        menuButton.backgroundColor = UIColor.white
-        menuButton.layer.cornerRadius = 25
-        menuButton.layer.borderWidth = 1
         menuButton.layer.borderColor = UIColor.black.cgColor
-        
-        addButton.layer.cornerRadius = 25
-        addButton.layer.borderWidth = 1
         addButton.layer.borderColor = UIColor.black.cgColor
     }
     
@@ -83,6 +79,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         menuView.isHidden = true
         
         widgetHomeIngredient = nil
+        selectedRecipe = nil
         
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -100,6 +97,8 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             let destinationVC = segue.destination as! HomeIngredientsViewController
             
             destinationVC.widgetHomeIngredient = hi
+        } else if segue.identifier == "recipeDetailsSegue", let recipe = selectedRecipe, let destinationVC = segue.destination as? RecipeDetailsViewController {
+            destinationVC.recipe = recipe
         }
     }
     
@@ -148,7 +147,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == homeTableView {
-            return 1
+            return 2
         } else {
             return MenuItems.allCases.count
         }
@@ -156,14 +155,25 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == homeTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "hiWidgetCell") as! HIWidgetTableViewCell
-
-            cell.selectionStyle = .none
-            
-            cell.delegate = self
-            cell.HIWidgetTableView.reloadData()
-            
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "hiWidgetCell") as! HIWidgetTableViewCell
+                
+                cell.selectionStyle = .none
+                
+                cell.delegate = self
+                cell.HIWidgetTableView.reloadData()
+                
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cookbookWidgetCell") as! CookbookWidgetTableViewCell
+                
+                cell.selectionStyle = .none
+                
+                cell.delegate = self
+                cell.recipesTableView.reloadData()
+                
+                return cell
+            }
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell")
         
@@ -240,5 +250,13 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func homeIngredientsChanged() {
         homeTableView.reloadData()
+    }
+}
+
+extension HomeScreenViewController: CookbookWidgetTableViewCellDelegate {
+    func recipePressed(withRecipe recipe: Recipe) {
+        selectedRecipe = recipe
+        
+        performSegue(withIdentifier: "recipeDetailsSegue", sender: self)
     }
 }

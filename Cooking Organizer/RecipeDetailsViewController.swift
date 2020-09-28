@@ -436,10 +436,9 @@ extension RecipeDetailsViewController: CategoriesViewDelegate {
 extension RecipeDetailsViewController {
     private func ingredientsViewSetup() {
         if let ingredientsView = ingredientsView {
-            ingredientsView.tableView.setEditing(false, animated: true)
+            ingredientsView.setEditMode(editMode: false)
             
             ingredientsView.ingredients = ingredients
-            ingredientsView.removeAddIngredientButton()
             ingredientsView.tableView.reloadData()
             
             ingredientsStackViewHeightConstraint.constant = 30 + CGFloat(ingredients.count * 60)
@@ -462,10 +461,7 @@ extension RecipeDetailsViewController {
     
     private func editIngredientsViewSetup() {
         if let ingredientsView = ingredientsView {
-            ingredientsView.tableView.setEditing(true, animated: true)
-            
-            ingredientsView.setupAddIngredientButton()
-            ingredientsView.tableView.reloadData()
+            ingredientsView.setEditMode(editMode: true)
             
             ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 76.0
             
@@ -506,7 +502,7 @@ extension RecipeDetailsViewController {
     
     private func validateChangedRecipeIngredients(success: @escaping ([NewRecipeIngredient]) -> Void) {
         if let ingredientsView = self.ingredientsView, ingredientsView.areIngredientsChanged() {
-            success(ingredientsView.changingIngredients)
+            success(ingredientsView.ingredientsCopy)
         }
     }
 }
@@ -516,10 +512,9 @@ extension RecipeDetailsViewController {
 extension RecipeDetailsViewController {
     private func stepsViewSetup() {
         if let stepsView = stepsView {
-            stepsView.tableView.setEditing(false, animated: true)
+            stepsView.setEditMode(editMode: false)
             
             stepsView.steps = steps
-            stepsView.removeAddStepButton()
             stepsView.tableView.reloadData()
             
             stepsStackViewHeightConstraint.constant = 30 + CGFloat(steps.count * 60)
@@ -540,10 +535,7 @@ extension RecipeDetailsViewController {
     
     private func editStepsViewSetup() {
         if let stepsView = stepsView {
-            stepsView.tableView.setEditing(true, animated: true)
-            
-            stepsView.setupAddStepButton()
-            stepsView.tableView.reloadData()
+            stepsView.setEditMode(editMode: true)
             
             stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 76.0
             
@@ -584,7 +576,7 @@ extension RecipeDetailsViewController {
     
     private func validateChangedRecipeSteps(success: @escaping ([String]) -> Void) {
         if let stepsView = self.stepsView, stepsView.areStepsChanged() {
-            success(stepsView.changingSteps)
+            success(stepsView.stepsCopy)
         }
     }
 }

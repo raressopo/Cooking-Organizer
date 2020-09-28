@@ -69,4 +69,22 @@ class UserDataManager: NSObject {
             }
         }
     }
+    
+    func addNewHomeIngredient(withDetails details: [String:Any],
+                              success: @escaping () -> Void,
+                              failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.addHomeIngredient(withDetails: details,
+                                                            success: success,
+                                                            failure: failure)
+    }
+    
+    func changeHomeIngredient(withId id: String,
+                              andDetails details: [String:Any],
+                              success: @escaping () -> Void,
+                              failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.changeHomeIngrdient(withId: id,
+                                                              andDetails: details,
+                                                              success: success,
+                                                              failure: failure)
+    }
 }

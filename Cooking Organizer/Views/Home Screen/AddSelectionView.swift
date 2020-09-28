@@ -27,12 +27,17 @@ class AddSelectionView: UIView {
         commonInit()
     }
     
+    // MARK: - Private Helpers
+    
     private func commonInit() {
         Bundle.main.loadNibNamed("AddSelectionView", owner: self, options: nil)
         
         addSubview(contentView)
         contentView.frame = self.bounds
     }
+    
+    
+    // MARK: - IBActions
     
     @IBAction func dismissSelectionViewPressed(_ sender: Any) {
         removeFromSuperview()

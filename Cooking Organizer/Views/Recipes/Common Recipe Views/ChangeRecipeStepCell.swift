@@ -12,7 +12,7 @@ protocol ChangeRecipeStepCellDelegate: class {
     func stepChanged(withValue string: String?, atIndex index: Int)
 }
 
-class ChangeRecipeStepCell: UITableViewCell, UITextFieldDelegate {
+class ChangeRecipeStepCell: UITableViewCell {
     @IBOutlet weak var stepNrLabel: UILabel!
     @IBOutlet weak var stepDetailsTextField: UITextField!
     
@@ -25,7 +25,10 @@ class ChangeRecipeStepCell: UITableViewCell, UITextFieldDelegate {
         
         stepDetailsTextField.delegate = self
     }
-    
+}
+
+// MARK: - TextField Delegate
+extension ChangeRecipeStepCell: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         delegate?.stepChanged(withValue: textField.text, atIndex: index)
     }

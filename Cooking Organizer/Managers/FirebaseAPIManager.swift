@@ -170,4 +170,38 @@ class FirebaseAPIManager {
             completion(error == nil)
         }
     }
+    
+    func addHomeIngredient(withDetails details: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id,
+            let ingredientId = details["id"] as? String else
+        {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("homeIngredients").child(ingredientId).setValue(details) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func changeHomeIngrdient(withId id: String, andDetails details: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("homeIngredients").child(id).updateChildValues(details) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
 }

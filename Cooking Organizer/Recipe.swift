@@ -21,6 +21,14 @@ class Recipe: Codable {
     
     var ingredients: [NewRecipeIngredient]?
     var steps: [String]?
+    
+    var ingredientsCountAsString: String {
+        if let ingredientsCount = ingredients?.count {
+            return "\(ingredientsCount)"
+        } else {
+            return "\(0)"
+        }
+    }
 }
 
 class ChangedRecipe {

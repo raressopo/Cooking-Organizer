@@ -31,6 +31,8 @@ class CustomPickerView: UIView {
     @IBOutlet weak var picker: UIPickerView!
     @IBOutlet weak var datePicker: UIDatePicker!
     
+    // MARK: - Initializers
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -43,6 +45,8 @@ class CustomPickerView: UIView {
         commonInit()
     }
     
+    // MARK: - Public Helpers
+    
     func commonInit() {
         Bundle.main.loadNibNamed("CustomPickerView", owner: self, options: nil)
         
@@ -53,12 +57,16 @@ class CustomPickerView: UIView {
         datePicker.isHidden = true
     }
     
+    // MARK: - IBActions
+    
     @IBAction func dismissUnitViewPressed(_ sender: Any) {
         removeFromSuperview()
     }
 }
 
-class UnitPickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
+// MARK: - Unit Picker View
+
+class UnitPickerView: CustomPickerView {
     private let volumeUnits = ["tsp", "tbsp", "cup", "cups", "ml", "L"]
     private let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg"]
     
@@ -76,9 +84,11 @@ class UnitPickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewDataSo
         
         allUnits = volumeUnits + massAndWeightUnits
     }
-    
-    // MARK: - Picker View Delegates and DataSource
-    
+}
+
+// MARK: - Unit Picker View - Picker View Delegates and DataSource
+
+extension UnitPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -98,7 +108,9 @@ class UnitPickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewDataSo
     }
 }
 
-class CookingTimePickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
+// MARK: - Cooking Time Picker View
+
+class CookingTimePickerView: CustomPickerView {
     weak var delegate: CookingTimePickerViewDelegate?
     
     override func commonInit() {
@@ -108,8 +120,13 @@ class CookingTimePickerView: CustomPickerView, UIPickerViewDelegate, UIPickerVie
         
         picker.delegate = self
         picker.dataSource = self
-        
+    }
+    
+    // MARK: - Private Helpers
+    
+    private func setupSaveButton() {
         let saveButton = UIButton()
+        
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         saveButton.setTitle("Save", for: .normal)
@@ -118,11 +135,26 @@ class CookingTimePickerView: CustomPickerView, UIPickerViewDelegate, UIPickerVie
         
         self.contentView.addSubview(saveButton)
         
-        NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 0.0), saveButton.heightAnchor.constraint(equalToConstant: 40.0), saveButton.widthAnchor.constraint(equalToConstant: picker.frame.width), saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0.0)])
+        NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 0.0),
+                                     saveButton.heightAnchor.constraint(equalToConstant: 40.0),
+                                     saveButton.widthAnchor.constraint(equalToConstant: picker.frame.width),
+                                     saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0.0)])
         
         saveButton.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
     }
     
+    // MARK: - Selectors
+    
+    @objc func savePressed() {
+        delegate?.didSelectTime(hours: picker.selectedRow(inComponent: 0), minutes: picker.selectedRow(inComponent: 2))
+        
+        removeFromSuperview()
+    }
+}
+
+// MARK: - Cooking Time Picker View - Picker View Delegate and DataSource
+
+extension CookingTimePickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 4
     }
@@ -149,15 +181,11 @@ class CookingTimePickerView: CustomPickerView, UIPickerViewDelegate, UIPickerVie
             return nil
         }
     }
-    
-    @objc func savePressed() {
-        delegate?.didSelectTime(hours: picker.selectedRow(inComponent: 0), minutes: picker.selectedRow(inComponent: 2))
-        
-        removeFromSuperview()
-    }
 }
 
-class DificultyPickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
+// MARK: - Dificulty Picker View
+
+class DificultyPickerView: CustomPickerView {
     weak var delegate: DificultyPickerViewDelegate?
     
     private let dificulties = ["Easy", "Medium", "Hard"]
@@ -170,7 +198,11 @@ class DificultyPickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewD
         
         picker.isHidden = false
     }
-    
+}
+
+// MARK: - Dificulty Picker View - Picker View Delegate and DataSource
+
+extension DificultyPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -190,6 +222,8 @@ class DificultyPickerView: CustomPickerView, UIPickerViewDelegate, UIPickerViewD
     }
 }
 
+// MARK: - Last Cooking Date Picker View
+
 class LastCookDatePickerView: CustomPickerView {
     weak var delegate: LastCookDatePickerViewDelegate?
     
@@ -197,8 +231,13 @@ class LastCookDatePickerView: CustomPickerView {
         super.commonInit()
         
         datePicker.isHidden = false
-        
+    }
+    
+    // MARK: - Private Helpers
+    
+    private func setupSaveButton() {
         let saveButton = UIButton()
+        
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         saveButton.setTitle("Save", for: .normal)
@@ -209,10 +248,15 @@ class LastCookDatePickerView: CustomPickerView {
         
         self.contentView.addSubview(saveButton)
         
-        NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0.0), saveButton.heightAnchor.constraint(equalToConstant: 40.0), saveButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width), saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0.0)])
+        NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0.0),
+                                     saveButton.heightAnchor.constraint(equalToConstant: 40.0),
+                                     saveButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width),
+                                     saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0.0)])
         
         saveButton.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
     }
+    
+    // MARK: - Selectors
     
     @objc func savePressed() {
         delegate?.didSelectLastCookDate(date: datePicker.date)

@@ -12,22 +12,21 @@ protocol StepsViewDelegate: class {
     func stepDeleted()
 }
 
-extension StepsViewDelegate {
-    func stepDeleted() {}
-}
-
-class StepsView: UIView, UITableViewDelegate, UITableViewDataSource, ChangeRecipeStepCellDelegate {
+class StepsView: UIView {
     var tableView = UITableView()
     var addStepButton = UIButton()
     
     var steps = [String]()
-    var changingSteps = [String]()
+    var stepsCopy = [String]()
     
     weak var delegate: StepsViewDelegate?
+    
+    // MARK: - Initializers
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        populateStepsCopy()
         setupTableView()
     }
     
@@ -35,46 +34,52 @@ class StepsView: UIView, UITableViewDelegate, UITableViewDataSource, ChangeRecip
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupAddStepButton() {
-        addStepButton = UIButton(frame: CGRect(x: 0, y: 0, width: frame.width, height: 60.0))
-        addStepButton.setTitle("+ Add Step", for: .normal)
-        addStepButton.setTitleColor(.systemBlue, for: .normal)
-        addStepButton.addTarget(self, action: #selector(addStepPressed), for: .touchUpInside)
+    // MARK: - Helpers
+    
+    func setEditMode(editMode: Bool) {
+        tableView.setEditing(editMode, animated: true)
         
-        addSubview(addStepButton)
-        
-        addStepButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        removeConstraints(constraints)
-        
-        addStepButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        addStepButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0).isActive = true
-        addStepButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8.0).isActive = true
-        addStepButton.heightAnchor.constraint(equalToConstant: 60.0).isActive = true
-        
-        tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: addStepButton.topAnchor).isActive = true
-        
-        changingSteps.removeAll()
-        
-        for step in steps {
-            let stepCopy = step
+        if editMode {
+            setupAddStepButton()
+            populateStepsCopy()
             
-            changingSteps.append(stepCopy)
+            tableView.reloadData()
+        } else {
+            removeAddStepButton()
+            
+            tableView.reloadData()
         }
     }
     
-    @objc func addStepPressed() {
-        let step = String()
+    func validateChangedSteps(validationFailed completion: @escaping (Bool) -> Void) {
+        for step in stepsCopy {
+            if step.isEmpty {
+                completion(true)
+                
+                return
+            }
+        }
         
-        changingSteps.append(step)
-        
-        tableView.reloadData()
+        completion(false)
     }
     
-    func setupTableView() {
+    func areStepsChanged() -> Bool {
+        if steps != stepsCopy {
+            return true
+        } else {
+            for index in steps.indices {
+                if steps[index] != stepsCopy[index] {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    // MARK: - Private Helpers
+    
+    private func setupTableView() {
         tableView = UITableView()
         
         addSubview(tableView)
@@ -85,17 +90,76 @@ class StepsView: UIView, UITableViewDelegate, UITableViewDataSource, ChangeRecip
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.isScrollEnabled = false
         
-        tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        constraintsSetup(inEditMode: false)
         
         tableView.register(UINib(nibName: "RecipeStepCell", bundle: nil), forCellReuseIdentifier: "stepCell")
         tableView.register(UINib(nibName: "ChangeRecipeStepCell", bundle: nil), forCellReuseIdentifier: "changeStepCell")
     }
     
+    private func constraintsSetup(inEditMode editMode: Bool) {
+        removeConstraints(constraints)
+        
+        tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        
+        if editMode {
+            tableView.bottomAnchor.constraint(equalTo: addStepButton.topAnchor).isActive = true
+            
+            addStepButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            addStepButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0).isActive = true
+            addStepButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8.0).isActive = true
+            addStepButton.heightAnchor.constraint(equalToConstant: 60.0).isActive = true
+        } else {
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        }
+    }
+    
+    private func setupAddStepButton() {
+        addStepButton = UIButton(frame: CGRect(x: 0, y: 0, width: frame.width, height: 60.0))
+        addStepButton.setTitle("+ Add Step", for: .normal)
+        addStepButton.setTitleColor(.systemBlue, for: .normal)
+        addStepButton.addTarget(self, action: #selector(addStepPressed), for: .touchUpInside)
+        
+        addSubview(addStepButton)
+        
+        addStepButton.translatesAutoresizingMaskIntoConstraints = false
+     
+        constraintsSetup(inEditMode: true)
+    }
+    
+    private func removeAddStepButton() {
+        addStepButton.removeFromSuperview()
+        
+        constraintsSetup(inEditMode: false)
+    }
+    
+    private func populateStepsCopy() {
+        stepsCopy.removeAll()
+        
+        for step in steps {
+            let stepCopy = step
+            
+            stepsCopy.append(stepCopy)
+        }
+    }
+    
+    // MARK: - Selectors
+    
+    @objc func addStepPressed() {
+        let step = String()
+        
+        stepsCopy.append(step)
+        
+        tableView.reloadData()
+    }
+}
+
+// MARK: - TableView Delegate and DataSource
+
+extension StepsView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView.isEditing ? changingSteps.count : steps.count
+        return tableView.isEditing ? stepsCopy.count : steps.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -107,7 +171,7 @@ class StepsView: UIView, UITableViewDelegate, UITableViewDataSource, ChangeRecip
             cell.delegate = self
             
             cell.stepNrLabel.text = "\(indexPath.row + 1)"
-            cell.stepDetailsTextField.text = changingSteps[indexPath.row]
+            cell.stepDetailsTextField.text = stepsCopy[indexPath.row]
             
             cell.selectionStyle = .none
             
@@ -129,61 +193,28 @@ class StepsView: UIView, UITableViewDelegate, UITableViewDataSource, ChangeRecip
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedStep = changingSteps[sourceIndexPath.row]
-        changingSteps.remove(at: sourceIndexPath.row)
-        changingSteps.insert(movedStep, at: destinationIndexPath.row)
+        let movedStep = stepsCopy[sourceIndexPath.row]
+        stepsCopy.remove(at: sourceIndexPath.row)
+        stepsCopy.insert(movedStep, at: destinationIndexPath.row)
         
         tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            changingSteps.remove(at: indexPath.row)
+            stepsCopy.remove(at: indexPath.row)
             
             delegate?.stepDeleted()
             
             tableView.reloadData()
         }
     }
-    
-    func removeAddStepButton() {
-        addStepButton.removeFromSuperview()
-        
-        removeConstraints(constraints)
-        
-        tableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-    }
-    
-    func validateChangedSteps(validationFailed completion: @escaping (Bool) -> Void) {
-        for step in changingSteps {
-            if step.isEmpty {
-                completion(true)
-                
-                return
-            }
-        }
-        
-        completion(false)
-    }
-    
-    func areStepsChanged() -> Bool {
-        if steps != changingSteps {
-            return true
-        } else {
-            for index in steps.indices {
-                if steps[index] != changingSteps[index] {
-                    return true
-                }
-            }
-        }
-        
-        return false
-    }
-    
+}
+
+// MARK: - Change Recipe Step Cell Delegate
+
+extension StepsView: ChangeRecipeStepCellDelegate {
     func stepChanged(withValue string: String?, atIndex index: Int) {
-        changingSteps[index] = string ?? ""
+        stepsCopy[index] = string ?? ""
     }
 }

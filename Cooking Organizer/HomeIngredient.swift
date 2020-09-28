@@ -35,4 +35,12 @@ class HomeIngredient: Codable {
             return [IngredientCategories]()
         }
     }
+    
+    var quantityAsString: String {
+        if let quantity = quantity {
+            return "\(quantity)"
+        } else {
+            return ""
+        }
+    }
 }

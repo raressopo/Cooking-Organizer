@@ -25,6 +25,8 @@ class LogInViewController: UIViewController {
     
     @IBOutlet weak var spinnerView: UIView!
     
+    // MARK: - View Lifecylce
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -36,11 +38,7 @@ class LogInViewController: UIViewController {
                 self.spinnerView.isHidden = true
                 
                 if let id = userId {
-                    UserDataManager.shared.observeHomeIngredientAdded(forUserId: id)
-                    UserDataManager.shared.observeHomeIngredientChanged(forUserId: id)
-                    
-                    UserDataManager.shared.observeRecipeAdded(forUserId: id)
-                    UserDataManager.shared.observeRecipeChanged(forUserId: id)
+                    self.setupObservers(forUserId: id)
                     
                     self.performSegue(withIdentifier: "logInSegue", sender: self)
                 } else {
@@ -52,6 +50,8 @@ class LogInViewController: UIViewController {
         }
     }
     
+    // MARK: - IBActions
+    
     @IBAction func cancelPressed(_ sender: Any) {
         signUpView.isHidden = true
         dismissSignUpViewButton.isHidden = true
@@ -59,9 +59,8 @@ class LogInViewController: UIViewController {
     
     @IBAction func createPressed(_ sender: Any) {
         spinnerView.isHidden = false
-        
-        self.dismissSignUpViewButton.isHidden = true
-        self.signUpView.isHidden = true
+        dismissSignUpViewButton.isHidden = true
+        signUpView.isHidden = true
         
         guard let email = signUpEmailTextField.text,
             let password = signUpPassTextField.text,
@@ -115,11 +114,7 @@ class LogInViewController: UIViewController {
             self.spinnerView.isHidden = true
             
             if let id = userId {
-                UserDataManager.shared.observeHomeIngredientAdded(forUserId: id)
-                UserDataManager.shared.observeHomeIngredientChanged(forUserId: id)
-                
-                UserDataManager.shared.observeRecipeAdded(forUserId: id)
-                UserDataManager.shared.observeRecipeChanged(forUserId: id)
+                self.setupObservers(forUserId: id)
                 
                 UserDefaults.standard.set(email, forKey: "currentUserEmail")
                 UserDefaults.standard.set(password, forKey: "currentUserPassword")
@@ -136,6 +131,16 @@ class LogInViewController: UIViewController {
     @IBAction func dismissSignUpPressed(_ sender: Any) {
         signUpView.isHidden = true
         dismissSignUpViewButton.isHidden = true
+    }
+    
+    // MARK: - Private Helpers
+    
+    private func setupObservers(forUserId id: String) {
+        UserDataManager.shared.observeHomeIngredientAdded(forUserId: id)
+        UserDataManager.shared.observeHomeIngredientChanged(forUserId: id)
+        
+        UserDataManager.shared.observeRecipeAdded(forUserId: id)
+        UserDataManager.shared.observeRecipeChanged(forUserId: id)
     }
 }
 

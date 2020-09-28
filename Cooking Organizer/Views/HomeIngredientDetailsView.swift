@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSource {
+class HomeIngredientDetailsView: UIView {
     @IBOutlet weak var dismissIngredientDetailsButton: UIButton!
     @IBOutlet weak var ingredientDetailsView: UIView!
     @IBOutlet weak var ingredientNameTextField: UITextField!
@@ -61,6 +61,8 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
         commonInit()
     }
     
+    // MARK: - Private Helpers
+    
     private func commonInit() {
         Bundle.main.loadNibNamed("HomeIngredientDetailsView", owner: self, options: nil)
         
@@ -77,128 +79,176 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
         categoriesButton.setNeedsLayout()
     }
     
+    private func validateNewIngredientsDetails(completion: @escaping ([String:Any]) -> Void) {
+        guard let ingredientName = ingredientNameTextField.text,
+            !ingredientName.isEmpty else
+        {
+            if let rootVC = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
+                                                                  title: "Invalid Ingredient Name",
+                                                                  message: "Please choose a valid name and don't let the field empty")
+            }
+            
+            return
+        }
+        
+        guard let ingredientQuantity = quantityTextField.text,
+            !ingredientQuantity.isEmpty,
+            let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity),
+            let quantity = ingredientQuantityAsNumber as? Double else
+        {
+            if let rootVC = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
+                                                                  title: "Invalid Quantity",
+                                                                  message: "Please choose a valid quantity and don't let the field empty")
+            }
+            
+            return
+        }
+        
+        var categoriesAsString = ""
+        
+        if selectedCategories.count > 0 {
+            if selectedCategories.count == 1 {
+                categoriesAsString = "\(selectedCategories.first!.string)"
+            } else {
+                for category in selectedCategories {
+                    if selectedCategories.last! == category {
+                        categoriesAsString = categoriesAsString + "\(category.string)"
+                    } else {
+                        categoriesAsString = categoriesAsString + "\(category.string), "
+                    }
+                }
+            }
+        }
+        
+        if categoriesAsString.isEmpty {
+            if let rootVC = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
+                                                                  title: "Invalid Categories",
+                                                                  message: "Please select at least one category")
+            }
+            
+            return
+        }
+        
+        var expirationDateString = ""
+        
+        if let expirationDate = expirationdate {
+            expirationDateString = UtilsManager.shared.dateFormatter.string(from: expirationDate)
+        }
+        
+        if expirationDateString.isEmpty {
+            if let rootVC = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
+                                                                  title: "Invalid Expiration Date",
+                                                                  message: "Please select a valid expiration date")
+            }
+            
+            return
+        }
+        
+        guard let selectedUnit = selectedUnit, !selectedUnit.isEmpty else {
+            if let rootVC = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
+                                                                  title: "Invalid Unit",
+                                                                  message: "Please select an unit")
+            }
+            
+            return
+        }
+        
+        let uuid = UUID().uuidString
+        
+        completion(["name": ingredientName,
+                    "expirationDate": expirationDateString,
+                    "quantity": quantity,
+                    "unit": selectedUnit,
+                    "categories": categoriesAsString,
+                    "id": uuid])
+    }
+    
+    private func validateChangedIngredient(completion: @escaping ([String:Any], String) -> Void) {
+        guard let ingredient = homeIngredient else {
+            if let presentedViewController = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
+                                                                  title: "Ingredient missing",
+                                                                  message: "Selected ingredient is not valid or it doesn't exist anymore.")
+            }
+            
+            return
+        }
+        
+        var ingredientChanged = false
+        var changedDataDictionary = [String:Any]()
+        
+        if let name = ingredientNameTextField.text, ingredient.name != name {
+            changedDataDictionary["name"] = name
+            
+            ingredientChanged = true
+        }
+        
+        if let expirationDate = expirationdate, ingredient.expirationDate != UtilsManager.shared.dateFormatter.string(from: expirationDate) {
+            changedDataDictionary["expirationDate"] = UtilsManager.shared.dateFormatter.string(from: expirationDate)
+            
+            ingredientChanged = true
+        }
+        
+        if let quantity = quantityTextField.text, let quantityAsDouble = NumberFormatter().number(from: quantity)?.doubleValue, ingredient.quantity != quantityAsDouble {
+            changedDataDictionary["quantity"] = quantityAsDouble
+            
+            ingredientChanged = true
+        }
+        
+        if let unit = selectedUnit, ingredient.unit != unit {
+            changedDataDictionary["unit"] = unit
+            
+            ingredientChanged = true
+        }
+        
+        if let categoriesAsString = allIngredientCategoriesAsString, ingredient.categories != categoriesAsString {
+            changedDataDictionary["categories"] = categoriesAsString
+            
+            ingredientChanged = true
+        }
+        
+        if ingredientChanged {
+            completion(changedDataDictionary, ingredient.id)
+        } else {
+            if let presentedViewController = window?.rootViewController?.presentedViewController {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
+                                                                  title: "Update Failed",
+                                                                  message: "You didn't change any of presented details for selected ingredient")
+            }
+        }
+    }
+    
+    // MARK: - IBActions
+    
     @IBAction func createChangedPressed(_ sender: Any) {
         if createButton.titleLabel?.text == "Create" {
-            guard let ingredientName = ingredientNameTextField.text, !ingredientName.isEmpty else {
-                if let rootVC = window?.rootViewController?.presentedViewController {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC, title: "Invalid Ingredient Name", message: "Please choose a valid name and don't let the field empty")
-                }
-                
-                return
-            }
-            
-            guard let ingredientQuantity = quantityTextField.text,
-                !ingredientQuantity.isEmpty,
-                let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity),
-                let quantity = ingredientQuantityAsNumber as? Double else {
-                    if let rootVC = window?.rootViewController?.presentedViewController {
-                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC, title: "Invalid Quantity", message: "Please choose a valid quantity and don't let the field empty")
+            validateNewIngredientsDetails { newIngredientDetails in
+                UserDataManager.shared.addNewHomeIngredient(withDetails: newIngredientDetails, success: {
+                    self.removeFromSuperview()
+                }) {
+                    if let presentedViewController = self.window?.rootViewController?.presentedViewController {
+                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
+                                                                          title: "Ingredient Creation Failed",
+                                                                          message: "Something went wrong creating new ingredient. Please try again later!")
                     }
-                    
-                    return
-            }
-            
-            if let loggedInUser = UsersManager.shared.currentLoggedInUser {
-                let uuid = UUID().uuidString
-                
-                var categoriesAsString = ""
-                
-                if selectedCategories.count > 0 {
-                    if selectedCategories.count == 1 {
-                        categoriesAsString = "\(selectedCategories.first!.string)"
-                    } else {
-                        for category in selectedCategories {
-                            if selectedCategories.last! == category {
-                                categoriesAsString = categoriesAsString + "\(category.string)"
-                            } else {
-                                categoriesAsString = categoriesAsString + "\(category.string), "
-                            }
-                        }
-                    }
-                }
-                
-                Database.database().reference().child("usersData")
-                    .child(loggedInUser.loginData.id).child("homeIngredients")
-                    .child(uuid)
-                    .setValue(["name": ingredientName,
-                               "expirationDate": UtilsManager.shared.dateFormatter.string(from: expirationdate ?? Date(timeIntervalSince1970: 0)),
-                               "quantity": quantity,
-                               "unit": selectedUnit ?? "",
-                               "categories": categoriesAsString,
-                               "id": uuid]) { (error, ref) in
-                                if error == nil {
-                                    self.removeFromSuperview()
-                                } else {
-                                    if let vc = self.window?.rootViewController?.presentedViewController {
-                                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: vc,
-                                                                                          title: "Ingredient Creation Failed",
-                                                                                          message: "Something went wrong creating new ingredient. Please try again later!")
-                                    }
-                                }
                 }
             }
         } else {
-            var ingredientChanged = false
-            
-            var changedDataDictionary = [String:Any]()
-            
-            guard let ingredient = homeIngredient else {
-                if let vc = window?.rootViewController?.presentedViewController {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: vc,
-                                                                      title: "Ingredient missing",
-                                                                      message: "Selected ingredient is not valid or it doesn't exist anymore.")
+            validateChangedIngredient { (changedIngredientDetails, ingredientId) in
+                UserDataManager.shared.changeHomeIngredient(withId: ingredientId, andDetails: changedIngredientDetails, success: {
+                    self.removeFromSuperview()
+                }) {
+                    if let presentedViewController = self.window?.rootViewController?.presentedViewController {
+                        AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
+                                                                          title: "Update Failed",
+                                                                          message: "Something went wrong changing the selected ingredient. Please try again later!")
+                    }
                 }
-                
-                return
-            }
-            
-            if let name = ingredientNameTextField.text, ingredient.name != name {
-                changedDataDictionary["name"] = name
-                
-                ingredientChanged = true
-            }
-            
-            if let expirationDate = expirationdate, ingredient.expirationDate != UtilsManager.shared.dateFormatter.string(from: expirationDate) {
-                changedDataDictionary["expirationDate"] = UtilsManager.shared.dateFormatter.string(from: expirationDate)
-                
-                ingredientChanged = true
-            }
-            
-            if let quantity = quantityTextField.text, let quantityAsDouble = NumberFormatter().number(from: quantity)?.doubleValue, ingredient.quantity != quantityAsDouble {
-                changedDataDictionary["quantity"] = quantityAsDouble
-                
-                ingredientChanged = true
-            }
-            
-            if let unit = selectedUnit, ingredient.unit != unit {
-                changedDataDictionary["unit"] = unit
-                
-                ingredientChanged = true
-            }
-            
-            if let categoriesAsString = allIngredientCategoriesAsString, ingredient.categories != categoriesAsString {
-                changedDataDictionary["categories"] = categoriesAsString
-                
-                ingredientChanged = true
-            }
-            
-            if ingredientChanged {
-                if let loggedInUser = UsersManager.shared.currentLoggedInUser {
-                    Database.database().reference().child("usersData")
-                        .child(loggedInUser.loginData.id).child("homeIngredients")
-                        .child(ingredient.id)
-                        .updateChildValues(changedDataDictionary, withCompletionBlock: { (error, ref) in
-                            self.removeFromSuperview()
-                        }
-                    )}
-            } else {
-                if let vc = window?.rootViewController?.presentedViewController {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: vc,
-                                                                      title: "Update Failed",
-                                                                      message: "You didn't change any of presented details for selected ingredient")
-                }
-                
-                return
             }
         }
     }
@@ -211,6 +261,164 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
         removeFromSuperview()
     }
     
+    // MARK: - Categories
+    
+    // MARK: - Categories - IBActions
+    
+    @IBAction func categoriesPressed(_ sender: Any) {
+        hideCategoriesView(hide: false)
+        
+        copyOfSelectedCategories = selectedCategories
+        
+        categoriesTableView.reloadData()
+    }
+    
+    @IBAction func cancelCategoriesPressed(_ sender: Any) {
+        hideCategoriesView(hide: true)
+    }
+    
+    @IBAction func saveCategoriesPressed(_ sender: Any) {
+        hideCategoriesView(hide: true)
+        
+        selectedCategories = copyOfSelectedCategories
+        
+        configureCategoriesButton()
+    }
+    
+    @IBAction func dismissCategoriesViewPressed(_ sender: Any) {
+        hideCategoriesView(hide: true)
+    }
+    
+    // MARK: - Categories - Private Helpers
+    
+    private func hideCategoriesView(hide: Bool) {
+        dismissCategoriesButton.isHidden = hide
+        categoriesView.isHidden = hide
+    }
+    
+    private func configureCategoriesButton() {
+        var categoriesButtonTitle = ""
+        
+        if selectedCategories.count == 0 {
+            categoriesButtonTitle = "Categories"
+        } else if selectedCategories.count == 1 {
+            categoriesButtonTitle = "\(selectedCategories.first!.string)"
+        } else {
+            for category in selectedCategories {
+                if selectedCategories.last! == category {
+                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string)"
+                } else {
+                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string), "
+                }
+            }
+        }
+        
+        categoriesButton.setTitle(categoriesButtonTitle, for: .normal)
+        categoriesButton.titleLabel?.textAlignment = .center
+    }
+    
+    // MARK: - Expiration, Bought or Opened date
+    
+    // MARK: - Expiration, Bought or Opened date - IBActions
+    
+    @IBAction func expirationDatePressed(_ sender: Any) {
+        hideDatePickerView(hide: false)
+    }
+    
+    @IBAction func dismissDatePickerPressed(_ sender: Any) {
+        hideDatePickerView(hide: true)
+    }
+    
+    @IBAction func cancelDatePickerPressed(_ sender: Any) {
+        hideDatePickerView(hide: true)
+    }
+    
+    @IBAction func saveDatePickerPressed(_ sender: Any) {
+        expirationdate = expirationDatePicker.date
+        
+        hideDatePickerView(hide: true)
+    }
+    
+    // MARK: - Expiration, Bought or Opened date - Private Helpers
+    
+    func hideDatePickerView(hide: Bool) {
+        dismissDatePickerButton.isHidden = hide
+        datePickerView.isHidden = hide
+        
+        if let date = expirationdate {
+            expirationDateButton.setTitle(UtilsManager.shared.dateFormatter.string(from: date), for: .normal)
+        }
+    }
+    
+    // MARK: - Unit
+    
+    // MARK: - Unit - IBActions
+    
+    @IBAction func unitPressed(_ sender: Any) {
+        copyOfSelectedUnit = selectedUnit
+        
+        unitsTableView.reloadData()
+        
+        hideUnitView(hide: false)
+    }
+    
+    @IBAction func dismissUnitViewPressed(_ sender: Any) {
+        hideUnitView(hide: true)
+    }
+    
+    @IBAction func cancelUnitViewPressed(_ sender: Any) {
+        hideUnitView(hide: true)
+    }
+    
+    @IBAction func saveUnitViewPressed(_ sender: Any) {
+        selectedUnit = copyOfSelectedUnit
+        
+        hideUnitView(hide: true)
+    }
+    
+    // MARK: - Unit - Private Helpers
+    
+    private func hideUnitView(hide: Bool) {
+        dismissUnitViewButton.isHidden = hide
+        unitView.isHidden = hide
+        
+        configureUnitButton()
+    }
+    
+    private func configureUnitButton() {
+        if let unit = selectedUnit {
+            unitButton.setTitle(unit, for: .normal)
+        } else {
+            unitButton.setTitle("Unit", for: .normal)
+        }
+    }
+    
+    // MARK: - Public Helpers
+    
+    func populateFields(withIngredient ingredient: HomeIngredient) {
+        homeIngredient = ingredient
+        
+        ingredientNameTextField.text = ingredient.name
+        
+        if let expDate = ingredient.expirationDate {
+            expirationDateButton.setTitle(expDate, for: .normal)
+            expirationdate = UtilsManager.shared.dateFormatter.date(from: expDate)
+        }
+        
+        quantityTextField.text = "\(ingredient.quantity ?? 0.0)"
+        
+        if let unit = ingredient.unit {
+            selectedUnit = unit
+            unitButton.setTitle(unit, for: .normal)
+        }
+        
+        selectedCategories = ingredient.ingredientCategories
+        allIngredientCategoriesAsString = ingredient.categories
+        categoriesButton.setTitle("\(ingredient.categories ?? "Categories")", for: .normal)
+    }
+}
+
+extension HomeIngredientDetailsView:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == unitsTableView {
             if section == 0 {
@@ -335,151 +543,5 @@ class HomeIngredientDetailsView: UIView, UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
-    }
-    
-    // MARK: - Categories
-    
-    // MARK: - Categories - IBActions
-    
-    @IBAction func categoriesPressed(_ sender: Any) {
-        hideCategoriesView(hide: false)
-        
-        copyOfSelectedCategories = selectedCategories
-        
-        categoriesTableView.reloadData()
-    }
-    
-    @IBAction func cancelCategoriesPressed(_ sender: Any) {
-        hideCategoriesView(hide: true)
-    }
-    
-    @IBAction func saveCategoriesPressed(_ sender: Any) {
-        hideCategoriesView(hide: true)
-        
-        selectedCategories = copyOfSelectedCategories
-        
-        configureCategoriesButton()
-    }
-    
-    @IBAction func dismissCategoriesViewPressed(_ sender: Any) {
-        hideCategoriesView(hide: true)
-    }
-    
-    // MARK: - Categories - Helpers
-    
-    func hideCategoriesView(hide: Bool) {
-        dismissCategoriesButton.isHidden = hide
-        categoriesView.isHidden = hide
-    }
-    
-    func configureCategoriesButton() {
-        var categoriesButtonTitle = ""
-        
-        if selectedCategories.count == 0 {
-            categoriesButtonTitle = "Categories"
-        } else if selectedCategories.count == 1 {
-            categoriesButtonTitle = "\(selectedCategories.first!.string)"
-        } else {
-            for category in selectedCategories {
-                if selectedCategories.last! == category {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string)"
-                } else {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string), "
-                }
-            }
-        }
-        
-        categoriesButton.setTitle(categoriesButtonTitle, for: .normal)
-        categoriesButton.titleLabel?.textAlignment = .center
-    }
-    
-    // MARK: - Expiration, Bought or Opened date
-    
-    @IBAction func expirationDatePressed(_ sender: Any) {
-        hideDatePickerView(hide: false)
-    }
-    
-    @IBAction func dismissDatePickerPressed(_ sender: Any) {
-        hideDatePickerView(hide: true)
-    }
-    
-    @IBAction func cancelDatePickerPressed(_ sender: Any) {
-        hideDatePickerView(hide: true)
-    }
-    
-    @IBAction func saveDatePickerPressed(_ sender: Any) {
-        expirationdate = expirationDatePicker.date
-        
-        hideDatePickerView(hide: true)
-    }
-    
-    func hideDatePickerView(hide: Bool) {
-        dismissDatePickerButton.isHidden = hide
-        datePickerView.isHidden = hide
-        
-        if let date = expirationdate {
-            expirationDateButton.setTitle(UtilsManager.shared.dateFormatter.string(from: date), for: .normal)
-        }
-    }
-    
-    // MARK: - Unit
-    
-    @IBAction func unitPressed(_ sender: Any) {
-        copyOfSelectedUnit = selectedUnit
-        
-        unitsTableView.reloadData()
-        
-        hideUnitView(hide: false)
-    }
-    
-    @IBAction func dismissUnitViewPressed(_ sender: Any) {
-        hideUnitView(hide: true)
-    }
-    
-    @IBAction func cancelUnitViewPressed(_ sender: Any) {
-        hideUnitView(hide: true)
-    }
-    
-    @IBAction func saveUnitViewPressed(_ sender: Any) {
-        selectedUnit = copyOfSelectedUnit
-        
-        hideUnitView(hide: true)
-    }
-    
-    func hideUnitView(hide: Bool) {
-        dismissUnitViewButton.isHidden = hide
-        unitView.isHidden = hide
-        
-        configureUnitButton()
-    }
-    
-    func configureUnitButton() {
-        if let unit = selectedUnit {
-            unitButton.setTitle(unit, for: .normal)
-        } else {
-            unitButton.setTitle("Unit", for: .normal)
-        }
-    }
-    
-    func populateFields(withIngredient ingredient: HomeIngredient) {
-        homeIngredient = ingredient
-        
-        ingredientNameTextField.text = ingredient.name
-        
-        if let expDate = ingredient.expirationDate {
-            expirationDateButton.setTitle(expDate, for: .normal)
-            expirationdate = UtilsManager.shared.dateFormatter.date(from: expDate)
-        }
-        
-        quantityTextField.text = "\(ingredient.quantity ?? 0.0)"
-        
-        if let unit = ingredient.unit {
-            selectedUnit = unit
-            unitButton.setTitle(unit, for: .normal)
-        }
-        
-        selectedCategories = ingredient.ingredientCategories
-        allIngredientCategoriesAsString = ingredient.categories
-        categoriesButton.setTitle("\(ingredient.categories ?? "Categories")", for: .normal)
     }
 }

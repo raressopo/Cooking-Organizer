@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cookbookWidgetCell" rowHeight="251" id="KnF-dV-aFc" customClass="CookbookWidgetTableViewCell" customModule="Cooking_Organizer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="420" height="251"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KnF-dV-aFc" id="Gol-35-hAA">
+                <rect key="frame" x="0.0" y="0.0" width="420" height="251"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ib-jR-rPO">
+                        <rect key="frame" x="4" y="4" width="412" height="243"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ixr-Qi-CpT">
+                                <rect key="frame" x="4" y="4" width="404" height="235"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ixr-Qi-CpT" secondAttribute="trailing" constant="4" id="hrL-cW-qqD"/>
+                            <constraint firstItem="ixr-Qi-CpT" firstAttribute="top" secondItem="9Ib-jR-rPO" secondAttribute="top" constant="4" id="jOi-79-Da9"/>
+                            <constraint firstItem="ixr-Qi-CpT" firstAttribute="leading" secondItem="9Ib-jR-rPO" secondAttribute="leading" constant="4" id="jf9-tg-dJ5"/>
+                            <constraint firstAttribute="bottom" secondItem="ixr-Qi-CpT" secondAttribute="bottom" constant="4" id="ogJ-Jj-EdM"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="9Ib-jR-rPO" secondAttribute="bottom" constant="4" id="AxC-CF-SQ6"/>
+                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="top" secondItem="Gol-35-hAA" secondAttribute="top" constant="4" id="XOU-Dh-jbH"/>
+                    <constraint firstAttribute="trailing" secondItem="9Ib-jR-rPO" secondAttribute="trailing" constant="4" id="gGY-iH-d7g"/>
+                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="leading" secondItem="Gol-35-hAA" secondAttribute="leading" constant="4" id="yXH-Bg-EzB"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="recipesTableView" destination="ixr-Qi-CpT" id="u7W-30-EmF"/>
+            </connections>
+            <point key="canvasLocation" x="139.13043478260872" y="142.96875"/>
+        </tableViewCell>
+    </objects>
+</document>

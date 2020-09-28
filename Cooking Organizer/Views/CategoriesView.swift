@@ -12,7 +12,7 @@ protocol CategoriesViewDelegate: class {
     func didSelectCategories(categories: [RecipeCategories])
 }
 
-class CategoriesView: UIView, UITableViewDelegate, UITableViewDataSource {
+class CategoriesView: UIView {
     @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var categoriesTableView: UITableView!
@@ -43,6 +43,8 @@ class CategoriesView: UIView, UITableViewDelegate, UITableViewDataSource {
         categoriesTableView.dataSource = self
     }
     
+    // MARK: - IBActions
+    
     @IBAction func dismissViewPressed(_ sender: Any) {
         removeFromSuperview()
     }
@@ -56,7 +58,11 @@ class CategoriesView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         removeFromSuperview()
     }
-    
+}
+
+// MARK: - TableView Delegate and DataaSource
+
+extension CategoriesView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return RecipeCategories.allCases.count
     }

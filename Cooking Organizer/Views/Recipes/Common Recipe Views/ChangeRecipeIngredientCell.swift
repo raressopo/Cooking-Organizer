@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChangeRecipeIngredientCell: UITableViewCell, UITextFieldDelegate, UnitPickerViewDelegate {
+class ChangeRecipeIngredientCell: UITableViewCell {
     @IBOutlet weak var ingredientNameTextField: UITextField!
     @IBOutlet weak var quantityTextField: UITextField!
     @IBOutlet weak var unitButton: UIButton!
@@ -20,6 +20,28 @@ class ChangeRecipeIngredientCell: UITableViewCell, UITextFieldDelegate, UnitPick
         
         ingredientNameTextField.delegate = self
         quantityTextField.delegate = self
+    }
+}
+
+// MARK: - TextField Delegate
+
+extension ChangeRecipeIngredientCell: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField.placeholder == "Ingredient" {
+            ingredient?.name = ingredientNameTextField.text
+        } else {
+            ingredient?.quantity = quantityTextField.text
+        }
+    }
+}
+
+// MARK: - UnitPickerView Delegate
+
+extension ChangeRecipeIngredientCell: UnitPickerViewDelegate {
+    func didSelectUnit(unit: String) {
+        ingredient?.unit = unit
+        
+        unitButton.setTitle(unit, for: .normal)
     }
     
     @IBAction func unitPressed(_ sender: Any) {
@@ -36,20 +58,6 @@ class ChangeRecipeIngredientCell: UITableViewCell, UITextFieldDelegate, UnitPick
                                          unitPickerView.bottomAnchor.constraint(equalTo: parentVCView.bottomAnchor, constant: 0.0),
                                          unitPickerView.trailingAnchor.constraint(equalTo: parentVCView.trailingAnchor, constant: 0.0),
                                          unitPickerView.leadingAnchor.constraint(equalTo: parentVCView.leadingAnchor, constant: 0.0)])
-        }
-    }
-    
-    func didSelectUnit(unit: String) {
-        ingredient?.unit = unit
-        
-        unitButton.setTitle(unit, for: .normal)
-    }
-    
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        if textField.placeholder == "Ingredient" {
-            ingredient?.name = ingredientNameTextField.text
-        } else {
-            ingredient?.quantity = quantityTextField.text
         }
     }
 }
