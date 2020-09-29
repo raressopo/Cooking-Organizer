@@ -13,4 +13,6 @@ pod 'Firebase/Core'
 
 pod 'CodableFirebase'
 
+pod 'FSCalendar'
+
 end

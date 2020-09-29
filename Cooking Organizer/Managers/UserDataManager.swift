@@ -87,4 +87,11 @@ class UserDataManager: NSObject {
                                                               success: success,
                                                               failure: failure)
     }
+    
+    func changeLastCook(forRecipeId recipeId: String, withValue value: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.changeLastCook(forRecipeId: recipeId,
+                                                         withValue: value,
+                                                         success: success,
+                                                         failure: failure)
+    }
 }

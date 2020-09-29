@@ -12,6 +12,7 @@ import Firebase
 enum MenuItems: CaseIterable {
     case HomeIngredients
     case Cookbook
+    case CookingCalendar
     
     var index: Int {
         switch self {
@@ -19,6 +20,8 @@ enum MenuItems: CaseIterable {
             return 0
         case .Cookbook:
             return 1
+        case .CookingCalendar:
+            return 2
         }
     }
     
@@ -28,11 +31,13 @@ enum MenuItems: CaseIterable {
             return "Home Ingredients"
         case .Cookbook:
             return "Cookbook"
+        case .CookingCalendar:
+            return "Cooking Calendar"
         }
     }
 }
 
-class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, HIWidgetTableViewCellDelegate, UserDataManagerDelegate {
+class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, HIWidgetTableViewCellDelegate {
     @IBOutlet weak var signUpDateLabel: UILabel!
     @IBOutlet weak var menuView: UIView!
     @IBOutlet weak var menuButton: UIButton!
@@ -46,6 +51,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var widgetHomeIngredient: HomeIngredient?
     var selectedRecipe: Recipe?
+    var selectedDate: Date?
     
     // MARK: - View Lifecycle
     
@@ -66,6 +72,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         
         homeTableView.register(UINib(nibName: "HIWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "hiWidgetCell")
         homeTableView.register(UINib(nibName: "CookbookWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "cookbookWidgetCell")
+        homeTableView.register(UINib(nibName: "CookingCalendarWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "cookingCalendarCell")
         
         menuButton.layer.borderColor = UIColor.black.cgColor
         addButton.layer.borderColor = UIColor.black.cgColor
@@ -80,6 +87,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         
         widgetHomeIngredient = nil
         selectedRecipe = nil
+        selectedDate = nil
         
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -99,6 +107,8 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             destinationVC.widgetHomeIngredient = hi
         } else if segue.identifier == "recipeDetailsSegue", let recipe = selectedRecipe, let destinationVC = segue.destination as? RecipeDetailsViewController {
             destinationVC.recipe = recipe
+        } else if segue.identifier == "cookingCalendarSegue", let date = selectedDate, let destinationVC = segue.destination as? CookingCalendarViewController {
+            destinationVC.homeScreenDate = date
         }
     }
     
@@ -147,7 +157,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == homeTableView {
-            return 2
+            return 3
         } else {
             return MenuItems.allCases.count
         }
@@ -164,13 +174,25 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.HIWidgetTableView.reloadData()
                 
                 return cell
-            } else {
+            } else if indexPath.row == 1 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cookbookWidgetCell") as! CookbookWidgetTableViewCell
                 
                 cell.selectionStyle = .none
                 
                 cell.delegate = self
                 cell.recipesTableView.reloadData()
+                
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "cookingCalendarCell") as? CookingCalendarWidgetTableViewCell else {
+                    fatalError("Cell type is not CookingCalendarWidgetTableViewCell")
+                }
+                
+                cell.delegate = self
+                cell.selectionStyle = .none
+                cell.calendar.scope = .week
+                
+                cell.filterRecipesForDate(date: cell.calendar.selectedDate ?? Date())
                 
                 return cell
             }
@@ -194,6 +216,10 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 performSegue(withIdentifier: "cookbookSegue", sender: self)
                 
                 return
+            case MenuItems.CookingCalendar.index:
+                performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
+                
+                return
             default:
                 return
             }
@@ -202,7 +228,11 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == homeTableView {
-            return 300
+            if indexPath.row == 2 {
+                return 200
+            } else {
+                return 300
+            }
         } else {
             return 44
         }
@@ -258,5 +288,19 @@ extension HomeScreenViewController: CookbookWidgetTableViewCellDelegate {
         selectedRecipe = recipe
         
         performSegue(withIdentifier: "recipeDetailsSegue", sender: self)
+    }
+}
+
+extension HomeScreenViewController: UserDataManagerDelegate {
+    func recipeChanged() {
+        homeTableView.reloadData()
+    }
+}
+
+extension HomeScreenViewController: CookingCalendarWidgetTableViewCellDelegate {
+    func recipePressed(withDate date: Date) {
+        selectedDate = date
+        
+        performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
     }
 }

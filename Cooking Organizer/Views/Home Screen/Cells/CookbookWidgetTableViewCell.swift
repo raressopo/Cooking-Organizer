@@ -17,8 +17,6 @@ class CookbookWidgetTableViewCell: UITableViewCell {
     
     weak var delegate: CookbookWidgetTableViewCellDelegate?
     
-    var recipes: [Recipe]?
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -26,8 +24,6 @@ class CookbookWidgetTableViewCell: UITableViewCell {
         recipesTableView.dataSource = self
         
         UserDataManager.shared.delegate = self
-        
-        recipes = UsersManager.shared.currentLoggedInUser?.recipes
         
         recipesTableView.register(UINib(nibName: "RecipeTableViewCell", bundle: nil), forCellReuseIdentifier: "recipeCell")
     }
@@ -37,7 +33,7 @@ class CookbookWidgetTableViewCell: UITableViewCell {
 
 extension CookbookWidgetTableViewCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let recipesCount = recipes?.count else {
+        guard let recipesCount = UsersManager.shared.currentLoggedInUser?.recipes?.count else {
             return 0
         }
         
@@ -51,7 +47,7 @@ extension CookbookWidgetTableViewCell: UITableViewDelegate, UITableViewDataSourc
         
         cell.selectionStyle = .none
         
-        if let recipe = recipes?[indexPath.row] {
+        if let recipe = UsersManager.shared.currentLoggedInUser?.recipes?[indexPath.row] {
             cell.nameLabel.text = recipe.name
             cell.nrOfIngredientsLabel.text = "\(recipe.ingredientsCountAsString) ingrds."
             cell.cookingTimeLabel.text = recipe.cookingTime
@@ -64,7 +60,7 @@ extension CookbookWidgetTableViewCell: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let recipe = recipes?[indexPath.row] {
+        if let recipe = UsersManager.shared.currentLoggedInUser?.recipes?[indexPath.row] {
             delegate?.recipePressed(withRecipe: recipe)
         }
     }
@@ -76,10 +72,6 @@ extension CookbookWidgetTableViewCell: UITableViewDelegate, UITableViewDataSourc
 
 extension CookbookWidgetTableViewCell: UserDataManagerDelegate {
     func recipeChanged() {
-        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
-            recipes = userRecipes
-        }
-        
         recipesTableView.reloadData()
     }
 }

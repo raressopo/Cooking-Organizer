@@ -29,4 +29,17 @@ class AlertManager: NSObject {
         
         presenter.present(alert, animated: true)
     }
+    
+    class func showDiscardAndSaveAlert(onPresenter presenter: UIViewController,
+                                       withTitle title: String,
+                                       message: String,
+                                       discardButtonHandler: ((UIAlertAction) -> Void)?,
+                                       saveButtonHandler: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Discard", style: .default, handler: discardButtonHandler))
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: saveButtonHandler))
+        
+        presenter.present(alert, animated: true)
+    }
 }

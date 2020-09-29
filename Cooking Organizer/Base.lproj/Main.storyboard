@@ -244,7 +244,6 @@
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="dismissMenuPressed:" destination="oTX-5u-b2b" eventType="touchUpInside" id="fCs-Ct-iUR"/>
-                                    <segue destination="5lQ-2z-7MV" kind="show" identifier="recipeDetailsSegue" id="R5s-vq-0px"/>
                                 </connections>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bpV-4q-QIu">
@@ -358,6 +357,8 @@
                         <segue destination="TVw-bQ-0hi" kind="show" identifier="homeIngredients" id="PdS-Vn-Zu1"/>
                         <segue destination="vgk-Y5-Abv" kind="show" identifier="cookbookSegue" id="NZk-mr-hog"/>
                         <segue destination="FxB-Yw-tKW" kind="show" identifier="addNewRecipeSegue" id="9zh-GO-iRb"/>
+                        <segue destination="5lQ-2z-7MV" kind="show" identifier="recipeDetailsSegue" id="6j1-gY-K4V"/>
+                        <segue destination="yHv-OY-2us" kind="show" identifier="cookingCalendarSegue" id="58D-3O-yMv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Twc-oc-aH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -835,6 +836,62 @@
             </objects>
             <point key="canvasLocation" x="4686.9565217391309" y="466.74107142857139"/>
         </scene>
+        <!--Cooking Calendar-->
+        <scene sceneID="e5H-6W-7BF">
+            <objects>
+                <viewController id="yHv-OY-2us" customClass="CookingCalendarViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Eob-Zw-heo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wg7-8s-Y0a" customClass="FSCalendar">
+                                <rect key="frame" x="0.0" y="88" width="414" height="326"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="326" id="5uq-WA-QkQ"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1do-ha-130">
+                                <rect key="frame" x="20" y="416" width="374" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="Vyi-MJ-R8w"/>
+                                </constraints>
+                                <state key="normal" title="Edit"/>
+                                <connections>
+                                    <action selector="editPressed:" destination="yHv-OY-2us" eventType="touchUpInside" id="hr0-b7-mW9"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fNk-2i-WSU">
+                                <rect key="frame" x="0.0" y="460" width="414" height="402"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="CfK-Zm-Q3V"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fNk-2i-WSU" firstAttribute="top" secondItem="1do-ha-130" secondAttribute="bottom" constant="2" id="ARL-XK-2Ou"/>
+                            <constraint firstItem="1do-ha-130" firstAttribute="top" secondItem="Wg7-8s-Y0a" secondAttribute="bottom" constant="2" id="AbU-kH-meT"/>
+                            <constraint firstItem="Wg7-8s-Y0a" firstAttribute="trailing" secondItem="CfK-Zm-Q3V" secondAttribute="trailing" id="TeB-oT-wG3"/>
+                            <constraint firstItem="Wg7-8s-Y0a" firstAttribute="top" secondItem="CfK-Zm-Q3V" secondAttribute="top" id="Vfh-zt-XaJ"/>
+                            <constraint firstItem="Wg7-8s-Y0a" firstAttribute="leading" secondItem="CfK-Zm-Q3V" secondAttribute="leading" id="WRW-r6-CIH"/>
+                            <constraint firstItem="fNk-2i-WSU" firstAttribute="leading" secondItem="CfK-Zm-Q3V" secondAttribute="leading" id="fT8-1K-63G"/>
+                            <constraint firstItem="1do-ha-130" firstAttribute="leading" secondItem="CfK-Zm-Q3V" secondAttribute="leading" constant="20" id="fnw-yo-ka6"/>
+                            <constraint firstItem="1do-ha-130" firstAttribute="trailing" secondItem="CfK-Zm-Q3V" secondAttribute="trailing" constant="-20" id="h17-zg-rnf"/>
+                            <constraint firstItem="fNk-2i-WSU" firstAttribute="trailing" secondItem="CfK-Zm-Q3V" secondAttribute="trailing" id="luF-BF-s6m"/>
+                            <constraint firstItem="CfK-Zm-Q3V" firstAttribute="bottom" secondItem="fNk-2i-WSU" secondAttribute="bottom" id="v7S-bk-XTe"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Cooking Calendar" id="9yX-wU-rwy"/>
+                    <connections>
+                        <outlet property="calendar" destination="Wg7-8s-Y0a" id="zX1-6l-hhw"/>
+                        <outlet property="editButton" destination="1do-ha-130" id="S2d-bR-ylK"/>
+                        <outlet property="recipesTableView" destination="fNk-2i-WSU" id="5yg-6b-8tl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I6q-bl-VHr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3518.840579710145" y="-997.09821428571422"/>
+        </scene>
         <!--Home Ingredients View Controller-->
         <scene sceneID="hRI-Jm-gwY">
             <objects>
@@ -955,7 +1012,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="R5s-vq-0px"/>
+        <segue reference="6j1-gY-K4V"/>
         <segue reference="9zh-GO-iRb"/>
     </inferredMetricsTieBreakers>
     <resources>

@@ -19,6 +19,8 @@
 		8E3143052510FD9E00FCF59F /* ChangeRecipeStepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3143042510FD9E00FCF59F /* ChangeRecipeStepCell.xib */; };
 		8E3FA85D2487C72300FDEB7D /* HomeIngredientTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3FA85C2487C72300FDEB7D /* HomeIngredientTableViewCell.xib */; };
 		8E59B1B6250BBA6A00DF3186 /* IngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E59B1B5250BBA6A00DF3186 /* IngredientsView.swift */; };
+		8E64AA5C25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AA5B25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift */; };
+		8E64AA5F25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E64AA5E25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib */; };
 		8E71E65C250F8EA400C4E588 /* RecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E71E65B250F8EA400C4E588 /* RecipeIngredientCell.swift */; };
 		8E71E65E250F8EB400C4E588 /* RecipeIngredientCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E71E65D250F8EB400C4E588 /* RecipeIngredientCell.xib */; };
 		8E71E660250FAA7F00C4E588 /* ChangeRecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E71E65F250FAA7F00C4E588 /* ChangeRecipeIngredientCell.swift */; };
@@ -36,6 +38,7 @@
 		8E95E52C249CDDD200ACCD44 /* RecipeDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95E52B249CDDD200ACCD44 /* RecipeDetailsViewController.swift */; };
 		8E9984362476BF4300C10B4F /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9984352476BF4300C10B4F /* UserDataManager.swift */; };
 		8E9984382476C7E300C10B4F /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9984372476C7E300C10B4F /* HomeScreenViewController.swift */; };
+		8EA955432522234500645198 /* CookingCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA955422522234500645198 /* CookingCalendarViewController.swift */; };
 		8EB02E70249CFECE0013D1B2 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB02E6F249CFECE0013D1B2 /* Checkbox.swift */; };
 		8EB9DD632508D1DC0020BCA9 /* FirebaseAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */; };
 		8ED3A9992490C43300922BB2 /* AddSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED3A9982490C43300922BB2 /* AddSelectionView.swift */; };
@@ -72,6 +75,8 @@
 		8E3143042510FD9E00FCF59F /* ChangeRecipeStepCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangeRecipeStepCell.xib; sourceTree = "<group>"; };
 		8E3FA85C2487C72300FDEB7D /* HomeIngredientTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeIngredientTableViewCell.xib; sourceTree = "<group>"; };
 		8E59B1B5250BBA6A00DF3186 /* IngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsView.swift; sourceTree = "<group>"; };
+		8E64AA5B25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingCalendarWidgetTableViewCell.swift; sourceTree = "<group>"; };
+		8E64AA5E25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CookingCalendarWidgetTableViewCell.xib; sourceTree = "<group>"; };
 		8E71E65B250F8EA400C4E588 /* RecipeIngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeIngredientCell.swift; sourceTree = "<group>"; };
 		8E71E65D250F8EB400C4E588 /* RecipeIngredientCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecipeIngredientCell.xib; sourceTree = "<group>"; };
 		8E71E65F250FAA7F00C4E588 /* ChangeRecipeIngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRecipeIngredientCell.swift; sourceTree = "<group>"; };
@@ -89,6 +94,8 @@
 		8E95E52B249CDDD200ACCD44 /* RecipeDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailsViewController.swift; sourceTree = "<group>"; };
 		8E9984352476BF4300C10B4F /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 		8E9984372476C7E300C10B4F /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
+		8EA955422522234500645198 /* CookingCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingCalendarViewController.swift; sourceTree = "<group>"; };
+		8EA95557252225E900645198 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8EB02E6F249CFECE0013D1B2 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPIManager.swift; sourceTree = "<group>"; };
 		8ED3A9982490C43300922BB2 /* AddSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSelectionView.swift; sourceTree = "<group>"; };
@@ -156,6 +163,8 @@
 				8EEC0BE6247FE7BF005BFA24 /* HIWidgetTableViewCell.xib */,
 				8E06382A2513919A00199907 /* CookbookWidgetTableViewCell.swift */,
 				8E06382C251391AC00199907 /* CookbookWidgetTableViewCell.xib */,
+				8E64AA5B25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift */,
+				8E64AA5E25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -263,6 +272,7 @@
 		8EF5BFD02475230F00C44646 /* Cooking Organizer */ = {
 			isa = PBXGroup;
 			children = (
+				8EA95557252225E900645198 /* BridgingHeader.h */,
 				8E8E20322475535900AF2F49 /* Models */,
 				8EEC0BDE247FD238005BFA24 /* Views */,
 				8EF5BFE7247534FC00C44646 /* Controllers */,
@@ -287,6 +297,7 @@
 				8ED3A9A02490DAA500922BB2 /* CookbookViewController.swift */,
 				8EE3941B249795D000DE2C9B /* NewRecipeViewController.swift */,
 				8E95E52B249CDDD200ACCD44 /* RecipeDetailsViewController.swift */,
+				8EA955422522234500645198 /* CookingCalendarViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -367,6 +378,7 @@
 				8E06382D251391AC00199907 /* CookbookWidgetTableViewCell.xib in Resources */,
 				8EF5BFDB2475231200C44646 /* Assets.xcassets in Resources */,
 				8E3143012510FCD800FCF59F /* RecipeStepCell.xib in Resources */,
+				8E64AA5F25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib in Resources */,
 				8EF5BFD92475230F00C44646 /* Main.storyboard in Resources */,
 				8E93469D249A4DE20048F5B1 /* CategoriesView.xib in Resources */,
 				8E71E65E250F8EB400C4E588 /* RecipeIngredientCell.xib in Resources */,
@@ -437,9 +449,11 @@
 				8E71E65C250F8EA400C4E588 /* RecipeIngredientCell.swift in Sources */,
 				8E0F01D0248A616D00CBA319 /* HomeIngredientDetailsView.swift in Sources */,
 				8E95E52A249CBD2900ACCD44 /* Recipe.swift in Sources */,
+				8EA955432522234500645198 /* CookingCalendarViewController.swift in Sources */,
 				8EF5BFD42475230F00C44646 /* SceneDelegate.swift in Sources */,
 				8ED3A99E2490D6BD00922BB2 /* RecipeTableViewCell.swift in Sources */,
 				8E3143032510FD8C00FCF59F /* ChangeRecipeStepCell.swift in Sources */,
+				8E64AA5C25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift in Sources */,
 				8EEC0BE0247FD25A005BFA24 /* HomeIngredientTableViewCell.swift in Sources */,
 				8ED3A9A12490DAA500922BB2 /* CookbookViewController.swift in Sources */,
 				8E95E52C249CDDD200ACCD44 /* RecipeDetailsViewController.swift in Sources */,
@@ -596,6 +610,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "raressoponar.Cooking-Organizer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cooking Organizer/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -615,6 +630,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "raressoponar.Cooking-Organizer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cooking Organizer/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
