@@ -15,10 +15,10 @@ class Recipe: Codable {
     var cookingTime: String?
     var dificulty: String?
     var imageData: String?
-    var lastCook: String?
     var name: String?
     var portions: Int = 0
     
+    var cookingDates: [String]?
     var ingredients: [NewRecipeIngredient]?
     var steps: [String]?
     
@@ -36,10 +36,15 @@ class ChangedRecipe {
     var cookingTime: String?
     var dificulty: String?
     var imageData: String?
-    var lastCook: String?
     var name: String?
     var portions: Int = 0
     
     var ingredients: [NewRecipeIngredient]?
     var steps: [String]?
+}
+
+struct CookingCalendarRecipe {
+    var name: String
+    var id: String
+    var cookingDates: [String]
 }

@@ -205,14 +205,14 @@ class FirebaseAPIManager {
         }
     }
     
-    func changeLastCook(forRecipeId recipeId: String, withValue value: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+    func changeCookingDates(forRecipeId recipeId: String, withValue value: [String], success: @escaping () -> Void, failure: @escaping () -> Void) {
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
             failure()
             
             return
         }
         
-        usersDataRef.child(loggedInUserId).child("recipes").child(recipeId).updateChildValues(["lastCook": value]) { (error, _) in
+        usersDataRef.child(loggedInUserId).child("recipes").child(recipeId).updateChildValues(["cookingDates": value]) { (error, _) in
             if error == nil {
                 success()
             } else {

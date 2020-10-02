@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,14 +18,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ib-jR-rPO">
-                        <rect key="frame" x="4" y="4" width="412" height="243"/>
+                        <rect key="frame" x="0.0" y="0.0" width="420" height="247"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ixr-Qi-CpT">
-                                <rect key="frame" x="4" y="4" width="404" height="235"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="4" y="4" width="412" height="239"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="ixr-Qi-CpT" secondAttribute="trailing" constant="4" id="hrL-cW-qqD"/>
                             <constraint firstItem="ixr-Qi-CpT" firstAttribute="top" secondItem="9Ib-jR-rPO" secondAttribute="top" constant="4" id="jOi-79-Da9"/>
@@ -35,9 +37,9 @@
                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="9Ib-jR-rPO" secondAttribute="bottom" constant="4" id="AxC-CF-SQ6"/>
-                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="top" secondItem="Gol-35-hAA" secondAttribute="top" constant="4" id="XOU-Dh-jbH"/>
-                    <constraint firstAttribute="trailing" secondItem="9Ib-jR-rPO" secondAttribute="trailing" constant="4" id="gGY-iH-d7g"/>
-                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="leading" secondItem="Gol-35-hAA" secondAttribute="leading" constant="4" id="yXH-Bg-EzB"/>
+                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="top" secondItem="Gol-35-hAA" secondAttribute="top" id="XOU-Dh-jbH"/>
+                    <constraint firstAttribute="trailing" secondItem="9Ib-jR-rPO" secondAttribute="trailing" id="gGY-iH-d7g"/>
+                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="leading" secondItem="Gol-35-hAA" secondAttribute="leading" id="yXH-Bg-EzB"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -46,4 +48,9 @@
             <point key="canvasLocation" x="139.13043478260872" y="142.96875"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

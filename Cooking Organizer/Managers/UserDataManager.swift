@@ -88,10 +88,10 @@ class UserDataManager: NSObject {
                                                               failure: failure)
     }
     
-    func changeLastCook(forRecipeId recipeId: String, withValue value: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
-        FirebaseAPIManager.sharedInstance.changeLastCook(forRecipeId: recipeId,
-                                                         withValue: value,
-                                                         success: success,
-                                                         failure: failure)
+    func changeCookingDates(forRecipeId recipeId: String, withValue value: [String], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.changeCookingDates(forRecipeId: recipeId,
+                                                             withValue: value,
+                                                             success: success,
+                                                             failure: failure)
     }
 }

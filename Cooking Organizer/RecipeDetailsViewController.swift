@@ -21,7 +21,7 @@ class RecipeDetailsViewController: UIViewController {
     
     @IBOutlet weak var cookingTimeButton: UIButton!
     @IBOutlet weak var difiicultyButton: UIButton!
-    @IBOutlet weak var lastCookButton: UIButton!
+    @IBOutlet weak var cookingDatesButton: UIButton!
     @IBOutlet weak var categoriesButton: UIButton!
     
     @IBOutlet weak var ingredientsStackView: UIStackView!
@@ -52,6 +52,8 @@ class RecipeDetailsViewController: UIViewController {
     var ingredientsView: IngredientsView?
     var stepsView: StepsView?
     
+    var cookingDateChanges: [String]?
+    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -66,17 +68,7 @@ class RecipeDetailsViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
     }
     
-    // MARK: - Views Helpers
-    
-    private func setIngredientsAndSteps() {
-        if let recipeIngredients = recipe?.ingredients, recipeIngredients.count > 0 {
-            ingredients = recipeIngredients
-        }
-        
-        if let recipeSteps = recipe?.steps, recipeSteps.count > 0 {
-            steps = recipeSteps
-        }
-    }
+    // MARK: - Views Private Helpers
     
     private func viewsAndFieldsSetup() {
         if let data = recipe?.imageData {
@@ -93,13 +85,13 @@ class RecipeDetailsViewController: UIViewController {
         portionsTextField.text = "\(recipe?.portions ?? 0)"
         cookingTimeButton.setTitle(recipe?.cookingTime, for: .normal)
         difiicultyButton.setTitle(recipe?.dificulty, for: .normal)
-        lastCookButton.setTitle(recipe?.lastCook ?? "Never Cooked", for: .normal)
+        cookingDatesButton.setTitle(recipe?.cookingDates != nil ? "See Cooking Dates" : "Never Cooked", for: .normal)
         categoriesButton.setTitle(recipe?.categories, for: .normal)
         
         categoriesButton.setTitleColor(UIColor.darkGray, for: .disabled)
         cookingTimeButton.setTitleColor(UIColor.darkGray, for: .disabled)
         difiicultyButton.setTitleColor(UIColor.darkGray, for: .disabled)
-        lastCookButton.setTitleColor(UIColor.darkGray, for: .disabled)
+        cookingDatesButton.setTitleColor(UIColor.darkGray, for: .disabled)
         
         ingredientsStackViewHeaderSetup()
         stepsStackViewHeaderSetup()
@@ -113,7 +105,7 @@ class RecipeDetailsViewController: UIViewController {
     private func enableFieldsAndButtons(enable: Bool) {
         recipeNametextField.isEnabled = enable
         portionsTextField.isEnabled = enable
-        lastCookButton.isEnabled = enable
+        cookingDatesButton.isEnabled = enable
         cookingTimeButton.isEnabled = enable
         categoriesButton.isEnabled = enable
         difiicultyButton.isEnabled = enable
@@ -140,9 +132,21 @@ class RecipeDetailsViewController: UIViewController {
         enableFieldsAndButtons(enable: false)
         
         changedRecipe = ChangedRecipe()
+        
+        cookingDateChanges = nil
     }
     
     // MARK: - Data Handle Helpers
+    
+    private func setIngredientsAndSteps() {
+        if let recipeIngredients = recipe?.ingredients, recipeIngredients.count > 0 {
+            ingredients = recipeIngredients
+        }
+        
+        if let recipeSteps = recipe?.steps, recipeSteps.count > 0 {
+            steps = recipeSteps
+        }
+    }
     
     private func changedRecipeDictionary() -> [String:Any] {
         var changedRecipeDictionary = [String:Any]()
@@ -188,13 +192,9 @@ class RecipeDetailsViewController: UIViewController {
             changedRecipeDictionary["dificulty"] = dificulty
         }
         
-        // Last Cook
-        if let lastCook = lastCookDateString {
-            if lastCook != recipe.lastCook {
-                changedRecipeDictionary["lastCook"] = lastCook
-            }
-        } else {
-            changedRecipeDictionary["lastCook"] = []
+        // Cooking Dates
+        if let changedCookingDates = cookingDateChanges, !changedCookingDates.containsSameElements(as: recipe.cookingDates ?? []) {
+            changedRecipeDictionary["cookingDates"] = changedCookingDates
         }
         
         // Categories
@@ -262,7 +262,6 @@ class RecipeDetailsViewController: UIViewController {
                                                                                 
                                                                                 self.setIngredientsAndSteps()
                                                                                 self.setupViewAfterEditing()
-                                                                                //self.viewsAndFieldsSetup()
                                                                             } else {
                                                                                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                                                                                                   title: "Update Failed",
@@ -282,14 +281,20 @@ class RecipeDetailsViewController: UIViewController {
 // MARK: - Recipe Image
 
 extension RecipeDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // MARK: - IBActions
+    
     @IBAction func changeImagePressed(_ sender: Any) {
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
             let myPickerController = UIImagePickerController()
+            
             myPickerController.delegate = self
             myPickerController.sourceType = .photoLibrary
+            
             present(myPickerController, animated: true, completion: nil)
         }
     }
+    
+    // MARK: - UIImagePickerController Delegate
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
@@ -360,19 +365,19 @@ extension RecipeDetailsViewController: DificultyPickerViewDelegate {
 // MARK: - Last Cook
 
 extension RecipeDetailsViewController: LastCookDatePickerViewDelegate {
-    @IBAction func lastCookPressed(_ sender: Any) {
-        let lastCookDatePickerView = LastCookDatePickerView()
+    @IBAction func cookingDatesPressed(_ sender: Any) {
+        let cookingDatesView = CookingDatesView(withFrame: CGRect(x: 0, y: 0, width: 100, height: 100), andCookingDates: recipe?.cookingDates ?? [String]())
         
-        lastCookDatePickerView.delegate = self
+        cookingDatesView.delegate = self
         
-        view.addSubview(lastCookDatePickerView)
+        view.addSubview(cookingDatesView)
         
-        lastCookDatePickerView.translatesAutoresizingMaskIntoConstraints = false
+        cookingDatesView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([lastCookDatePickerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
-                                     lastCookDatePickerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
-                                     lastCookDatePickerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
-                                     lastCookDatePickerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+        NSLayoutConstraint.activate([cookingDatesView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     cookingDatesView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     cookingDatesView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     cookingDatesView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
     }
     
     func didSelectLastCookDate(date: Date?) {
@@ -381,11 +386,11 @@ extension RecipeDetailsViewController: LastCookDatePickerViewDelegate {
         
             lastCookDateString = dateString
         
-            lastCookButton.setTitle(dateString, for: .normal)
+            cookingDatesButton.setTitle(dateString, for: .normal)
         } else {
             lastCookDateString = nil
             
-            lastCookButton.setTitle("Never Cooked", for: .normal)
+            cookingDatesButton.setTitle("Never Cooked", for: .normal)
         }
     }
 }
@@ -600,5 +605,13 @@ extension RecipeDetailsViewController: IngredientsViewDelegate {
 extension RecipeDetailsViewController: StepsViewDelegate {
     func stepDeleted() {
         stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant - 60.0
+    }
+}
+
+extension RecipeDetailsViewController: CookingDatesViewDelegate {
+    func cokingDatesChanged(withDates dates: [String]) {
+        cookingDateChanges = dates
+        
+        cookingDatesButton.setTitle(cookingDateChanges != nil ? "See Cooking Dates" : "Never Cooked", for: .normal)
     }
 }

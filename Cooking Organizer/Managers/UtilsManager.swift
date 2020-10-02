@@ -16,7 +16,7 @@ class UtilsManager: NSObject {
     override init() {
         super.init()
         
-        dateFormatter.dateFormat = "dd-MMM-yyyy HH:mm"
+        dateFormatter.dateFormat = "dd-MMM-yyyy"
     }
     
     class func resizeImageTo450x450AsData(image: UIImage) -> Data? {
@@ -48,5 +48,41 @@ class UtilsManager: NSObject {
         } else {
             return nil
         }
+    }
+    
+    class func isSelectedDate(selectedDate: Date, equalToGivenDate date: Date) -> Bool {
+        let calendar = Calendar.current
+        
+        let givenDateDay = calendar.component(.day, from: date)
+        let givenDateMonth = calendar.component(.month, from: date)
+        let givenDateYear = calendar.component(.year, from: date)
+        
+        let selectedDateDay = calendar.component(.day, from: selectedDate)
+        let selectedDateMonth = calendar.component(.month, from: selectedDate)
+        let selectedDateYear = calendar.component(.year, from: selectedDate)
+        
+        return givenDateDay == selectedDateDay && givenDateMonth == selectedDateMonth && givenDateYear == selectedDateYear
+    }
+    
+    class func isSelectedDate(selectedDate: Date, inFutureOrInPresentToGivenDate date: Date) -> Bool {
+        let calendar = Calendar.current
+        
+        let givenDateDay = calendar.component(.day, from: date)
+        let givenDateMonth = calendar.component(.month, from: date)
+        let givenDateYear = calendar.component(.year, from: date)
+        
+        let selectedDateDay = calendar.component(.day, from: selectedDate)
+        let selectedDateMonth = calendar.component(.month, from: selectedDate)
+        let selectedDateYear = calendar.component(.year, from: selectedDate)
+        
+        return (selectedDateYear > givenDateYear) ||
+            (selectedDateYear == givenDateYear && selectedDateMonth > givenDateMonth) ||
+            (selectedDateYear == givenDateYear && selectedDateMonth == givenDateMonth && selectedDateDay >= givenDateDay)
+    }
+}
+
+extension Array where Element: Comparable {
+    func containsSameElements(as other: [Element]) -> Bool {
+        return self.count == other.count && self.sorted() == other.sorted()
     }
 }

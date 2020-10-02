@@ -10,11 +10,13 @@ import UIKit
 
 class CookingCalendarViewController: UIViewController {
     @IBOutlet weak var calendar: FSCalendar!
-    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var recipesTableView: UITableView!
     
-    var recipes = [Recipe]()
-    var unscheduledRecipesIds = [String]()
+    var allRecipes = [CookingCalendarRecipe]()
+    var allRecipesCopy = [CookingCalendarRecipe]()
+    
+    var filteredRecipes = [CookingCalendarRecipe]()
+    var changedRecipesCookingDatesIds = [String]()
     
     var homeScreenDate: Date?
     
@@ -23,19 +25,36 @@ class CookingCalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        editButton.layer.cornerRadius = 8.0
-        editButton.layer.borderWidth = 3.0
-        editButton.layer.borderColor = UIColor.systemRed.cgColor
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .done, target: self, action: #selector(editPressed))
+        
+        if let rightBarButton = navigationItem.rightBarButtonItem {
+            rightBarButton.title = "Edit"
+        }
         
         delegateAndDataSourceSetup()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        populateAllRecipes()
+
         setupScreen(forDate: homeScreenDate ?? Date())
     }
     
     // MARK: - Private Helpers
     
+    private func populateAllRecipes() {
+        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
+            allRecipes = userRecipes.map( {CookingCalendarRecipe(name: $0.name ?? "", id: $0.id, cookingDates: $0.cookingDates ?? [])} )
+        }
+    }
+    
     private func delegateAndDataSourceSetup() {
         recipesTableView.delegate = self
         recipesTableView.dataSource = self
+        
+        recipesTableView.allowsSelectionDuringEditing = true
         
         calendar.delegate = self
         calendar.dataSource = self
@@ -50,51 +69,48 @@ class CookingCalendarViewController: UIViewController {
     }
     
     private func filterRecipesForDate(date: Date) {
-        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
-            recipes = userRecipes.filter({ recipe -> Bool in
-                if let lastCook = recipe.lastCook, let lastCookDate = UtilsManager.shared.dateFormatter.date(from: lastCook) {
-                    let calendar = Calendar.current
-                    
-                    let lastCookDay = calendar.component(.day, from: lastCookDate)
-                    let lastCookMonth = calendar.component(.month, from: lastCookDate)
-                    let lastCookYear = calendar.component(.year, from: lastCookDate)
-                    
-                    let selectedDateDay = calendar.component(.day, from: date)
-                    let selectedDateMonth = calendar.component(.month, from: date)
-                    let selectedDateYear = calendar.component(.year, from: date)
-                    
-                    return lastCookDay == selectedDateDay && lastCookMonth == selectedDateMonth && lastCookYear == selectedDateYear
-                } else {
-                    return false
+        let recipes = recipesTableView.isEditing ? allRecipesCopy : allRecipes
+        
+        filteredRecipes = recipes.filter({ recipe -> Bool in
+            var isCookingDateSelectedDate = false
+            
+            for cookingDateString in recipe.cookingDates {
+                if let cookingDate = UtilsManager.shared.dateFormatter.date(from: cookingDateString), !isCookingDateSelectedDate {
+                    isCookingDateSelectedDate = UtilsManager.isSelectedDate(selectedDate: date, equalToGivenDate: cookingDate)
                 }
-            })
+            }
             
-            editButton.layer.borderColor = recipes.count == 0 ? UIColor.systemGray.cgColor : UIColor.systemRed.cgColor
-            editButton.isEnabled = recipes.count != 0
-            
-            recipesTableView.reloadData()
-        }
+            return isCookingDateSelectedDate
+        })
+        
+        recipesTableView.reloadData()
     }
     
     private func saveChangesToDB(withDate date: Date?) {
-        let unscheduleGroup = DispatchGroup()
+        let scheduleGroup = DispatchGroup()
         
-        for recipeId in self.unscheduledRecipesIds {
-            unscheduleGroup.enter()
+        for recipeId in changedRecipesCookingDatesIds {
+            scheduleGroup.enter()
             
-            UserDataManager.shared.changeLastCook(forRecipeId: recipeId, withValue: "Never Cooked") {
-                unscheduleGroup.leave()
-            } failure: {
-                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                  title: "Changes Failed",
-                                                                  message: "Something went wrong unscheduling the recipe. Please try again later!")
+            if let recipeCookingDates = allRecipesCopy.first(where: { $0.id == recipeId })?.cookingDates {
                 
-                unscheduleGroup.leave()
+                
+                UserDataManager.shared.changeCookingDates(forRecipeId: recipeId, withValue: recipeCookingDates) {
+                    scheduleGroup.leave()
+                } failure: {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                      title: "Changes Failed",
+                                                                      message: "Something went wrong unscheduling the recipe. Please try again later!")
+                    
+                    scheduleGroup.leave()
+                }
             }
         }
         
-        unscheduleGroup.notify(queue: .main) {
-            self.unscheduledRecipesIds.removeAll()
+        scheduleGroup.notify(queue: .main) {
+            self.populateAllRecipes()
+            
+            self.changedRecipesCookingDatesIds.removeAll()
             
             self.exitEditModeSetup()
             
@@ -105,25 +121,68 @@ class CookingCalendarViewController: UIViewController {
     }
     
     private func exitEditModeSetup() {
+        navigationItem.leftBarButtonItem = nil
         navigationItem.hidesBackButton = false
         
-        editButton.setTitle("Edit", for: .normal)
+        if let rightBarButton = navigationItem.rightBarButtonItem {
+            rightBarButton.title = "Edit"
+        }
         
         recipesTableView.setEditing(false, animated: true)
+        
+        recipesTableView.reloadData()
+    }
+    
+    private func validateRecipeCookingDatesChanges() {
+        if changedRecipesCookingDatesIds.isEmpty {
+            exitEditModeSetup()
+        } else {
+            AlertManager.showDiscardAndSaveAlert(onPresenter: self, withTitle: "Changes not saved", message: "You have unsaved changes! Please choose if you want to discard or to send the changes to DB") { _ in
+                self.exitEditModeSetup()
+                
+                self.setupScreen(forDate: self.calendar.selectedDate ?? Date())
+            } saveButtonHandler: { _ in
+                self.saveChangesToDB(withDate: nil)
+            }
+        }
+    }
+    
+    private func shouldDisplayScheduleRecipeCell() -> Bool {
+        if let selectedDate = calendar.selectedDate {
+            return UtilsManager.isSelectedDate(selectedDate: selectedDate, inFutureOrInPresentToGivenDate: Date())
+        } else {
+            return false
+        }
     }
     
     // MARK: - IBActions
     
-    @IBAction func editPressed(_ sender: Any) {
-        if editButton.titleLabel?.text == "Edit" {
+    @objc func editPressed() {
+        if let rightBarButton = navigationItem.rightBarButtonItem, rightBarButton.title == "Edit" {
             navigationItem.hidesBackButton = true
             
-            editButton.setTitle("Save", for: .normal)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelPressed))
+            
+            rightBarButton.title = "Save"
+            
+            allRecipesCopy = allRecipes
             
             recipesTableView.setEditing(true, animated: true)
+            
+            recipesTableView.reloadData()
         } else {
-            saveChangesToDB(withDate: nil)
+            if !changedRecipesCookingDatesIds.isEmpty {
+                saveChangesToDB(withDate: calendar.selectedDate)
+            } else {
+                exitEditModeSetup()
+            }
         }
+    }
+    
+    @objc func cancelPressed() {
+        validateRecipeCookingDatesChanges()
+        
+        recipesTableView.reloadData()
     }
 }
 
@@ -135,62 +194,152 @@ extension CookingCalendarViewController: FSCalendarDataSource, FSCalendarDelegat
         
         filterRecipesForDate(date: date)
     }
-    
-    func calendar(_ calendar: FSCalendar, shouldSelect date: Date, at monthPosition: FSCalendarMonthPosition) -> Bool {
-        if !unscheduledRecipesIds.isEmpty {
-            AlertManager.showDiscardAndSaveAlert(onPresenter: self,
-                                                 withTitle: "Changes not saved",
-                                                 message: "Your unscheduled recipes are not saved. Please choose if you want to save or discard changes") { _ in
-                self.unscheduledRecipesIds.removeAll()
-                
-                self.exitEditModeSetup()
-                self.setupScreen(forDate: date)
-            } saveButtonHandler: { _ in
-                self.saveChangesToDB(withDate: date)
-            }
-            
-            return false
-        } else {
-            self.exitEditModeSetup()
-            
-            return true
-        }
-    }
 }
 
 // MARK: - Table View Delegate and Datasource
 
 extension CookingCalendarViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipes.count
+        return tableView.isEditing && shouldDisplayScheduleRecipeCell() ? filteredRecipes.count + 1 : filteredRecipes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        if tableView.isEditing, shouldDisplayScheduleRecipeCell(), indexPath.row == filteredRecipes.count {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "scheduleRecipeCell")
+            
+            cell.selectionStyle = .none
+            
+            cell.textLabel?.text = "Schedule Recipe"
+            cell.textLabel?.textColor = filteredRecipes.count == allRecipesCopy.count ? .systemGray3 : .systemBlue
+            cell.textLabel?.textAlignment = .center
+            
+            return cell
+            
+        } else {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "recipeCell")
         
-        cell.selectionStyle = .none
+            cell.selectionStyle = .none
         
-        cell.textLabel?.text = recipes[indexPath.row].name
+            cell.textLabel?.text = filteredRecipes[indexPath.row].name
         
-        return cell
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            unscheduledRecipesIds.append(recipes[indexPath.row].id)
-            recipes.remove(at: indexPath.row)
+            let changedRecipeIndex = allRecipesCopy.firstIndex { recipeCopy -> Bool in
+                return recipeCopy.id == filteredRecipes[indexPath.row].id
+            }
             
-            tableView.reloadData()
+            guard let index = changedRecipeIndex else { return }
+            
+            if let selectedDate = calendar.selectedDate {
+                let dateIndex = allRecipesCopy[index].cookingDates.firstIndex { dateString -> Bool in
+                    guard let date = UtilsManager.shared.dateFormatter.date(from: dateString) else { return false }
+                    
+                    return UtilsManager.isSelectedDate(selectedDate: selectedDate, equalToGivenDate: date)
+                }
+                
+                guard let cookingDateIndex = dateIndex else { return }
+                
+                allRecipesCopy[index].cookingDates.remove(at: cookingDateIndex)
+            }
+            
+            if !changedRecipesCookingDatesIds.contains(filteredRecipes[indexPath.row].id) {
+                changedRecipesCookingDatesIds.append(filteredRecipes[indexPath.row].id)
+            }
+            
+            if allRecipes[index].cookingDates.containsSameElements(as: allRecipesCopy[index].cookingDates) {
+                if let changedRecipeIdIndex = changedRecipesCookingDatesIds.firstIndex( where: {$0 == filteredRecipes[indexPath.row].id} ) {
+                    changedRecipesCookingDatesIds.remove(at: changedRecipeIdIndex)
+                }
+            }
+            
+            filterRecipesForDate(date: calendar.selectedDate ?? Date())
+            
+            recipesTableView.reloadData()
         }
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row != filteredRecipes.count
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing, indexPath.row == filteredRecipes.count, filteredRecipes.count != allRecipesCopy.count {
+            let recipesView = RecipesTableView()
+            
+            recipesView.recipes = allRecipesCopy.filter({ recipe -> Bool in
+                var isRecipeScheduledForSelectedDay = false
+                
+                if let selectedDate = calendar.selectedDate {
+                    for cookingDateString in recipe.cookingDates {
+                        guard let cookingDate = UtilsManager.shared.dateFormatter.date(from: cookingDateString) else {
+                            return false
+                        }
+                        
+                        if !isRecipeScheduledForSelectedDay {
+                            isRecipeScheduledForSelectedDay = UtilsManager.isSelectedDate(selectedDate: selectedDate, equalToGivenDate: cookingDate)
+                        }
+                    }
+                }
+                
+                return !isRecipeScheduledForSelectedDay
+            })
+            
+            recipesView.delegate = self
+            
+            view.addSubview(recipesView)
+            
+            recipesView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([recipesView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0.0),
+                                         recipesView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
+                                         recipesView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
+                                         recipesView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
+        }
+    }
+    
+    
 }
 
 // MARK: - User Data Manager Delegate
 
 extension CookingCalendarViewController: UserDataManagerDelegate {
     func recipeChanged() {
+        populateAllRecipes()
+        
         if let date = calendar.selectedDate {
             filterRecipesForDate(date: date)
         }
+    }
+}
+
+extension CookingCalendarViewController: RecipesTableViewDelegate {
+    func recipeSelectedForSchedule(withRecipe recipe: CookingCalendarRecipe) {
+        let changedRecipeIndex = allRecipesCopy.firstIndex { recipeCopy -> Bool in
+            return recipeCopy.id == recipe.id
+        }
+        
+        guard let index = changedRecipeIndex else { return }
+        
+        if let selectedDate = calendar.selectedDate {
+            allRecipesCopy[index].cookingDates.append(UtilsManager.shared.dateFormatter.string(from: selectedDate))
+        }
+        
+        if !changedRecipesCookingDatesIds.contains(recipe.id) {
+            changedRecipesCookingDatesIds.append(recipe.id)
+        }
+        
+        if allRecipes[index].cookingDates.containsSameElements(as: allRecipesCopy[index].cookingDates) {
+            if let changedRecipeIdIndex = changedRecipesCookingDatesIds.firstIndex( where: {$0 == recipe.id} ) {
+                changedRecipesCookingDatesIds.remove(at: changedRecipeIdIndex)
+            }
+        }
+        
+        filterRecipesForDate(date: calendar.selectedDate ?? Date())
+        
+        recipesTableView.reloadData()
     }
 }

@@ -50,18 +50,16 @@ class CookingCalendarWidgetTableViewCell: UITableViewCell {
     func filterRecipesForDate(date: Date) {
         if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
             recipes = userRecipes.filter({ recipe -> Bool in
-                if let lastCook = recipe.lastCook, let lastCookDate = UtilsManager.shared.dateFormatter.date(from: lastCook) {
-                    let calendar = Calendar.current
+                if let cookingDates = recipe.cookingDates {
+                    var isCookingDateSelectedDate = false
                     
-                    let lastCookDay = calendar.component(.day, from: lastCookDate)
-                    let lastCookMonth = calendar.component(.month, from: lastCookDate)
-                    let lastCookYear = calendar.component(.year, from: lastCookDate)
+                    for cookingDateString in cookingDates {
+                        if let cookingDate = UtilsManager.shared.dateFormatter.date(from: cookingDateString), !isCookingDateSelectedDate {
+                            isCookingDateSelectedDate = UtilsManager.isSelectedDate(selectedDate: date, equalToGivenDate: cookingDate)
+                        }
+                    }
                     
-                    let selectedDateDay = calendar.component(.day, from: date)
-                    let selectedDateMonth = calendar.component(.month, from: date)
-                    let selectedDateYear = calendar.component(.year, from: date)
-                    
-                    return lastCookDay == selectedDateDay && lastCookMonth == selectedDateMonth && lastCookYear == selectedDateYear
+                    return isCookingDateSelectedDate
                 } else {
                     return false
                 }

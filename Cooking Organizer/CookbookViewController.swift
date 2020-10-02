@@ -54,7 +54,7 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         cell.nameLabel.text = recipe.name
         cell.categoriesLabel.text = recipe.categories
         cell.cookingTimeLabel.text = recipe.cookingTime
-        cell.lastCookLabel.text = recipe.lastCook ?? "Never Cooked"
+        cell.lastCookLabel.text = recipe.cookingDates != nil ? "" : "Never Cooked"
         
         if let ingredients = recipe.ingredients {
             cell.nrOfIngredientsLabel.text = "\(ingredients.count) ingr."

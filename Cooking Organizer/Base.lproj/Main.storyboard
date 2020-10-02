@@ -748,9 +748,9 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="oWZ-45-De9"/>
                                                 </constraints>
-                                                <state key="normal" title="Last Cook"/>
+                                                <state key="normal" title="Cooking Dates"/>
                                                 <connections>
-                                                    <action selector="lastCookPressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="XYn-gx-npf"/>
+                                                    <action selector="cookingDatesPressed:" destination="5lQ-2z-7MV" eventType="touchUpInside" id="LA9-YJ-S9u"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kc-hF-NnS">
@@ -820,11 +820,11 @@
                     <connections>
                         <outlet property="categoriesButton" destination="2Kc-hF-NnS" id="Pa0-JG-KzN"/>
                         <outlet property="changeImageButton" destination="lpO-AK-QdX" id="A8f-cD-a25"/>
+                        <outlet property="cookingDatesButton" destination="1WJ-u3-o4y" id="syF-wA-MAL"/>
                         <outlet property="cookingTimeButton" destination="Jsw-44-eLp" id="HnL-D4-3XH"/>
                         <outlet property="difiicultyButton" destination="Cxk-57-mAY" id="kkc-fV-5KR"/>
                         <outlet property="ingredientsStackView" destination="TT1-eP-7uY" id="fUk-3C-zlB"/>
                         <outlet property="ingredientsStackViewHeightConstraint" destination="ebt-c3-Nqi" id="OwC-W5-RDC"/>
-                        <outlet property="lastCookButton" destination="1WJ-u3-o4y" id="y5x-jn-HWw"/>
                         <outlet property="portionsTextField" destination="Jch-fd-mbK" id="rRc-xO-Xfy"/>
                         <outlet property="recipeImageView" destination="DfQ-tC-vnV" id="g2S-JS-cD2"/>
                         <outlet property="recipeNametextField" destination="MDe-of-gjx" id="yuC-qB-hTk"/>
@@ -851,32 +851,19 @@
                                     <constraint firstAttribute="height" constant="326" id="5uq-WA-QkQ"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1do-ha-130">
-                                <rect key="frame" x="20" y="416" width="374" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="Vyi-MJ-R8w"/>
-                                </constraints>
-                                <state key="normal" title="Edit"/>
-                                <connections>
-                                    <action selector="editPressed:" destination="yHv-OY-2us" eventType="touchUpInside" id="hr0-b7-mW9"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fNk-2i-WSU">
-                                <rect key="frame" x="0.0" y="460" width="414" height="402"/>
+                                <rect key="frame" x="0.0" y="422" width="414" height="440"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CfK-Zm-Q3V"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fNk-2i-WSU" firstAttribute="top" secondItem="1do-ha-130" secondAttribute="bottom" constant="2" id="ARL-XK-2Ou"/>
-                            <constraint firstItem="1do-ha-130" firstAttribute="top" secondItem="Wg7-8s-Y0a" secondAttribute="bottom" constant="2" id="AbU-kH-meT"/>
+                            <constraint firstItem="fNk-2i-WSU" firstAttribute="top" secondItem="Wg7-8s-Y0a" secondAttribute="bottom" constant="8" id="Nda-OK-ivz"/>
                             <constraint firstItem="Wg7-8s-Y0a" firstAttribute="trailing" secondItem="CfK-Zm-Q3V" secondAttribute="trailing" id="TeB-oT-wG3"/>
                             <constraint firstItem="Wg7-8s-Y0a" firstAttribute="top" secondItem="CfK-Zm-Q3V" secondAttribute="top" id="Vfh-zt-XaJ"/>
                             <constraint firstItem="Wg7-8s-Y0a" firstAttribute="leading" secondItem="CfK-Zm-Q3V" secondAttribute="leading" id="WRW-r6-CIH"/>
                             <constraint firstItem="fNk-2i-WSU" firstAttribute="leading" secondItem="CfK-Zm-Q3V" secondAttribute="leading" id="fT8-1K-63G"/>
-                            <constraint firstItem="1do-ha-130" firstAttribute="leading" secondItem="CfK-Zm-Q3V" secondAttribute="leading" constant="20" id="fnw-yo-ka6"/>
-                            <constraint firstItem="1do-ha-130" firstAttribute="trailing" secondItem="CfK-Zm-Q3V" secondAttribute="trailing" constant="-20" id="h17-zg-rnf"/>
                             <constraint firstItem="fNk-2i-WSU" firstAttribute="trailing" secondItem="CfK-Zm-Q3V" secondAttribute="trailing" id="luF-BF-s6m"/>
                             <constraint firstItem="CfK-Zm-Q3V" firstAttribute="bottom" secondItem="fNk-2i-WSU" secondAttribute="bottom" id="v7S-bk-XTe"/>
                         </constraints>
@@ -884,7 +871,6 @@
                     <navigationItem key="navigationItem" title="Cooking Calendar" id="9yX-wU-rwy"/>
                     <connections>
                         <outlet property="calendar" destination="Wg7-8s-Y0a" id="zX1-6l-hhw"/>
-                        <outlet property="editButton" destination="1do-ha-130" id="S2d-bR-ylK"/>
                         <outlet property="recipesTableView" destination="fNk-2i-WSU" id="5yg-6b-8tl"/>
                     </connections>
                 </viewController>

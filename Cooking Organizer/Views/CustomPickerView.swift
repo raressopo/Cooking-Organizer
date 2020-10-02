@@ -30,6 +30,7 @@ class CustomPickerView: UIView {
     @IBOutlet weak var dismissUnitViewButton: UIButton!
     @IBOutlet weak var picker: UIPickerView!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var buttonsStackView: UIStackView!
     
     // MARK: - Initializers
     
@@ -120,6 +121,8 @@ class CookingTimePickerView: CustomPickerView {
         
         picker.delegate = self
         picker.dataSource = self
+        
+        setupSaveButton()
     }
     
     // MARK: - Private Helpers
@@ -227,10 +230,14 @@ extension DificultyPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
 class LastCookDatePickerView: CustomPickerView {
     weak var delegate: LastCookDatePickerViewDelegate?
     
+    var neverCookedButton = UIButton()
+    
     override func commonInit() {
         super.commonInit()
         
         datePicker.isHidden = false
+        buttonsStackView.isHidden = false
+        buttonsStackView.distribution = .fillEqually
         
         setupSaveButton()
         setupNeverCookedButton()
@@ -249,19 +256,12 @@ class LastCookDatePickerView: CustomPickerView {
         
         datePicker.backgroundColor = UIColor.white
         
-        self.contentView.addSubview(saveButton)
-        
-        NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0.0),
-                                     saveButton.heightAnchor.constraint(equalToConstant: 40.0),
-                                     saveButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width / 2 - 2),
-                                     saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0.0)])
+        buttonsStackView.addArrangedSubview(saveButton)
         
         saveButton.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
     }
     
     private func setupNeverCookedButton() {
-        let neverCookedButton = UIButton()
-        
         neverCookedButton.translatesAutoresizingMaskIntoConstraints = false
         
         neverCookedButton.setTitle("Never Cooked", for: .normal)
@@ -270,12 +270,7 @@ class LastCookDatePickerView: CustomPickerView {
         
         datePicker.backgroundColor = UIColor.white
         
-        self.contentView.addSubview(neverCookedButton)
-        
-        NSLayoutConstraint.activate([neverCookedButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0.0),
-                                     neverCookedButton.heightAnchor.constraint(equalToConstant: 40.0),
-                                     neverCookedButton.widthAnchor.constraint(equalToConstant: datePicker.frame.width / 2 - 2),
-                                     neverCookedButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: datePicker.frame.width / 2 + 2)])
+        buttonsStackView.addArrangedSubview(neverCookedButton)
         
         neverCookedButton.addTarget(self, action: #selector(neverCookedPressed), for: .touchUpInside)
     }

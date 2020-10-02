@@ -231,10 +231,10 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
                                 "portions": portionsNumber,
                                 "cookingTime": cookingTime,
                                 "dificulty": dificulty,
-                                "lastCook": lastCookDateString ?? [],
                                 "categories": selectedCategoriesString,
                                 "ingredients": createIngredientsDictionary(),
                                 "steps": createStepsDictionary(),
+                                "cookingDates": lastCookDateString != nil ? [lastCookDateString!] : [],
                                 "id": id] as [String:Any]
         
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
