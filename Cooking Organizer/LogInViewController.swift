@@ -138,9 +138,11 @@ class LogInViewController: UIViewController {
     private func setupObservers(forUserId id: String) {
         UserDataManager.shared.observeHomeIngredientAdded(forUserId: id)
         UserDataManager.shared.observeHomeIngredientChanged(forUserId: id)
+        UserDataManager.shared.observeHomeIngredientRemoved()
         
         UserDataManager.shared.observeRecipeAdded(forUserId: id)
         UserDataManager.shared.observeRecipeChanged(forUserId: id)
+        UserDataManager.shared.observeRecipeRemoved()
     }
 }
 

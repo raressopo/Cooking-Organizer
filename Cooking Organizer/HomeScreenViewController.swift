@@ -69,6 +69,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         homeTableView.dataSource = self
         
         UserDataManager.shared.delegate = self
+        UserDataManager.shared.homeIngredientDelegate = self
         
         homeTableView.register(UINib(nibName: "HIWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "hiWidgetCell")
         homeTableView.register(UINib(nibName: "CookbookWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "cookbookWidgetCell")

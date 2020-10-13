@@ -12,23 +12,28 @@ import Firebase
 protocol UserDataManagerDelegate: class {
     func homeIngredientsChanged()
     func homeIngredientsAdded()
+    func homeIngredientRemoved()
     
     func recipeAdded()
     func recipeChanged()
+    func recipeRemoved()
 }
 
 extension UserDataManagerDelegate {
     func homeIngredientsChanged() {}
     func homeIngredientsAdded() {}
+    func homeIngredientRemoved() {}
     
     func recipeAdded() {}
     func recipeChanged() {}
+    func recipeRemoved() {}
 }
 
 class UserDataManager: NSObject {
     static let shared = UserDataManager()
     
     weak var delegate: UserDataManagerDelegate?
+    weak var homeIngredientDelegate: UserDataManagerDelegate?
     
     func observeHomeIngredientAdded(forUserId id: String) {
         FirebaseAPIManager.sharedInstance.observeHomeIngredientAdded(forUserId: id) { ingredient in
@@ -36,6 +41,7 @@ class UserDataManager: NSObject {
                 currentUser.data.homeIngredients?[newIngredient.id] = newIngredient
                 
                 self.delegate?.homeIngredientsAdded()
+                self.homeIngredientDelegate?.homeIngredientsAdded()
             }
         }
     }
@@ -47,6 +53,18 @@ class UserDataManager: NSObject {
                 
                 self.delegate?.homeIngredientsChanged()
             }
+        }
+    }
+    
+    func observeHomeIngredientRemoved() {
+        FirebaseAPIManager.sharedInstance.observeHomeIngredientRemoved {
+            self.delegate?.homeIngredientRemoved()
+        }
+    }
+    
+    func observeRecipeRemoved() {
+        FirebaseAPIManager.sharedInstance.observeRecipeRemoved {
+            self.delegate?.recipeRemoved()
         }
     }
     
@@ -93,5 +111,17 @@ class UserDataManager: NSObject {
                                                              withValue: value,
                                                              success: success,
                                                              failure: failure)
+    }
+    
+    func removeHomeIngredient(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.removeHomeIngredient(withId: id,
+                                                               success: success,
+                                                               failure: failure)
+    }
+    
+    func removeRecipe(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.removeHomeIngredient(withId: id,
+                                                               success: success,
+                                                               failure: failure)
     }
 }

@@ -114,6 +114,22 @@ class FirebaseAPIManager {
         }
     }
     
+    func observeHomeIngredientRemoved(completion: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
+        
+        usersDataRef.child(loggedInUserId).child("homeIngredients").observe(.childRemoved) { _ in
+            completion()
+        }
+    }
+    
+    func observeRecipeRemoved(completion: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
+        
+        usersDataRef.child(loggedInUserId).child("recipes").observe(.childRemoved) { _ in
+            completion()
+        }
+    }
+    
     private func parseHomeIngredientDetails(fromSnapshot snapshot: DataSnapshot, withCompletionHandler completion: @escaping (HomeIngredient?) -> Void) {
         guard let homeIngredientDetails = snapshot.value else {
             completion(nil)
@@ -213,6 +229,38 @@ class FirebaseAPIManager {
         }
         
         usersDataRef.child(loggedInUserId).child("recipes").child(recipeId).updateChildValues(["cookingDates": value]) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func removeHomeIngredient(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("homeIngredients").child(id).removeValue { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func removeRecipe(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("recipes").child(id).removeValue { (error, _) in
             if error == nil {
                 success()
             } else {

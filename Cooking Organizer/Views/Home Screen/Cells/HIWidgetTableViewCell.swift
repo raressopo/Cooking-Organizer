@@ -35,7 +35,7 @@ class HIWidgetTableViewCell: UITableViewCell {
 
 extension HIWidgetTableViewCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let homeIngredientsCount = homeIngredients?.count else {
+        guard let homeIngredientsCount = UsersManager.shared.currentLoggedInUser?.homeIngredients?.count else {
             return 0
         }
         
@@ -50,7 +50,7 @@ extension HIWidgetTableViewCell: UITableViewDelegate, UITableViewDataSource {
         
         cell.selectionStyle = .none
         
-        if let homeIngredient = homeIngredients?[indexPath.row] {
+        if let homeIngredient = UsersManager.shared.currentLoggedInUser?.homeIngredients?[indexPath.row] {
             cell.name.text = homeIngredient.name
             cell.expirationDate.text = homeIngredient.expirationDate
             cell.quantityAndUnit.text = "\(homeIngredient.quantityAsString) \(homeIngredient.unit ?? "")"
@@ -60,7 +60,7 @@ extension HIWidgetTableViewCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let homeIngredient = homeIngredients?[indexPath.row] {
+        if let homeIngredient = UsersManager.shared.currentLoggedInUser?.homeIngredients?[indexPath.row] {
             delegate?.homeIngredientPressed(withHomeIngredient: homeIngredient)
         }
     }

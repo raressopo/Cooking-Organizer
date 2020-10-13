@@ -653,6 +653,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Cookbook" id="xFH-N3-IgP"/>
                     <connections>
+                        <outlet property="addRecipeButton" destination="hhH-JB-JSL" id="iP2-hr-b3w"/>
                         <outlet property="recipesTableView" destination="446-6p-2aj" id="gaF-GA-gt4"/>
                         <segue destination="5lQ-2z-7MV" kind="show" identifier="recipeDetailsSegue" id="PDk-uC-zQ9"/>
                     </connections>
@@ -998,8 +999,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="6j1-gY-K4V"/>
-        <segue reference="9zh-GO-iRb"/>
+        <segue reference="PDk-uC-zQ9"/>
+        <segue reference="yvl-qW-Z4e"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="opaqueSeparatorColor">

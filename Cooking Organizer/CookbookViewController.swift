@@ -8,12 +8,15 @@
 
 import UIKit
 
-class CookbookViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserDataManagerDelegate {
+class CookbookViewController: UIViewController {
     @IBOutlet weak var recipesTableView: UITableView!
+    @IBOutlet weak var addRecipeButton: UIButton!
     
     private var recipes = [Recipe]()
     
     private var selectedRecipe: Recipe?
+    
+    private var deletedRecipesIds = [String]()
     
     // MARK: - View Lifecycle
     
@@ -27,9 +30,9 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         
         recipesTableView.register(UINib(nibName: "RecipeTableViewCell", bundle: nil), forCellReuseIdentifier: "recipeCell")
         
-        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
-            recipes = userRecipes
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        
+        populateRecipes()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -40,8 +43,74 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    // MARK: - TableView Delegate and Datasource
+    // MARK: - Private Helpers
     
+    private func populateRecipes() {
+        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
+            recipes = userRecipes
+            
+            recipesTableView.reloadData()
+        }
+    }
+    
+    private func setupScreenMode(inEditMode inEdit: Bool) {
+        populateRecipes()
+        
+        recipesTableView.setEditing(inEdit, animated: true)
+        
+        navigationItem.hidesBackButton = inEdit
+        addRecipeButton.isHidden = inEdit
+        
+        if inEdit {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelPressed))
+        } else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            navigationItem.leftBarButtonItem = nil
+        }
+        
+        deletedRecipesIds.removeAll()
+    }
+    
+    // MARK: - Private Selectors
+    
+    @objc
+    private func editPressed() {
+        setupScreenMode(inEditMode: true)
+    }
+    
+    @objc
+    private func savePressed() {
+        let dispatchGroup = DispatchGroup()
+        
+        for id in deletedRecipesIds {
+            dispatchGroup.enter()
+            
+            UserDataManager.shared.removeRecipe(withId: id) {
+                if let loggedInUser = UsersManager.shared.currentLoggedInUser {
+                    loggedInUser.data.recipes?[id] = nil
+                }
+                
+                dispatchGroup.leave()
+            } failure: {
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.setupScreenMode(inEditMode: false)
+        }
+    }
+    
+    @objc
+    private func cancelPressed() {
+        setupScreenMode(inEditMode: false)
+    }
+}
+
+// MARK: - TableView Delegate and Datasource
+
+extension CookbookViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
     }
@@ -75,15 +144,28 @@ class CookbookViewController: UIViewController, UITableViewDelegate, UITableView
         performSegue(withIdentifier: "recipeDetailsSegue", sender: self)
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deletedRecipesIds.append(recipes[indexPath.row].id)
+            recipes.remove(at: indexPath.row)
+            
+            recipesTableView.reloadData()
+        }
+    }
+}
+
+// MARK: - User Data Manager Delegate
+
+extension CookbookViewController: UserDataManagerDelegate {
     func recipeAdded() {
-        recipesTableView.reloadData()
+        populateRecipes()
     }
     
     func recipeChanged() {
-        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
-            recipes = userRecipes
-        }
-        
-        recipesTableView.reloadData()
+        populateRecipes()
+    }
+    
+    func recipeRemoved() {
+        populateRecipes()
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UserDataManagerDelegate {
+class HomeIngredientsViewController: UIViewController {
     @IBOutlet weak var addHomeIngrButton: UIButton!
     
     @IBOutlet weak var homeIngredientsTableView: UITableView!
@@ -17,6 +17,8 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
     var homeIngredients = [HomeIngredient]()
     
     var widgetHomeIngredient: HomeIngredient?
+    
+    var deletedHomeIngredientsIds = [String]()
     
     // MARK: - View Lifecycle
     
@@ -32,28 +34,10 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
         
         homeIngredientsTableView.register(UINib(nibName: "HomeIngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "homeIngredientCell")
         
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-            homeIngredients = ingredients
-            
-            homeIngredientsTableView.reloadData()
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
         
-        if let ingredient = widgetHomeIngredient {
-            let ingredientDetailsView = HomeIngredientDetailsView()
-            
-            ingredientDetailsView.populateFields(withIngredient: ingredient)
-            
-            view.addSubview(ingredientDetailsView)
-            
-            ingredientDetailsView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([ingredientDetailsView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0.0),
-                                         ingredientDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
-                                         ingredientDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
-                                         ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
-            
-            ingredientDetailsView.createButton.setTitle("Change", for: .normal)
-        }
+        populateHomeIngredients()
+        displayHomeScreenHomeIngredient()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -77,8 +61,93 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
                                      ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
     }
     
-    // MARK: - TableView delegates and datasource
+    // MARK: - Private Helpers
     
+    private func displayHomeScreenHomeIngredient() {
+        if let ingredient = widgetHomeIngredient {
+            let ingredientDetailsView = HomeIngredientDetailsView()
+            
+            ingredientDetailsView.populateFields(withIngredient: ingredient)
+            
+            view.addSubview(ingredientDetailsView)
+            
+            ingredientDetailsView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([ingredientDetailsView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0.0),
+                                         ingredientDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
+                                         ingredientDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
+                                         ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
+            
+            ingredientDetailsView.createButton.setTitle("Change", for: .normal)
+        }
+    }
+    
+    private func populateHomeIngredients() {
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            homeIngredients = ingredients
+            
+            homeIngredientsTableView.reloadData()
+        }
+    }
+    
+    private func setupScreenMode(inEditMode inEdit: Bool) {
+        populateHomeIngredients()
+        
+        homeIngredientsTableView.setEditing(inEdit, animated: true)
+        
+        navigationItem.hidesBackButton = inEdit
+        addHomeIngrButton.isHidden = inEdit
+        
+        if inEdit {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelPressed))
+        } else {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            navigationItem.leftBarButtonItem = nil
+        }
+        
+        deletedHomeIngredientsIds.removeAll()
+    }
+    
+    // MARK: - Private Selectors
+    
+    @objc
+    private func editPressed() {
+        setupScreenMode(inEditMode: true)
+    }
+    
+    @objc
+    private func savePressed() {
+        let dispatchGroup = DispatchGroup()
+        
+        for id in deletedHomeIngredientsIds {
+            dispatchGroup.enter()
+            
+            UserDataManager.shared.removeHomeIngredient(withId: id) {
+                if let loggedInUser = UsersManager.shared.currentLoggedInUser {
+                    loggedInUser.data.homeIngredients?[id] = nil
+                }
+                
+                dispatchGroup.leave()
+            } failure: {
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.setupScreenMode(inEditMode: false)
+        }
+    }
+    
+    @objc
+    private func cancelPressed() {
+        setupScreenMode(inEditMode: false)
+    }
+}
+
+// MARK: - TableView Delegate and DataSource
+
+extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return homeIngredients.count
     }
@@ -118,19 +187,28 @@ class HomeIngredientsViewController: UIViewController, UITableViewDelegate, UITa
         return 76
     }
     
-    func homeIngredientsChanged() {
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-            homeIngredients = ingredients
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deletedHomeIngredientsIds.append(homeIngredients[indexPath.row].id)
+            homeIngredients.remove(at: indexPath.row)
             
             homeIngredientsTableView.reloadData()
         }
     }
+}
+
+// MARK: - User Data Manager Delegate
+
+extension HomeIngredientsViewController: UserDataManagerDelegate {
+    func homeIngredientRemoved() {
+        populateHomeIngredients()
+    }
+    
+    func homeIngredientsChanged() {
+        populateHomeIngredients()
+    }
     
     func homeIngredientsAdded() {
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-            homeIngredients = ingredients
-            
-            homeIngredientsTableView.reloadData()
-        }
+        populateHomeIngredients()
     }
 }
