@@ -11,7 +11,7 @@ import Firebase
 
 class HomeIngredientsViewController: UIViewController {
     @IBOutlet weak var addHomeIngrButton: UIButton!
-    
+    @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var homeIngredientsTableView: UITableView!
     
     var homeIngredients = [HomeIngredient]()
@@ -19,6 +19,9 @@ class HomeIngredientsViewController: UIViewController {
     var widgetHomeIngredient: HomeIngredient?
     
     var deletedHomeIngredientsIds = [String]()
+    
+    var filteredHomeIngredients: [HomeIngredient]?
+    var filterParams: HomeIngredientsFilterParams?
     
     // MARK: - View Lifecycle
     
@@ -61,6 +64,21 @@ class HomeIngredientsViewController: UIViewController {
                                      ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
     }
     
+    @IBAction func filterPressed(_ sender: Any) {
+        let filterView = HomeIngredientsFilterView(withCriterias: [.Availability, .Category], filterParams: filterParams, andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
+        view.addSubview(filterView)
+        
+        filterView.delegate = self
+        
+        filterView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([filterView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     filterView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     filterView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     filterView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
     // MARK: - Private Helpers
     
     private func displayHomeScreenHomeIngredient() {
@@ -83,11 +101,15 @@ class HomeIngredientsViewController: UIViewController {
     }
     
     private func populateHomeIngredients() {
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-            homeIngredients = ingredients
-            
-            homeIngredientsTableView.reloadData()
+        if let params = filterParams {
+            filterHomeIngredients(withParams: params)
+        } else {
+            if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+                homeIngredients = ingredients
+            }
         }
+        
+        homeIngredientsTableView.reloadData()
     }
     
     private func setupScreenMode(inEditMode inEdit: Bool) {
@@ -97,6 +119,7 @@ class HomeIngredientsViewController: UIViewController {
         
         navigationItem.hidesBackButton = inEdit
         addHomeIngrButton.isHidden = inEdit
+        filterButton.isHidden = inEdit
         
         if inEdit {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))
@@ -107,6 +130,46 @@ class HomeIngredientsViewController: UIViewController {
         }
         
         deletedHomeIngredientsIds.removeAll()
+    }
+    
+    private func filterHomeIngredients(withParams params: HomeIngredientsFilterParams) {
+        filteredHomeIngredients = nil
+        
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            if let category = params.name {
+                filteredHomeIngredients = ingredients.filter({ hi -> Bool in
+                    if let categories = hi.categories {
+                        return categories.contains(category)
+                    } else {
+                        return false
+                    }
+                })
+            }
+            
+            if params.available {
+                let hiIngredients = filteredHomeIngredients ?? ingredients
+                
+                filteredHomeIngredients = hiIngredients.filter({ hi -> Bool in
+                    if let expirationDateString = hi.expirationDate, let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString) {
+                        return UtilsManager.isSelectedDate(selectedDate: expirationDate, inFutureOrInPresentToGivenDate: Date())
+                    } else {
+                        return false
+                    }
+                })
+            }
+            
+            if params.expired {
+                let hiIngredients = filteredHomeIngredients ?? ingredients
+                
+                filteredHomeIngredients = hiIngredients.filter({ hi -> Bool in
+                    if let expirationDateString = hi.expirationDate, let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString) {
+                        return !UtilsManager.isSelectedDate(selectedDate: expirationDate, inFutureOrInPresentToGivenDate: Date())
+                    } else {
+                        return false
+                    }
+                })
+            }
+        }
     }
     
     // MARK: - Private Selectors
@@ -149,13 +212,13 @@ class HomeIngredientsViewController: UIViewController {
 
 extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return homeIngredients.count
+        return filteredHomeIngredients?.count ?? homeIngredients.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeIngredientCell", for: indexPath) as! HomeIngredientTableViewCell
         
-        let homeIngredient = homeIngredients[indexPath.row]
+        let homeIngredient = filteredHomeIngredients?[indexPath.row] ?? homeIngredients[indexPath.row]
         
         cell.name.text = homeIngredient.name
         cell.expirationDate.text = homeIngredient.expirationDate
@@ -165,7 +228,7 @@ extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ingredient = homeIngredients[indexPath.row]
+        let ingredient = filteredHomeIngredients?[indexPath.row] ?? homeIngredients[indexPath.row]
         
         let ingredientDetailsView = HomeIngredientDetailsView()
         
@@ -189,8 +252,13 @@ extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            deletedHomeIngredientsIds.append(homeIngredients[indexPath.row].id)
-            homeIngredients.remove(at: indexPath.row)
+            deletedHomeIngredientsIds.append(filteredHomeIngredients?[indexPath.row].id ?? homeIngredients[indexPath.row].id)
+            
+            if let _ = filteredHomeIngredients {
+                filteredHomeIngredients?.remove(at: indexPath.row)
+            } else {
+                homeIngredients.remove(at: indexPath.row)
+            }
             
             homeIngredientsTableView.reloadData()
         }
@@ -210,5 +278,22 @@ extension HomeIngredientsViewController: UserDataManagerDelegate {
     
     func homeIngredientsAdded() {
         populateHomeIngredients()
+    }
+}
+
+extension HomeIngredientsViewController: FilterViewDelegate {
+    func homeIngredientFilterPressed(withParams params: HomeIngredientsFilterParams) {
+        filterParams = params
+        
+        filterHomeIngredients(withParams: params)
+        
+        homeIngredientsTableView.reloadData()
+    }
+    
+    func homeIngredientResetFilterPressed() {
+        filterParams = nil
+        filteredHomeIngredients = nil
+        
+        homeIngredientsTableView.reloadData()
     }
 }

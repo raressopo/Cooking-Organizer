@@ -10,16 +10,27 @@ import UIKit
 
 protocol CategoriesViewDelegate: class {
     func didSelectCategories(categories: [RecipeCategories])
+    func didSelectRecipeCategory(withCategoryName name: String)
+    
+    func didSelectHICategory(withCategoryName name: String)
+}
+
+extension CategoriesViewDelegate {
+    func didSelectCategories(categories: [RecipeCategories]) {}
+    func didSelectRecipeCategory(withCategoryName name: String) {}
+    
+    func didSelectHICategory(withCategoryName name: String) {}
 }
 
 class CategoriesView: UIView {
     @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var categoriesTableView: UITableView!
-    
-    weak var delegate: CategoriesViewDelegate?
+    @IBOutlet weak var buttonsStackView: UIStackView!
     
     var copyOfSelectedCategories = [RecipeCategories]()
+    
+    weak var delegate: CategoriesViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,9 +49,6 @@ class CategoriesView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
-        
-        categoriesTableView.delegate = self
-        categoriesTableView.dataSource = self
     }
     
     // MARK: - IBActions
@@ -60,9 +68,29 @@ class CategoriesView: UIView {
     }
 }
 
-// MARK: - TableView Delegate and DataaSource
+// MARK: - Recipe Categories View
 
-extension CategoriesView: UITableViewDelegate, UITableViewDataSource {
+class RecipeCategoriesView: CategoriesView {
+    var isRecipeCategorySelection = false {
+        didSet {
+            buttonsStackView.isHidden = isRecipeCategorySelection
+        }
+    }
+    var selectedRecipeCategory: String?
+    
+    override func commonInit() {
+        super.commonInit()
+        
+        if isRecipeCategorySelection {
+            buttonsStackView.isHidden = true
+        }
+        
+        categoriesTableView.delegate = self
+        categoriesTableView.dataSource = self
+    }
+}
+
+extension RecipeCategoriesView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return RecipeCategories.allCases.count
     }
@@ -73,9 +101,82 @@ extension CategoriesView: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = RecipeCategory.categoryNameForIndex(index: indexPath.row)
         cell.selectionStyle = .none
         
-        if copyOfSelectedCategories.contains(where: { (category) -> Bool in
-            return category.index == indexPath.row
-        }) {
+        if isRecipeCategorySelection {
+            if let categoryName = selectedRecipeCategory, categoryName == RecipeCategory.categoryNameForIndex(index: indexPath.row) {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+        } else {
+            if copyOfSelectedCategories.contains(where: { (category) -> Bool in
+                return category.index == indexPath.row
+            }) {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isRecipeCategorySelection {
+            delegate?.didSelectRecipeCategory(withCategoryName: RecipeCategory.categoryNameForIndex(index: indexPath.row))
+            
+            removeFromSuperview()
+        } else {
+            let selectedCategory = RecipeCategories.allCases.first { (ingredient) -> Bool in
+                return ingredient.index == indexPath.row
+            }
+            
+            guard let category = selectedCategory else { return }
+            
+            if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+                tableView.cellForRow(at: indexPath)?.accessoryType = .none
+                
+                if copyOfSelectedCategories.contains(category) {
+                    let categoryIndex = copyOfSelectedCategories.firstIndex(of: category)
+                    
+                    if let index = categoryIndex {
+                        copyOfSelectedCategories.remove(at: index)
+                    }
+                }
+            } else {
+                tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+                
+                copyOfSelectedCategories.append(category)
+            }
+        }
+    }
+}
+
+// MARK: - Home Ingredients Categories View
+
+class HomeIngredientsCategoriesView: CategoriesView {
+    var selectedCategoryName: String?
+    
+    override func commonInit() {
+        super.commonInit()
+        
+        buttonsStackView.isHidden = true
+        
+        categoriesTableView.delegate = self
+        categoriesTableView.dataSource = self
+    }
+}
+
+extension HomeIngredientsCategoriesView: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return IngredientCategories.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "categoryCell")
+        
+        cell.textLabel?.text = IngredientCategory.categoryNameForIndex(index: indexPath.row)
+        
+        if let name = selectedCategoryName, name == IngredientCategory.categoryNameForIndex(index: indexPath.row) {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
@@ -85,26 +186,8 @@ extension CategoriesView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCategory = RecipeCategories.allCases.first { (ingredient) -> Bool in
-            return ingredient.index == indexPath.row
-        }
+        delegate?.didSelectHICategory(withCategoryName: IngredientCategory.categoryNameForIndex(index: indexPath.row))
         
-        guard let category = selectedCategory else { return }
-        
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-            
-            if copyOfSelectedCategories.contains(category) {
-                let categoryIndex = copyOfSelectedCategories.firstIndex(of: category)
-                
-                if let index = categoryIndex {
-                    copyOfSelectedCategories.remove(at: index)
-                }
-            }
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            
-            copyOfSelectedCategories.append(category)
-        }
+        removeFromSuperview()
     }
 }

@@ -29,6 +29,50 @@ class Recipe: Codable {
             return "\(0)"
         }
     }
+    
+    var cookingDatesAsDates: [Date] {
+        var finalDates = [Date]()
+        
+        if let dates = cookingDates {
+            for cookingDate in dates {
+                if let finalDate = UtilsManager.shared.dateFormatter.date(from: cookingDate) {
+                    finalDates.append(finalDate)
+                }
+            }
+        }
+        
+        return finalDates
+    }
+    
+    var cookingTimeHours: Int {
+        if let cookingTimeString = cookingTime {
+            let stringComponents = cookingTimeString.components(separatedBy: " ")
+            
+            return Int(stringComponents[0]) ?? 0
+        } else {
+            return 0
+        }
+    }
+    
+    var cookingTimeMinutes: Int {
+        if let cookingTimeString = cookingTime {
+            let stringComponents = cookingTimeString.components(separatedBy: " ")
+            
+            return Int(stringComponents[2]) ?? 0
+        } else {
+            return 0
+        }
+    }
+    
+    var lastCookingDate: Date? {
+        if cookingDatesAsDates.isEmpty {
+            return nil
+        } else {
+            let sortedDates = cookingDatesAsDates.sorted(by: { $0.compare($1) == .orderedDescending})
+            
+            return sortedDates.first
+        }
+    }
 }
 
 class ChangedRecipe {

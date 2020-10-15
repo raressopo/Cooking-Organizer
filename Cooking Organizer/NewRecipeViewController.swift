@@ -120,7 +120,7 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
     }
     
     @IBAction func categoriesPressed(_ sender: Any) {
-        let categoriesView = CategoriesView()
+        let categoriesView = RecipeCategoriesView()
         
         categoriesView.copyOfSelectedCategories = selectedCategories
         categoriesView.delegate = self

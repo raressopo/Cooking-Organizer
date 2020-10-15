@@ -628,6 +628,17 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9d-DO-L0l">
+                                <rect key="frame" x="24" y="808" width="35" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="Zvn-bA-vzU"/>
+                                    <constraint firstAttribute="height" constant="30" id="bMd-VN-8E1"/>
+                                </constraints>
+                                <state key="normal" title="Filter"/>
+                                <connections>
+                                    <action selector="filterPressed:" destination="vgk-Y5-Abv" eventType="touchUpInside" id="Udn-Bn-cHj"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hhH-JB-JSL">
                                 <rect key="frame" x="348" y="812" width="46" height="30"/>
                                 <constraints>
@@ -648,12 +659,15 @@
                             <constraint firstItem="446-6p-2aj" firstAttribute="leading" secondItem="jQL-EO-n3Q" secondAttribute="leading" id="LiC-KE-0bi"/>
                             <constraint firstItem="jQL-EO-n3Q" firstAttribute="bottom" secondItem="hhH-JB-JSL" secondAttribute="bottom" constant="20" id="MZZ-Xs-eFI"/>
                             <constraint firstItem="446-6p-2aj" firstAttribute="top" secondItem="jQL-EO-n3Q" secondAttribute="top" id="QLg-cp-OH3"/>
+                            <constraint firstItem="jQL-EO-n3Q" firstAttribute="bottom" secondItem="l9d-DO-L0l" secondAttribute="bottom" constant="24" id="UIV-gO-IcL"/>
                             <constraint firstAttribute="bottom" secondItem="446-6p-2aj" secondAttribute="bottom" id="vbj-ZT-1z2"/>
+                            <constraint firstItem="l9d-DO-L0l" firstAttribute="leading" secondItem="jQL-EO-n3Q" secondAttribute="leading" constant="24" id="vgf-1S-3RN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Cookbook" id="xFH-N3-IgP"/>
                     <connections>
                         <outlet property="addRecipeButton" destination="hhH-JB-JSL" id="iP2-hr-b3w"/>
+                        <outlet property="filterButton" destination="l9d-DO-L0l" id="UZO-r0-xqY"/>
                         <outlet property="recipesTableView" destination="446-6p-2aj" id="gaF-GA-gt4"/>
                         <segue destination="5lQ-2z-7MV" kind="show" identifier="recipeDetailsSegue" id="PDk-uC-zQ9"/>
                     </connections>
@@ -946,6 +960,17 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RRJ-ny-UdB">
+                                <rect key="frame" x="24" y="808" width="35" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="NXq-2I-5Bg"/>
+                                    <constraint firstAttribute="height" constant="30" id="zFB-Ep-k7g"/>
+                                </constraints>
+                                <state key="normal" title="Filter"/>
+                                <connections>
+                                    <action selector="filterPressed:" destination="TVw-bQ-0hi" eventType="touchUpInside" id="RtH-Wn-FVh"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sU3-kA-P8A">
                                 <rect key="frame" x="344" y="808" width="46" height="30"/>
                                 <constraints>
@@ -966,12 +991,15 @@
                             <constraint firstItem="AH3-cm-Wb2" firstAttribute="trailing" secondItem="lGS-n7-3ux" secondAttribute="trailing" id="Cuc-vp-gbg"/>
                             <constraint firstItem="lGS-n7-3ux" firstAttribute="bottom" secondItem="sU3-kA-P8A" secondAttribute="bottom" constant="24" id="SIq-6F-RRz"/>
                             <constraint firstAttribute="bottom" secondItem="AH3-cm-Wb2" secondAttribute="bottom" id="UTH-9d-i21"/>
+                            <constraint firstItem="lGS-n7-3ux" firstAttribute="bottom" secondItem="RRJ-ny-UdB" secondAttribute="bottom" constant="24" id="WKz-SI-wgb"/>
                             <constraint firstItem="lGS-n7-3ux" firstAttribute="trailing" secondItem="sU3-kA-P8A" secondAttribute="trailing" constant="24" id="Z1r-jF-FBr"/>
+                            <constraint firstItem="RRJ-ny-UdB" firstAttribute="leading" secondItem="lGS-n7-3ux" secondAttribute="leading" constant="24" id="dWo-Wr-lbu"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ya1-ZE-4jP"/>
                     <connections>
                         <outlet property="addHomeIngrButton" destination="sU3-kA-P8A" id="6PX-7e-12f"/>
+                        <outlet property="filterButton" destination="RRJ-ny-UdB" id="phf-BM-XK4"/>
                         <outlet property="homeIngredientsTableView" destination="AH3-cm-Wb2" id="sAv-gZ-1Aa"/>
                     </connections>
                 </viewController>
