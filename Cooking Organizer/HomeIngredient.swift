@@ -43,4 +43,12 @@ class HomeIngredient: Codable {
             return ""
         }
     }
+    
+    var expirationDateAsDate: Date? {
+        if let expDate = expirationDate {
+            return UtilsManager.shared.dateFormatter.date(from: expDate)
+        } else {
+            return nil
+        }
+    }
 }

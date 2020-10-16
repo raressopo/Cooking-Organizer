@@ -22,6 +22,10 @@ class CookbookViewController: UIViewController {
     
     var filterParams: RecipeFilterParams?
     
+    var selectedSortOption: SortStackViewButtons?
+    
+    var sortView: SortView?
+    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -34,7 +38,10 @@ class CookbookViewController: UIViewController {
         
         recipesTableView.register(UINib(nibName: "RecipeTableViewCell", bundle: nil), forCellReuseIdentifier: "recipeCell")
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
+        
+        navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
         
         populateRecipes()
     }
@@ -72,6 +79,10 @@ class CookbookViewController: UIViewController {
             }
         }
         
+        if let sortOption = selectedSortOption {
+            sortRecipes(withSortOption: sortOption)
+        }
+        
         recipesTableView.reloadData()
     }
     
@@ -85,10 +96,13 @@ class CookbookViewController: UIViewController {
         filterButton.isHidden = inEdit
         
         if inEdit {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))
+            navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))]
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelPressed))
         } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
+            
+            navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
             navigationItem.leftBarButtonItem = nil
         }
         
@@ -212,6 +226,73 @@ class CookbookViewController: UIViewController {
                 })
             }
         }
+        
+        if let selectedSortOption = selectedSortOption {
+            sortRecipes(withSortOption: selectedSortOption)
+        }
+    }
+    
+    private func sortRecipes(withSortOption option: SortStackViewButtons) {
+        var sortedRecipes = filteredRecipes ?? recipes
+        
+        sortedRecipes.sort(by: { (r1, r2) -> Bool in
+            switch option {
+            case .RecipeNameAscending:
+                if let r1Name = r1.name, let r2Name = r2.name {
+                    return r1Name.compare(r2Name) == .orderedAscending
+                } else {
+                    return false
+                }
+            case .RecipeNameDescending:
+                if let r1Name = r1.name, let r2Name = r2.name {
+                    return r1Name.compare(r2Name) == .orderedDescending
+                } else {
+                    return false
+                }
+            case .CookingTimeAscending:
+                return r1.cookingTimeHours < r2.cookingTimeHours || (r1.cookingTimeHours == r2.cookingTimeHours && r1.cookingTimeMinutes < r2.cookingTimeMinutes)
+            case .CookingTimeDescending:
+                return r1.cookingTimeHours > r2.cookingTimeHours || (r1.cookingTimeHours == r2.cookingTimeHours && r1.cookingTimeMinutes > r2.cookingTimeMinutes)
+            case .DifficultyAscending:
+                if let r1Difficulty = r1.dificulty, let r2Difficulty = r2.dificulty {
+                    return r1Difficulty.compare(r2Difficulty) == .orderedAscending
+                } else {
+                    return false
+                }
+            case .DifficultyDescending:
+                if let r1Difficulty = r1.dificulty, let r2Difficulty = r2.dificulty {
+                    return r1Difficulty.compare(r2Difficulty) == .orderedDescending
+                } else {
+                    return false
+                }
+            case .PortionsAscending:
+                return r1.portions < r2.portions
+            case .PortionsDescending:
+                return r1.portions > r2.portions
+            case .LastCookingDateAscending:
+                if let r1LastCookingDate = r1.lastCookingDate, let r2LastCookingDate = r2.lastCookingDate {
+                    return r1LastCookingDate.compare(r2LastCookingDate) == .orderedAscending
+                } else {
+                    return false
+                }
+            case .LastCookingDateDescending:
+                if let r1LastCookingDate = r1.lastCookingDate, let r2LastCookingDate = r2.lastCookingDate {
+                    return r1LastCookingDate.compare(r2LastCookingDate) == .orderedDescending
+                } else {
+                    return false
+                }
+            default:
+                return false
+            }
+        })
+        
+        if filteredRecipes != nil {
+            filteredRecipes = sortedRecipes
+        } else {
+            recipes = sortedRecipes
+        }
+        
+        recipesTableView.reloadData()
     }
     
     // MARK: - Private Selectors
@@ -219,6 +300,36 @@ class CookbookViewController: UIViewController {
     @objc
     private func editPressed() {
         setupScreenMode(inEditMode: true)
+    }
+    
+    @objc
+    private func sortPressed() {
+        if let sortView = sortView {
+            sortView.removeFromSuperview()
+            
+            self.sortView = nil
+        } else {
+            sortView = SortView(withButtons: [.RecipeNameAscending, .RecipeNameDescending, .CookingTimeAscending, .CookingTimeDescending, .DifficultyAscending, .DifficultyDescending, .PortionsAscending, .PortionsDescending, .LastCookingDateAscending, .LastCookingDateDescending], andFrame: CGRect(x: 0, y: 0, width: 250, height: 500))
+            
+            if let sortView = sortView {
+                sortView.selectedSortOption = { sortOption in
+                    self.selectedSortOption = sortOption
+                    
+                    self.sortRecipes(withSortOption: sortOption)
+                    
+                    sortView.removeFromSuperview()
+                }
+                
+                sortView.translatesAutoresizingMaskIntoConstraints = false
+                
+                view.addSubview(sortView)
+                
+                NSLayoutConstraint.activate([sortView.heightAnchor.constraint(equalToConstant: 500),
+                                             sortView.topAnchor.constraint(equalTo: recipesTableView.topAnchor, constant: 10),
+                                             sortView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+                                             sortView.widthAnchor.constraint(equalToConstant: 250)])
+            }
+        }
     }
     
     @objc
@@ -265,7 +376,14 @@ extension CookbookViewController: UITableViewDelegate, UITableViewDataSource {
         cell.nameLabel.text = recipe.name
         cell.categoriesLabel.text = recipe.categories
         cell.cookingTimeLabel.text = recipe.cookingTime
-        cell.lastCookLabel.text = recipe.cookingDates != nil ? "" : "Never Cooked"
+        
+        var lastCookingDateString = "Never Cooked"
+        
+        if let lastDate = recipe.lastCookingDate {
+            lastCookingDateString = UtilsManager.shared.dateFormatter.string(from: lastDate)
+        }
+        
+        cell.lastCookLabel.text = lastCookingDateString
         
         if let ingredients = recipe.ingredients {
             cell.nrOfIngredientsLabel.text = "\(ingredients.count) ingr."

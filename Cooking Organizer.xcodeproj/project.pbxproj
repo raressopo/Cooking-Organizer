@@ -59,6 +59,8 @@
 		8EEC0BE0247FD25A005BFA24 /* HomeIngredientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEC0BDF247FD25A005BFA24 /* HomeIngredientTableViewCell.swift */; };
 		8EEC0BE7247FE7BF005BFA24 /* HIWidgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEC0BE5247FE7BF005BFA24 /* HIWidgetTableViewCell.swift */; };
 		8EEC0BE8247FE7BF005BFA24 /* HIWidgetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EEC0BE6247FE7BF005BFA24 /* HIWidgetTableViewCell.xib */; };
+		8EF58387253969A300381C43 /* SortView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF58386253969A300381C43 /* SortView.xib */; };
+		8EF5838A253969D900381C43 /* SortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF58389253969D900381C43 /* SortView.swift */; };
 		8EF5BFD22475230F00C44646 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF5BFD12475230F00C44646 /* AppDelegate.swift */; };
 		8EF5BFD42475230F00C44646 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF5BFD32475230F00C44646 /* SceneDelegate.swift */; };
 		8EF5BFD62475230F00C44646 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF5BFD52475230F00C44646 /* LogInViewController.swift */; };
@@ -122,6 +124,8 @@
 		8EEC0BDF247FD25A005BFA24 /* HomeIngredientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngredientTableViewCell.swift; sourceTree = "<group>"; };
 		8EEC0BE5247FE7BF005BFA24 /* HIWidgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIWidgetTableViewCell.swift; sourceTree = "<group>"; };
 		8EEC0BE6247FE7BF005BFA24 /* HIWidgetTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HIWidgetTableViewCell.xib; sourceTree = "<group>"; };
+		8EF58386253969A300381C43 /* SortView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SortView.xib; sourceTree = "<group>"; };
+		8EF58389253969D900381C43 /* SortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortView.swift; sourceTree = "<group>"; };
 		8EF5BFCE2475230F00C44646 /* Cooking Organizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cooking Organizer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EF5BFD12475230F00C44646 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8EF5BFD32475230F00C44646 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -273,6 +277,8 @@
 				8E93469C249A4DE20048F5B1 /* CategoriesView.xib */,
 				8E498AD02536FF5200900D61 /* FilterView.swift */,
 				8E498AD32536FF6400900D61 /* FilterView.xib */,
+				8EF58389253969D900381C43 /* SortView.swift */,
+				8EF58386253969A300381C43 /* SortView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -411,6 +417,7 @@
 				8E71E65E250F8EB400C4E588 /* RecipeIngredientCell.xib in Resources */,
 				8E3FA85D2487C72300FDEB7D /* HomeIngredientTableViewCell.xib in Resources */,
 				8E0DE0232525CA58007CFA31 /* CookingDatesView.xib in Resources */,
+				8EF58387253969A300381C43 /* SortView.xib in Resources */,
 				8ED3A99B2490C43F00922BB2 /* AddSelectionView.xib in Resources */,
 				8E3143052510FD9E00FCF59F /* ChangeRecipeStepCell.xib in Resources */,
 				8E71E662250FAA9C00C4E588 /* ChangeRecipeIngredientCell.xib in Resources */,
@@ -487,6 +494,7 @@
 				8E3143032510FD8C00FCF59F /* ChangeRecipeStepCell.swift in Sources */,
 				8E64AA5C25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift in Sources */,
 				8EEC0BE0247FD25A005BFA24 /* HomeIngredientTableViewCell.swift in Sources */,
+				8EF5838A253969D900381C43 /* SortView.swift in Sources */,
 				8ED3A9A12490DAA500922BB2 /* CookbookViewController.swift in Sources */,
 				8E95E52C249CDDD200ACCD44 /* RecipeDetailsViewController.swift in Sources */,
 			);

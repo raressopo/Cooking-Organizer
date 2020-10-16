@@ -23,6 +23,10 @@ class HomeIngredientsViewController: UIViewController {
     var filteredHomeIngredients: [HomeIngredient]?
     var filterParams: HomeIngredientsFilterParams?
     
+    var selectedSortOption: SortStackViewButtons?
+    
+    var sortView: SortView?
+    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -37,7 +41,10 @@ class HomeIngredientsViewController: UIViewController {
         
         homeIngredientsTableView.register(UINib(nibName: "HomeIngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "homeIngredientCell")
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
+        
+        navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
         
         populateHomeIngredients()
         displayHomeScreenHomeIngredient()
@@ -109,6 +116,12 @@ class HomeIngredientsViewController: UIViewController {
             }
         }
         
+        if let sortOption = selectedSortOption {
+            self.selectedSortOption = sortOption
+            
+            sortHomeIngredients(withSortOption: sortOption)
+        }
+        
         homeIngredientsTableView.reloadData()
     }
     
@@ -122,10 +135,13 @@ class HomeIngredientsViewController: UIViewController {
         filterButton.isHidden = inEdit
         
         if inEdit {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))
+            navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))]
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelPressed))
         } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
+            
+            navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
             navigationItem.leftBarButtonItem = nil
         }
         
@@ -170,13 +186,92 @@ class HomeIngredientsViewController: UIViewController {
                 })
             }
         }
+        
+        if let selectedSortOption = selectedSortOption {
+            sortHomeIngredients(withSortOption: selectedSortOption)
+        }
     }
     
+    private func sortHomeIngredients(withSortOption option: SortStackViewButtons) {
+        var ingredients = filteredHomeIngredients ?? homeIngredients
+        
+        ingredients.sort(by: { (ingredient1, ingredient2) -> Bool in
+            switch option {
+            case .NameAscending:
+                if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
+                    return ingredient1Name.compare(ingredient2Name) == .orderedAscending
+                } else {
+                    return false
+                }
+            case .NameDescending:
+                if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
+                    return ingredient1Name.compare(ingredient2Name) == .orderedDescending
+                } else {
+                    return false
+                }
+            case .ExpirationDateAscending:
+                if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
+                    return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedAscending
+                } else {
+                    return false
+                }
+            case .ExpirationDateDescending:
+                if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
+                    return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedDescending
+                } else {
+                    return false
+                }
+            default:
+                return false
+            }
+        })
+        
+        if filteredHomeIngredients != nil {
+            filteredHomeIngredients = ingredients
+        } else {
+            homeIngredients = ingredients
+        }
+        
+        homeIngredientsTableView.reloadData()
+    }
+        
     // MARK: - Private Selectors
     
     @objc
     private func editPressed() {
         setupScreenMode(inEditMode: true)
+    }
+    
+    @objc
+    private func sortPressed() {
+        if let sortView = sortView {
+            sortView.removeFromSuperview()
+            
+            self.sortView = nil
+            
+            return
+        } else {
+            sortView = SortView(withButtons: [.NameAscending, .NameDescending, .ExpirationDateAscending, .ExpirationDateDescending], andFrame: CGRect(x: 0, y: 0, width: 250, height: 140))
+            
+            if let sortView = sortView {
+                sortView.selectedSortOption = { sortOption in
+                    self.selectedSortOption = sortOption
+                    
+                    self.sortHomeIngredients(withSortOption: sortOption)
+                    
+                    sortView.removeFromSuperview()
+                }
+                
+                sortView.translatesAutoresizingMaskIntoConstraints = false
+                
+                view.addSubview(sortView)
+                
+                NSLayoutConstraint.activate([sortView.heightAnchor.constraint(equalToConstant: 200),
+                                             sortView.topAnchor.constraint(equalTo: homeIngredientsTableView.topAnchor, constant: 10),
+                                             sortView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+                                             sortView.widthAnchor.constraint(equalToConstant: 250)])
+            }
+        }
     }
     
     @objc
