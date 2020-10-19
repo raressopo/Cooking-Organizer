@@ -28,6 +28,9 @@
 		8E4F734E253D957000E145A9 /* Products.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E4F734D253D957000E145A9 /* Products.json */; };
 		8E4F7357253D9AB800E145A9 /* ProductsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4F7356253D9AB800E145A9 /* ProductsManager.swift */; };
 		8E59B1B6250BBA6A00DF3186 /* IngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E59B1B5250BBA6A00DF3186 /* IngredientsView.swift */; };
+		8E5B68D9253C47BD00B4BA19 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B68D8253C47BD00B4BA19 /* SettingsViewController.swift */; };
+		8E5B68DC253C4DB800B4BA19 /* RearrangeHomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5B68DB253C4DB800B4BA19 /* RearrangeHomeScreenView.swift */; };
+		8E5B68DF253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E5B68DE253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib */; };
 		8E64AA5C25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E64AA5B25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift */; };
 		8E64AA5F25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E64AA5E25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib */; };
 		8E71E65C250F8EA400C4E588 /* RecipeIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E71E65B250F8EA400C4E588 /* RecipeIngredientCell.swift */; };
@@ -95,6 +98,9 @@
 		8E4F734D253D957000E145A9 /* Products.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Products.json; sourceTree = "<group>"; };
 		8E4F7356253D9AB800E145A9 /* ProductsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsManager.swift; sourceTree = "<group>"; };
 		8E59B1B5250BBA6A00DF3186 /* IngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsView.swift; sourceTree = "<group>"; };
+		8E5B68D8253C47BD00B4BA19 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		8E5B68DB253C4DB800B4BA19 /* RearrangeHomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RearrangeHomeScreenView.swift; sourceTree = "<group>"; };
+		8E5B68DE253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RearrangeHomeScreenView.xib; sourceTree = "<group>"; };
 		8E64AA5B25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingCalendarWidgetTableViewCell.swift; sourceTree = "<group>"; };
 		8E64AA5E25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CookingCalendarWidgetTableViewCell.xib; sourceTree = "<group>"; };
 		8E71E65B250F8EA400C4E588 /* RecipeIngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeIngredientCell.swift; sourceTree = "<group>"; };
@@ -287,6 +293,8 @@
 				8E498AD32536FF6400900D61 /* FilterView.xib */,
 				8EF58389253969D900381C43 /* SortView.swift */,
 				8EF58386253969A300381C43 /* SortView.xib */,
+				8E5B68DB253C4DB800B4BA19 /* RearrangeHomeScreenView.swift */,
+				8E5B68DE253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -339,6 +347,7 @@
 				8EE3941B249795D000DE2C9B /* NewRecipeViewController.swift */,
 				8E95E52B249CDDD200ACCD44 /* RecipeDetailsViewController.swift */,
 				8EA955422522234500645198 /* CookingCalendarViewController.swift */,
+				8E5B68D8253C47BD00B4BA19 /* SettingsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -423,6 +432,7 @@
 				8E64AA5F25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib in Resources */,
 				8EF5BFD92475230F00C44646 /* Main.storyboard in Resources */,
 				8E4F734E253D957000E145A9 /* Products.json in Resources */,
+				8E5B68DF253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib in Resources */,
 				8E93469D249A4DE20048F5B1 /* CategoriesView.xib in Resources */,
 				8E71E65E250F8EB400C4E588 /* RecipeIngredientCell.xib in Resources */,
 				8E3FA85D2487C72300FDEB7D /* HomeIngredientTableViewCell.xib in Resources */,
@@ -490,7 +500,9 @@
 				8EEC0BE7247FE7BF005BFA24 /* HIWidgetTableViewCell.swift in Sources */,
 				8E59B1B6250BBA6A00DF3186 /* IngredientsView.swift in Sources */,
 				8E402DA225272C7B00BC31A4 /* RecipesTableView.swift in Sources */,
+				8E5B68DC253C4DB800B4BA19 /* RearrangeHomeScreenView.swift in Sources */,
 				8E71E660250FAA7F00C4E588 /* ChangeRecipeIngredientCell.swift in Sources */,
+				8E5B68D9253C47BD00B4BA19 /* SettingsViewController.swift in Sources */,
 				8ED3A9992490C43300922BB2 /* AddSelectionView.swift in Sources */,
 				8E06382B2513919A00199907 /* CookbookWidgetTableViewCell.swift in Sources */,
 				8EE3941E2497A35900DE2C9B /* NewRecipeIngredient.swift in Sources */,

@@ -359,6 +359,7 @@
                         <segue destination="FxB-Yw-tKW" kind="show" identifier="addNewRecipeSegue" id="9zh-GO-iRb"/>
                         <segue destination="5lQ-2z-7MV" kind="show" identifier="recipeDetailsSegue" id="6j1-gY-K4V"/>
                         <segue destination="yHv-OY-2us" kind="show" identifier="cookingCalendarSegue" id="58D-3O-yMv"/>
+                        <segue destination="aez-B9-nM1" kind="show" identifier="settingsSegue" id="zOb-Qa-vax"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Twc-oc-aH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -605,6 +606,48 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Da-7n-9tf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2137.68115942029" y="1200.6696428571429"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="3a2-A8-bCr">
+            <objects>
+                <viewController id="aez-B9-nM1" customClass="SettingsViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mah-bt-qzE">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hPJ-QL-bma">
+                                <rect key="frame" x="0.0" y="267" width="414" height="595"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cxc-cM-Xja">
+                                <rect key="frame" x="0.0" y="88" width="414" height="175"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="175" id="9dd-Qz-3oQ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="92V-S5-HrE"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="hPJ-QL-bma" firstAttribute="top" secondItem="cxc-cM-Xja" secondAttribute="bottom" constant="4" id="9Q8-zi-4vh"/>
+                            <constraint firstItem="cxc-cM-Xja" firstAttribute="trailing" secondItem="92V-S5-HrE" secondAttribute="trailing" id="Ky7-gG-eT0"/>
+                            <constraint firstItem="cxc-cM-Xja" firstAttribute="top" secondItem="92V-S5-HrE" secondAttribute="top" id="N3Q-aO-KAR"/>
+                            <constraint firstItem="cxc-cM-Xja" firstAttribute="leading" secondItem="92V-S5-HrE" secondAttribute="leading" id="Obw-Qi-XvM"/>
+                            <constraint firstItem="hPJ-QL-bma" firstAttribute="trailing" secondItem="92V-S5-HrE" secondAttribute="trailing" id="iaW-ax-qm6"/>
+                            <constraint firstItem="hPJ-QL-bma" firstAttribute="leading" secondItem="92V-S5-HrE" secondAttribute="leading" id="rKR-SO-t4Z"/>
+                            <constraint firstItem="92V-S5-HrE" firstAttribute="bottom" secondItem="hPJ-QL-bma" secondAttribute="bottom" id="uI0-xp-53P"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" id="ajh-qr-9Qp"/>
+                    <connections>
+                        <outlet property="settingsTableView" destination="hPJ-QL-bma" id="FVt-gl-8EA"/>
+                        <outlet property="userProfileView" destination="cxc-cM-Xja" id="cca-es-HN8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aeK-Jw-WgN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3505.7971014492755" y="1230.8035714285713"/>
         </scene>
         <!--Cookbook-->
         <scene sceneID="wZx-5h-1gm">
@@ -1027,8 +1070,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PDk-uC-zQ9"/>
-        <segue reference="yvl-qW-Z4e"/>
+        <segue reference="6j1-gY-K4V"/>
+        <segue reference="9zh-GO-iRb"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="opaqueSeparatorColor">

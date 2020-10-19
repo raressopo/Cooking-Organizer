@@ -13,6 +13,7 @@ enum MenuItems: CaseIterable {
     case HomeIngredients
     case Cookbook
     case CookingCalendar
+    case Settings
     
     var index: Int {
         switch self {
@@ -22,6 +23,8 @@ enum MenuItems: CaseIterable {
             return 1
         case .CookingCalendar:
             return 2
+        case .Settings:
+            return 3
         }
     }
     
@@ -33,6 +36,8 @@ enum MenuItems: CaseIterable {
             return "Cookbook"
         case .CookingCalendar:
             return "Cooking Calendar"
+        case .Settings:
+            return "Settings"
         }
     }
 }
@@ -166,7 +171,13 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == homeTableView {
-            if indexPath.row == 0 {
+            var savedOrder = RearrangeHomeScreenView.getSavedHomeScreenOrder()
+            
+            if savedOrder.isEmpty {
+                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar]
+            }
+            
+            if indexPath.row == savedOrder.firstIndex(of: .HomeIngredients) ?? 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "hiWidgetCell") as! HIWidgetTableViewCell
                 
                 cell.selectionStyle = .none
@@ -175,7 +186,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.HIWidgetTableView.reloadData()
                 
                 return cell
-            } else if indexPath.row == 1 {
+            } else if indexPath.row == savedOrder.firstIndex(of: .Cookbook) ?? 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cookbookWidgetCell") as! CookbookWidgetTableViewCell
                 
                 cell.selectionStyle = .none
@@ -221,6 +232,10 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
                 
                 return
+            case MenuItems.Settings.index:
+                performSegue(withIdentifier: "settingsSegue", sender: self)
+                
+                return
             default:
                 return
             }
@@ -229,7 +244,13 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == homeTableView {
-            if indexPath.row == 2 {
+            var savedOrder = RearrangeHomeScreenView.getSavedHomeScreenOrder()
+            
+            if savedOrder.isEmpty {
+                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar]
+            }
+            
+            if indexPath.row == savedOrder.firstIndex(of: .CookingCalendar) ?? 2 {
                 return 200
             } else {
                 return 300

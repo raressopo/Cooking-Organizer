@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ib-jR-rPO">
-                        <rect key="frame" x="0.0" y="0.0" width="420" height="247"/>
+                        <rect key="frame" x="0.0" y="4" width="420" height="247"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ixr-Qi-CpT">
                                 <rect key="frame" x="4" y="4" width="412" height="239"/>
@@ -36,8 +36,8 @@
                 </subviews>
                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="9Ib-jR-rPO" secondAttribute="bottom" constant="4" id="AxC-CF-SQ6"/>
-                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="top" secondItem="Gol-35-hAA" secondAttribute="top" id="XOU-Dh-jbH"/>
+                    <constraint firstAttribute="bottom" secondItem="9Ib-jR-rPO" secondAttribute="bottom" id="AxC-CF-SQ6"/>
+                    <constraint firstItem="9Ib-jR-rPO" firstAttribute="top" secondItem="Gol-35-hAA" secondAttribute="top" constant="4" id="XOU-Dh-jbH"/>
                     <constraint firstAttribute="trailing" secondItem="9Ib-jR-rPO" secondAttribute="trailing" id="gGY-iH-d7g"/>
                     <constraint firstItem="9Ib-jR-rPO" firstAttribute="leading" secondItem="Gol-35-hAA" secondAttribute="leading" id="yXH-Bg-EzB"/>
                 </constraints>
