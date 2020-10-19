@@ -8,11 +8,12 @@
 
 import UIKit
 import Firebase
+import SearchTextField
 
 class HomeIngredientDetailsView: UIView {
     @IBOutlet weak var dismissIngredientDetailsButton: UIButton!
     @IBOutlet weak var ingredientDetailsView: UIView!
-    @IBOutlet weak var ingredientNameTextField: UITextField!
+    @IBOutlet weak var ingredientNameTextField: SearchTextField!
     @IBOutlet weak var expirationDateButton: UIButton!
     @IBOutlet weak var quantityTextField: UITextField!
     @IBOutlet weak var unitButton: UIButton!
@@ -77,6 +78,8 @@ class HomeIngredientDetailsView: UIView {
         
         categoriesButton.titleLabel?.numberOfLines = 3
         categoriesButton.setNeedsLayout()
+        
+        ingredientNameTextField.filterStrings(ProductsManager.shared.allProducts)
     }
     
     private func validateNewIngredientsDetails(completion: @escaping ([String:Any]) -> Void) {

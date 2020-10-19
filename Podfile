@@ -15,4 +15,6 @@ pod 'CodableFirebase'
 
 pod 'FSCalendar'
 
+pod 'SearchTextField'
+
 end

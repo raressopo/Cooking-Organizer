@@ -73,12 +73,14 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - SearchTextField (1.2.4)
 
 DEPENDENCIES:
   - CodableFirebase
   - Firebase/Core
   - Firebase/Database
   - FSCalendar
+  - SearchTextField
 
 SPEC REPOS:
   trunk:
@@ -98,6 +100,7 @@ SPEC REPOS:
     - GoogleUtilities
     - leveldb-library
     - nanopb
+    - SearchTextField
 
 SPEC CHECKSUMS:
   CodableFirebase: 0bf201991eeec35eb9fcd987d271ea463cf34a80
@@ -116,7 +119,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 29bd0d8f850efbd28cff6d99e8b7da1f8d236bcf
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
 
-PODFILE CHECKSUM: 5875aa35317b82823e0530339a8976e4272709cb
+PODFILE CHECKSUM: 455bd3051b0d4c6fba27fad0abf4d8a04dacac3c
 
 COCOAPODS: 1.9.1

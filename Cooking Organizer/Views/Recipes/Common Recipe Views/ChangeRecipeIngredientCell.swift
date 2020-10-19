@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import SearchTextField
 
 class ChangeRecipeIngredientCell: UITableViewCell {
-    @IBOutlet weak var ingredientNameTextField: UITextField!
+    @IBOutlet weak var ingredientNameTextField: SearchTextField!
     @IBOutlet weak var quantityTextField: UITextField!
     @IBOutlet weak var unitButton: UIButton!
     
@@ -20,6 +21,8 @@ class ChangeRecipeIngredientCell: UITableViewCell {
         
         ingredientNameTextField.delegate = self
         quantityTextField.delegate = self
+        
+        ingredientNameTextField.filterStrings(ProductsManager.shared.allProducts)
     }
 }
 
