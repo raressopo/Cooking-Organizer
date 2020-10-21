@@ -19,10 +19,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WzB-yC-6D1">
-                        <rect key="frame" x="0.0" y="4" width="345" height="225"/>
+                        <rect key="frame" x="0.0" y="4" width="345" height="229"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PnM-7m-lKz">
-                                <rect key="frame" x="4" y="4" width="337" height="217"/>
+                                <rect key="frame" x="4" y="4" width="337" height="221"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -37,7 +37,7 @@
                 </subviews>
                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="WzB-yC-6D1" secondAttribute="bottom" constant="4" id="8v5-h5-bru"/>
+                    <constraint firstAttribute="bottom" secondItem="WzB-yC-6D1" secondAttribute="bottom" id="8v5-h5-bru"/>
                     <constraint firstAttribute="trailing" secondItem="WzB-yC-6D1" secondAttribute="trailing" id="d8H-Zd-ajA"/>
                     <constraint firstItem="WzB-yC-6D1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="e8N-8a-OYt"/>
                     <constraint firstItem="WzB-yC-6D1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="iX2-py-mDj"/>

@@ -21,12 +21,7 @@ class HomeIngredientDetailsView: UIView {
     
     @IBOutlet weak var createButton: UIButton!
     
-    @IBOutlet weak var dismissCategoriesButton: UIButton!
-    @IBOutlet weak var categoriesView: UIView!
-    @IBOutlet weak var categoriesTableView: UITableView!
-    
-    var selectedCategories = [IngredientCategories]()
-    var copyOfSelectedCategories = [IngredientCategories]()
+    var selectedCategory: IngredientCategories?
     
     @IBOutlet weak var dismissDatePickerButton: UIButton!
     @IBOutlet weak var datePickerView: UIView!
@@ -70,21 +65,19 @@ class HomeIngredientDetailsView: UIView {
         addSubview(contentView)
         contentView.frame = self.bounds
         
-        categoriesTableView.delegate = self
-        categoriesTableView.dataSource = self
-        
         unitsTableView.delegate = self
         unitsTableView.dataSource = self
         
         categoriesButton.titleLabel?.numberOfLines = 3
         categoriesButton.setNeedsLayout()
         
-        ingredientNameTextField.filterStrings(ProductsManager.shared.allProducts)
+        ingredientNameTextField.filterStrings(IngredientsManager.shared.allProducts)
+        ingredientNameTextField.delegate = self
     }
     
     private func validateNewIngredientsDetails(completion: @escaping ([String:Any]) -> Void) {
         guard let ingredientName = ingredientNameTextField.text,
-            !ingredientName.isEmpty else
+              !ingredientName.isEmpty else
         {
             if let rootVC = window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
@@ -96,9 +89,9 @@ class HomeIngredientDetailsView: UIView {
         }
         
         guard let ingredientQuantity = quantityTextField.text,
-            !ingredientQuantity.isEmpty,
-            let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity),
-            let quantity = ingredientQuantityAsNumber as? Double else
+              !ingredientQuantity.isEmpty,
+              let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity),
+              let quantity = ingredientQuantityAsNumber as? Double else
         {
             if let rootVC = window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
@@ -109,23 +102,9 @@ class HomeIngredientDetailsView: UIView {
             return
         }
         
-        var categoriesAsString = ""
+        let categoryAsString = selectedCategory?.string ?? ""
         
-        if selectedCategories.count > 0 {
-            if selectedCategories.count == 1 {
-                categoriesAsString = "\(selectedCategories.first!.string)"
-            } else {
-                for category in selectedCategories {
-                    if selectedCategories.last! == category {
-                        categoriesAsString = categoriesAsString + "\(category.string)"
-                    } else {
-                        categoriesAsString = categoriesAsString + "\(category.string), "
-                    }
-                }
-            }
-        }
-        
-        if categoriesAsString.isEmpty {
+        if categoryAsString.isEmpty {
             if let rootVC = window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
                                                                   title: "Invalid Categories",
@@ -161,13 +140,19 @@ class HomeIngredientDetailsView: UIView {
             return
         }
         
+        if !IngredientsManager.shared.allProducts.contains(ingredientName) {
+            FirebaseAPIManager.sharedInstance.postCustomIngredient(inCategory: selectedCategory!.dbKeyString, withName: ingredientName)
+            
+            IngredientsManager.shared.addNewCustomIngredients(customIngredient: ingredientName, inCategory: selectedCategory!)
+        }
+        
         let uuid = UUID().uuidString
         
         completion(["name": ingredientName,
                     "expirationDate": expirationDateString,
                     "quantity": quantity,
                     "unit": selectedUnit,
-                    "categories": categoriesAsString,
+                    "category": categoryAsString,
                     "id": uuid])
     }
     
@@ -185,8 +170,10 @@ class HomeIngredientDetailsView: UIView {
         var ingredientChanged = false
         var changedDataDictionary = [String:Any]()
         
+        var changedName = ""
         if let name = ingredientNameTextField.text, ingredient.name != name {
             changedDataDictionary["name"] = name
+            changedName = name
             
             ingredientChanged = true
         }
@@ -209,13 +196,19 @@ class HomeIngredientDetailsView: UIView {
             ingredientChanged = true
         }
         
-        if let categoriesAsString = allIngredientCategoriesAsString, ingredient.categories != categoriesAsString {
-            changedDataDictionary["categories"] = categoriesAsString
+        if let categoryString = selectedCategory?.string, ingredient.category != categoryString  {
+            changedDataDictionary["category"] = categoryString
             
             ingredientChanged = true
         }
         
         if ingredientChanged {
+            if !changedName.isEmpty, !IngredientsManager.shared.allProducts.contains(changedName), let category = selectedCategory {
+                FirebaseAPIManager.sharedInstance.postCustomIngredient(inCategory: category.dbKeyString, withName: changedName)
+                
+                IngredientsManager.shared.addNewCustomIngredients(customIngredient: changedName, inCategory: category)
+            }
+            
             completion(changedDataDictionary, ingredient.id)
         } else {
             if let presentedViewController = window?.rootViewController?.presentedViewController {
@@ -269,55 +262,19 @@ class HomeIngredientDetailsView: UIView {
     // MARK: - Categories - IBActions
     
     @IBAction func categoriesPressed(_ sender: Any) {
-        hideCategoriesView(hide: false)
+        let categoriesView = HomeIngredientsCategoriesView()
         
-        copyOfSelectedCategories = selectedCategories
+        categoriesView.delegate = self
+        categoriesView.selectedCategoryName = selectedCategory?.string
         
-        categoriesTableView.reloadData()
-    }
-    
-    @IBAction func cancelCategoriesPressed(_ sender: Any) {
-        hideCategoriesView(hide: true)
-    }
-    
-    @IBAction func saveCategoriesPressed(_ sender: Any) {
-        hideCategoriesView(hide: true)
+        addSubview(categoriesView)
         
-        selectedCategories = copyOfSelectedCategories
+        categoriesView.translatesAutoresizingMaskIntoConstraints = false
         
-        configureCategoriesButton()
-    }
-    
-    @IBAction func dismissCategoriesViewPressed(_ sender: Any) {
-        hideCategoriesView(hide: true)
-    }
-    
-    // MARK: - Categories - Private Helpers
-    
-    private func hideCategoriesView(hide: Bool) {
-        dismissCategoriesButton.isHidden = hide
-        categoriesView.isHidden = hide
-    }
-    
-    private func configureCategoriesButton() {
-        var categoriesButtonTitle = ""
-        
-        if selectedCategories.count == 0 {
-            categoriesButtonTitle = "Categories"
-        } else if selectedCategories.count == 1 {
-            categoriesButtonTitle = "\(selectedCategories.first!.string)"
-        } else {
-            for category in selectedCategories {
-                if selectedCategories.last! == category {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string)"
-                } else {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string), "
-                }
-            }
-        }
-        
-        categoriesButton.setTitle(categoriesButtonTitle, for: .normal)
-        categoriesButton.titleLabel?.textAlignment = .center
+        NSLayoutConstraint.activate([categoriesView.topAnchor.constraint(equalTo: topAnchor, constant: 0.0),
+                                     categoriesView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0.0),
+                                     categoriesView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0.0),
+                                     categoriesView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0.0)])
     }
     
     // MARK: - Expiration, Bought or Opened date
@@ -415,9 +372,9 @@ class HomeIngredientDetailsView: UIView {
             unitButton.setTitle(unit, for: .normal)
         }
         
-        selectedCategories = ingredient.ingredientCategories
-        allIngredientCategoriesAsString = ingredient.categories
-        categoriesButton.setTitle("\(ingredient.categories ?? "Categories")", for: .normal)
+        selectedCategory = IngredientCategories.allCases.first(where: {$0.string == ingredient.category ?? ""})
+        
+        categoriesButton.setTitle(selectedCategory?.string, for: .normal)
     }
 }
 
@@ -435,95 +392,55 @@ extension HomeIngredientDetailsView:  UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == categoriesTableView {
-            let cell = UITableViewCell(style: .default, reuseIdentifier: "categoryCell")
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "unitCell")
+        
+        if indexPath.section == 0 {
+            cell.textLabel?.text = volumeUnits[indexPath.row]
             
-            cell.textLabel?.text = IngredientCategory.categoryNameForIndex(index: indexPath.row)
-            
-            if copyOfSelectedCategories.contains(where: { (category) -> Bool in
-                return category.index == indexPath.row
-            }) {
+            if let unit = copyOfSelectedUnit,
+               volumeUnits.contains(unit),
+               indexPath.row == volumeUnits.firstIndex(of: unit) {
                 cell.accessoryType = .checkmark
             } else {
                 cell.accessoryType = .none
             }
-            
-            return cell
         } else {
-            let cell = UITableViewCell(style: .default, reuseIdentifier: "unitCell")
+            cell.textLabel?.text = massAndWeightUnits[indexPath.row]
             
-            if indexPath.section == 0 {
-                cell.textLabel?.text = volumeUnits[indexPath.row]
-                
-                if let unit = copyOfSelectedUnit,
-                    volumeUnits.contains(unit),
-                    indexPath.row == volumeUnits.firstIndex(of: unit) {
-                    cell.accessoryType = .checkmark
-                } else {
-                    cell.accessoryType = .none
-                }
+            if let unit = copyOfSelectedUnit,
+               massAndWeightUnits.contains(unit),
+               indexPath.row == massAndWeightUnits.firstIndex(of: unit) {
+                cell.accessoryType = .checkmark
             } else {
-                cell.textLabel?.text = massAndWeightUnits[indexPath.row]
-                
-                if let unit = copyOfSelectedUnit,
-                    massAndWeightUnits.contains(unit),
-                    indexPath.row == massAndWeightUnits.firstIndex(of: unit) {
-                    cell.accessoryType = .checkmark
-                } else {
-                    cell.accessoryType = .none
-                }
+                cell.accessoryType = .none
             }
-            
-            return cell
         }
+        
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == categoriesTableView {
-            let selectedCategory = IngredientCategories.allCases.first { (ingredient) -> Bool in
-                return ingredient.index == indexPath.row
+        if let unit = copyOfSelectedUnit {
+            if let selectedVolumeUnitIndex = volumeUnits.firstIndex(of: unit)  {
+                tableView.cellForRow(at: IndexPath(item: selectedVolumeUnitIndex, section: 0))?.accessoryType = .none
+            } else if let selectedMassAndWeightUnitIndex = massAndWeightUnits.firstIndex(of: unit) {
+                tableView.cellForRow(at: IndexPath(item: selectedMassAndWeightUnitIndex, section: 1))?.accessoryType = .none
             }
-            
-            guard let category = selectedCategory else { return }
-            
-            if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-                tableView.cellForRow(at: indexPath)?.accessoryType = .none
-                
-                if copyOfSelectedCategories.contains(category) {
-                    let categoryIndex = copyOfSelectedCategories.firstIndex(of: category)
-                    
-                    if let index = categoryIndex {
-                        copyOfSelectedCategories.remove(at: index)
-                    }
-                }
-            } else {
-                tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-                
-                copyOfSelectedCategories.append(category)
-            }
-        } else {
-            if let unit = copyOfSelectedUnit {
-                if let selectedVolumeUnitIndex = volumeUnits.firstIndex(of: unit)  {
-                    tableView.cellForRow(at: IndexPath(item: selectedVolumeUnitIndex, section: 0))?.accessoryType = .none
-                } else if let selectedMassAndWeightUnitIndex = massAndWeightUnits.firstIndex(of: unit) {
-                    tableView.cellForRow(at: IndexPath(item: selectedMassAndWeightUnitIndex, section: 1))?.accessoryType = .none
-                }
-            }
-            
-            if indexPath.section == 0 {
-                copyOfSelectedUnit = volumeUnits[indexPath.row]
-                
-                tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            } else {
-                copyOfSelectedUnit = massAndWeightUnits[indexPath.row]
-                
-                tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            }
-            
-            selectedUnit = copyOfSelectedUnit
-            
-            hideUnitView(hide: true)
         }
+        
+        if indexPath.section == 0 {
+            copyOfSelectedUnit = volumeUnits[indexPath.row]
+            
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+        } else {
+            copyOfSelectedUnit = massAndWeightUnits[indexPath.row]
+            
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+        }
+        
+        selectedUnit = copyOfSelectedUnit
+        
+        hideUnitView(hide: true)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -546,5 +463,25 @@ extension HomeIngredientDetailsView:  UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
+    }
+}
+
+extension HomeIngredientDetailsView: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField is SearchTextField,
+           let ingredientName = textField.text,
+           let category = IngredientsManager.shared.ingredientCategory(forIngredient: ingredientName) {
+            selectedCategory = category
+            
+            categoriesButton.setTitle(category.string, for: .normal)
+        }
+    }
+}
+
+extension HomeIngredientDetailsView: CategoriesViewDelegate {
+    func didSelectIngredientCategory(withCategory category: IngredientCategories) {
+        selectedCategory = category
+        
+        categoriesButton.setTitle(category.string, for: .normal)
     }
 }

@@ -9,99 +9,131 @@
 import UIKit
 
 public enum IngredientCategories: CaseIterable {
+    case Dairy
     case Vegetables
     case Fruits
-    case International
-    case Fish
-    case Meat
-    case Bread
-    case Baking
-    case Beverages
-    case CerealBreakfast
-    case CannedGoods
-    case Condiments
-    case Dairy
-    case FrozenFoods
-    case PastaRice
-    case Snacks
-    case Sweets
+    case BakingAndGrains
     case Spices
+    case Meat
+    case FishAndSeafood
+    case Condiments
+    case Oils
+    case Seasonings
+    case Sauces
+    case Legumes
+    case Alcohol
+    case Nuts
+    case DessetAndSnacks
+    case Beverages
     
     var index: Int {
         switch self {
-        case .Vegetables:
-            return 0
-        case .Fruits:
-            return 1
-        case .International:
-            return 2
-        case .Fish:
-            return 3
-        case .Meat:
-            return 4
-        case .Bread:
-            return 5
-        case .Baking:
-            return 6
-        case .Beverages:
-            return 7
-        case .CerealBreakfast:
-            return 8
-        case .CannedGoods:
-            return 9
-        case .Condiments:
-            return 10
         case .Dairy:
-            return 11
-        case .FrozenFoods:
-            return 12
-        case .PastaRice:
-            return 13
-        case .Snacks:
-            return 14
-        case .Sweets:
-            return 15
+            return 0
+        case .Vegetables:
+            return 1
+        case .Fruits:
+            return 2
+        case .BakingAndGrains:
+            return 3
         case .Spices:
-            return 16
+            return 4
+        case .Meat:
+            return 5
+        case .FishAndSeafood:
+            return 6
+        case .Condiments:
+            return 7
+        case .Oils:
+            return 8
+        case .Seasonings:
+            return 9
+        case .Sauces:
+            return 10
+        case .Legumes:
+            return 11
+        case .Alcohol:
+            return 12
+        case .Nuts:
+            return 13
+        case .DessetAndSnacks:
+            return 14
+        case .Beverages:
+            return 15
         }
     }
     
     var string: String {
         switch self {
+        case .Dairy:
+            return "Dairy"
         case .Vegetables:
             return "Vegetables"
         case .Fruits:
             return "Fruits"
-        case .International:
-            return "International"
-        case .Fish:
-            return "Fish"
-        case .Meat:
-            return "Meat"
-        case .Bread:
-            return "Bread"
-        case .Baking:
-            return "Baking"
-        case .Beverages:
-            return "Beverages"
-        case .CerealBreakfast:
-            return "Cereals / Breakfast"
-        case .CannedGoods:
-            return "Canned Goods"
-        case .Condiments:
-            return "Condiments"
-        case .Dairy:
-            return "Dairy"
-        case .FrozenFoods:
-            return "Frozen Foods"
-        case .PastaRice:
-            return "Pasta / Rice"
-        case .Snacks:
-            return "Snacks"
-        case .Sweets:
-            return "Sweets"
+        case .BakingAndGrains:
+            return "Baking and Beans"
         case .Spices:
             return "Spices"
+        case .Meat:
+            return "Meat"
+        case .FishAndSeafood:
+            return "Fish and Seafood"
+        case .Condiments:
+            return "Condiments"
+        case .Oils:
+            return "Oils"
+        case .Seasonings:
+            return "Seasonings"
+        case .Sauces:
+            return "Sauces"
+        case .Legumes:
+            return "Legumes"
+        case .Alcohol:
+            return "Alcohol"
+        case .Nuts:
+            return "Nuts"
+        case .DessetAndSnacks:
+            return "Desserts and Snacks"
+        case .Beverages:
+            return "Beverages"
+        }
+    }
+    
+    var dbKeyString: String {
+        switch self {
+        case .Dairy:
+            return "dairy"
+        case .Vegetables:
+            return "vegetables"
+        case .Fruits:
+            return "Fruits"
+        case .BakingAndGrains:
+            return "bakingAndBeans"
+        case .Spices:
+            return "spices"
+        case .Meat:
+            return "meat"
+        case .FishAndSeafood:
+            return "fishAndSeafood"
+        case .Condiments:
+            return "condiments"
+        case .Oils:
+            return "oils"
+        case .Seasonings:
+            return "seasonings"
+        case .Sauces:
+            return "sauces"
+        case .Legumes:
+            return "legumes"
+        case .Alcohol:
+            return "alcohol"
+        case .Nuts:
+            return "nuts"
+        case .DessetAndSnacks:
+            return "dessertsAndSnacks"
+        case .Beverages:
+            return "beverages"
         }
     }
 }
@@ -113,36 +145,34 @@ class IngredientCategory: NSObject {
             return "Vegetables"
         case IngredientCategories.Fruits.index:
             return "Fruits"
-        case IngredientCategories.International.index:
-            return "International"
-        case IngredientCategories.Fish.index:
-            return "Fish"
+        case IngredientCategories.Spices.index:
+            return "Spices"
+        case IngredientCategories.FishAndSeafood.index:
+            return "Fish and Seafood"
         case IngredientCategories.Meat.index:
             return "Meat"
-        case IngredientCategories.Bread.index:
-            return "Bread"
-        case IngredientCategories.Baking.index:
-            return "Baking"
+        case IngredientCategories.DessetAndSnacks.index:
+            return "Dessert and Snacks"
+        case IngredientCategories.Alcohol.index:
+            return "Alcohol"
         case IngredientCategories.Beverages.index:
             return "Beverages"
-        case IngredientCategories.CerealBreakfast.index:
-            return "Cereals / Breakfast"
-        case IngredientCategories.CannedGoods.index:
-            return "Canned Goods"
+        case IngredientCategories.Legumes.index:
+            return "Legumes"
+        case IngredientCategories.BakingAndGrains.index:
+            return "Baking and Grains"
         case IngredientCategories.Condiments.index:
             return "Condiments"
         case IngredientCategories.Dairy.index:
             return "Dairy"
-        case IngredientCategories.FrozenFoods.index:
-            return "Frozen Foods"
-        case IngredientCategories.PastaRice.index:
-            return "Pasta / Rice"
-        case IngredientCategories.Snacks.index:
-            return "Snacks"
-        case IngredientCategories.Sweets.index:
-            return "Sweets"
-        case IngredientCategories.Spices.index:
-            return "Spices"
+        case IngredientCategories.Oils.index:
+            return "Oils"
+        case IngredientCategories.Sauces.index:
+            return "Sauces"
+        case IngredientCategories.Nuts.index:
+            return "Nuts"
+        case IngredientCategories.Seasonings.index:
+            return "Seasonings"
         default:
             return ""
         }
@@ -150,40 +180,38 @@ class IngredientCategory: NSObject {
     
     class func categoryIndexForIndex(index: Int) -> Int {
         switch index {
-        case IngredientCategories.Vegetables.index:
-            return 0
-        case IngredientCategories.Fruits.index:
-            return 1
-        case IngredientCategories.International.index:
-            return 2
-        case IngredientCategories.Fish.index:
-            return 3
-        case IngredientCategories.Meat.index:
-            return 4
-        case IngredientCategories.Bread.index:
-            return 5
-        case IngredientCategories.Baking.index:
-            return 6
-        case IngredientCategories.Beverages.index:
-            return 7
-        case IngredientCategories.CerealBreakfast.index:
-            return 8
-        case IngredientCategories.CannedGoods.index:
-            return 9
-        case IngredientCategories.Condiments.index:
-            return 10
         case IngredientCategories.Dairy.index:
-            return 11
-        case IngredientCategories.FrozenFoods.index:
-            return 12
-        case IngredientCategories.PastaRice.index:
-            return 13
-        case IngredientCategories.Snacks.index:
-            return 14
-        case IngredientCategories.Sweets.index:
-            return 15
+            return 0
+        case IngredientCategories.Vegetables.index:
+            return 1
+        case IngredientCategories.Fruits.index:
+            return 2
+        case IngredientCategories.BakingAndGrains.index:
+            return 3
         case IngredientCategories.Spices.index:
-            return 16
+            return 4
+        case IngredientCategories.Meat.index:
+            return 5
+        case IngredientCategories.FishAndSeafood.index:
+            return 6
+        case IngredientCategories.Condiments.index:
+            return 7
+        case IngredientCategories.Oils.index:
+            return 8
+        case IngredientCategories.Seasonings.index:
+            return 9
+        case IngredientCategories.Sauces.index:
+            return 10
+        case IngredientCategories.Legumes.index:
+            return 11
+        case IngredientCategories.Alcohol.index:
+            return 12
+        case IngredientCategories.Nuts.index:
+            return 13
+        case IngredientCategories.DessetAndSnacks.index:
+            return 14
+        case IngredientCategories.Beverages.index:
+            return 15
         default:
             return -1
         }

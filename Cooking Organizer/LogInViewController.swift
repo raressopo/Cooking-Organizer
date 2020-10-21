@@ -143,6 +143,8 @@ class LogInViewController: UIViewController {
         UserDataManager.shared.observeRecipeAdded(forUserId: id)
         UserDataManager.shared.observeRecipeChanged(forUserId: id)
         UserDataManager.shared.observeRecipeRemoved()
+        
+        UserDataManager.shared.getCustomIngredients()
     }
 }
 

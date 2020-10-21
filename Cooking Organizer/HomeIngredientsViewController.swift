@@ -154,8 +154,8 @@ class HomeIngredientsViewController: UIViewController {
         if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
             if let category = params.name {
                 filteredHomeIngredients = ingredients.filter({ hi -> Bool in
-                    if let categories = hi.categories {
-                        return categories.contains(category)
+                    if let hiCategory = hi.category {
+                        return category == hiCategory
                     } else {
                         return false
                     }

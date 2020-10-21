@@ -76,9 +76,13 @@ class RearrangeHomeScreenView: UIView {
                     return .HomeIngredients
                 }
             })
+            
+            return results
+        } else {
+            return [HomeScreenCells.HomeIngredients,
+                    HomeScreenCells.Cookbook,
+                    HomeScreenCells.CookingCalendar]
         }
-        
-        return results
     }
     
     @IBAction func dissmisBackgroundPressed(_ sender: Any) {

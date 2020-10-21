@@ -268,4 +268,26 @@ class FirebaseAPIManager {
             }
         }
     }
+    
+    func getCustomIngredients() {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
+        
+        usersDataRef.child(loggedInUserId).child("customIngredients").observeSingleEvent(of: .value) { snapshot in
+            guard let customIngredients = snapshot.value else { return }
+            
+            do {
+                let ingredients = try FirebaseDecoder().decode(CustomIngredients.self, from: customIngredients)
+                
+                IngredientsManager.shared.customIngredients = ingredients
+            } catch let error {
+                print(error)
+            }
+        }
+    }
+    
+    func postCustomIngredient(inCategory category: String, withName name: String) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
+        
+        usersDataRef.child(loggedInUserId).child("customIngredients").child(category).setValue([name])
+    }
 }

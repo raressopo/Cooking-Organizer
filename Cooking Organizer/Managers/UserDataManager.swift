@@ -124,4 +124,8 @@ class UserDataManager: NSObject {
                                                                success: success,
                                                                failure: failure)
     }
+    
+    func getCustomIngredients() {
+        FirebaseAPIManager.sharedInstance.getCustomIngredients()
+    }
 }

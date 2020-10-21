@@ -22,7 +22,7 @@ class ChangeRecipeIngredientCell: UITableViewCell {
         ingredientNameTextField.delegate = self
         quantityTextField.delegate = self
         
-        ingredientNameTextField.filterStrings(ProductsManager.shared.allProducts)
+        ingredientNameTextField.filterStrings(IngredientsManager.shared.allProducts)
     }
 }
 

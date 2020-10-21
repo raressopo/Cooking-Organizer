@@ -12,12 +12,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeIngredientDetailsView" customModule="Cooking_Organizer" customModuleProvider="target">
             <connections>
                 <outlet property="categoriesButton" destination="Ni1-VS-8aH" id="ImF-cX-EmI"/>
-                <outlet property="categoriesTableView" destination="fA6-iS-5L4" id="0VH-kG-Fhh"/>
-                <outlet property="categoriesView" destination="bmK-lb-bQe" id="hyC-uc-5lr"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="rs3-Ov-d3c"/>
                 <outlet property="createButton" destination="udO-kP-q1A" id="XbJ-XS-Onf"/>
                 <outlet property="datePickerView" destination="B4r-aS-o1H" id="czi-qd-5as"/>
-                <outlet property="dismissCategoriesButton" destination="HNw-Tm-OAC" id="x5V-cz-3sy"/>
                 <outlet property="dismissDatePickerButton" destination="TgR-1u-Zr5" id="5we-Vc-yI2"/>
                 <outlet property="dismissIngredientDetailsButton" destination="xqK-Sj-kek" id="PfB-rW-LqK"/>
                 <outlet property="dismissUnitViewButton" destination="LAV-J1-ClA" id="59J-q0-pQi"/>
@@ -135,59 +132,6 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <button hidden="YES" opaque="NO" alpha="0.40000000596046448" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNw-Tm-OAC">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <connections>
-                        <action selector="dismissCategoriesViewPressed:" destination="-1" eventType="touchUpInside" id="wU1-ty-EHh"/>
-                    </connections>
-                </button>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bmK-lb-bQe">
-                    <rect key="frame" x="53" y="126" width="307" height="643"/>
-                    <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fA6-iS-5L4">
-                            <rect key="frame" x="0.0" y="0.0" width="307" height="582"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        </tableView>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="2AJ-I1-x7w">
-                            <rect key="frame" x="0.0" y="586" width="307" height="57"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wWW-Qi-l74">
-                                    <rect key="frame" x="0.0" y="0.0" width="153.5" height="57"/>
-                                    <state key="normal" title="Cancel"/>
-                                    <connections>
-                                        <action selector="cancelCategoriesPressed:" destination="-1" eventType="touchUpInside" id="1HM-yf-517"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gI3-dl-miB">
-                                    <rect key="frame" x="153.5" y="0.0" width="153.5" height="57"/>
-                                    <state key="normal" title="Save"/>
-                                    <connections>
-                                        <action selector="saveCategoriesPressed:" destination="-1" eventType="touchUpInside" id="MZb-R7-Ng7"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="57" id="N1G-WP-hgH"/>
-                            </constraints>
-                        </stackView>
-                    </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <constraints>
-                        <constraint firstAttribute="bottom" secondItem="2AJ-I1-x7w" secondAttribute="bottom" id="38S-9d-kFx"/>
-                        <constraint firstAttribute="trailing" secondItem="fA6-iS-5L4" secondAttribute="trailing" id="DLc-GM-FLa"/>
-                        <constraint firstAttribute="trailing" secondItem="2AJ-I1-x7w" secondAttribute="trailing" id="Vf4-EA-Dav"/>
-                        <constraint firstItem="2AJ-I1-x7w" firstAttribute="top" secondItem="fA6-iS-5L4" secondAttribute="bottom" constant="4" id="gs7-KE-4c2"/>
-                        <constraint firstItem="2AJ-I1-x7w" firstAttribute="leading" secondItem="bmK-lb-bQe" secondAttribute="leading" id="ne9-uq-7dp"/>
-                        <constraint firstItem="fA6-iS-5L4" firstAttribute="top" secondItem="bmK-lb-bQe" secondAttribute="top" id="rYK-Nn-qa5"/>
-                        <constraint firstItem="fA6-iS-5L4" firstAttribute="leading" secondItem="bmK-lb-bQe" secondAttribute="leading" id="zXz-X2-Unn"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="8"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
                 <button hidden="YES" opaque="NO" alpha="0.40000000596046448" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgR-1u-Zr5">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -291,9 +235,6 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="HNw-Tm-OAC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="22W-7L-GFu"/>
-                <constraint firstAttribute="bottom" secondItem="HNw-Tm-OAC" secondAttribute="bottom" id="3qJ-P4-sg7"/>
-                <constraint firstItem="bmK-lb-bQe" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="82" id="4Jo-i8-rrZ"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="pqt-Te-g4u" secondAttribute="bottom" constant="93" id="4La-rY-NjM"/>
                 <constraint firstItem="pqt-Te-g4u" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="82" id="8Zh-q4-gW3"/>
                 <constraint firstItem="QuH-qW-V3f" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Mac-Kc-6cn"/>
@@ -301,16 +242,11 @@
                 <constraint firstItem="B4r-aS-o1H" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="PFA-89-YqN"/>
                 <constraint firstItem="pqt-Te-g4u" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="53" id="QHW-be-kWp"/>
                 <constraint firstItem="xqK-Sj-kek" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="RgH-pi-glW"/>
-                <constraint firstItem="HNw-Tm-OAC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="SF0-E5-Kwr"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="bmK-lb-bQe" secondAttribute="bottom" constant="93" id="SVz-ML-lfG"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bmK-lb-bQe" secondAttribute="trailing" constant="54" id="Spl-mI-zGg"/>
                 <constraint firstItem="QuH-qW-V3f" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="UmA-L0-zYi"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="pqt-Te-g4u" secondAttribute="trailing" constant="53" id="Xf5-rZ-YFa"/>
                 <constraint firstAttribute="bottom" secondItem="xqK-Sj-kek" secondAttribute="bottom" id="e3q-V2-qZ6"/>
                 <constraint firstItem="xqK-Sj-kek" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="ewv-51-2X9"/>
                 <constraint firstItem="xqK-Sj-kek" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="iVC-mu-fQZ"/>
-                <constraint firstItem="bmK-lb-bQe" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="53" id="ndo-2C-Thc"/>
-                <constraint firstItem="HNw-Tm-OAC" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="tFw-Lo-XSa"/>
             </constraints>
             <point key="canvasLocation" x="142.02898550724638" y="188.16964285714286"/>
         </view>

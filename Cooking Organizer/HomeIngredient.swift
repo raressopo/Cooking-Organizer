@@ -14,27 +14,7 @@ class HomeIngredient: Codable {
     var expirationDate: String?
     var quantity: Double?
     var unit: String?
-    var categories: String?
-    
-    var ingredientCategories: [IngredientCategories] {
-        if let categoriesAsString = categories {
-            let categoriesStringArray = categoriesAsString.components(separatedBy: ", ")
-            
-            var result = [IngredientCategories]()
-            
-            IngredientCategories.allCases.forEach { (category) in
-                for categoryString in categoriesStringArray {
-                    if categoryString == category.string {
-                        result.append(category)
-                    }
-                }
-            }
-            
-            return result
-        } else {
-            return [IngredientCategories]()
-        }
-    }
+    var category: String?
     
     var quantityAsString: String {
         if let quantity = quantity {

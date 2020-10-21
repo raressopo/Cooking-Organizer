@@ -13,6 +13,7 @@ protocol CategoriesViewDelegate: class {
     func didSelectRecipeCategory(withCategoryName name: String)
     
     func didSelectHICategory(withCategoryName name: String)
+    func didSelectIngredientCategory(withCategory category: IngredientCategories)
 }
 
 extension CategoriesViewDelegate {
@@ -20,6 +21,7 @@ extension CategoriesViewDelegate {
     func didSelectRecipeCategory(withCategoryName name: String) {}
     
     func didSelectHICategory(withCategoryName name: String) {}
+    func didSelectIngredientCategory(withCategory category: IngredientCategories) {}
 }
 
 class CategoriesView: UIView {
@@ -187,6 +189,7 @@ extension HomeIngredientsCategoriesView: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.didSelectHICategory(withCategoryName: IngredientCategory.categoryNameForIndex(index: indexPath.row))
+        delegate?.didSelectIngredientCategory(withCategory: IngredientCategories.allCases[indexPath.row])
         
         removeFromSuperview()
     }

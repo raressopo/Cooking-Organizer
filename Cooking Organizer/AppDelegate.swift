@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
-        ProductsManager.shared.loadLocalBaseIngredients()
+        IngredientsManager.shared.loadLocalBaseIngredients()
         
         return true
     }
