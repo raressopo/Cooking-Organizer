@@ -145,6 +145,8 @@ class LogInViewController: UIViewController {
         UserDataManager.shared.observeRecipeRemoved()
         
         UserDataManager.shared.getCustomIngredients()
+        
+        UserDataManager.shared.observeShoppingListsChanged()
     }
 }
 

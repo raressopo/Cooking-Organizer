@@ -12,6 +12,7 @@ enum HomeScreenCells: CaseIterable {
     case HomeIngredients
     case Cookbook
     case CookingCalendar
+    case ShoppingList
     
     var cellName: String {
         switch self {
@@ -21,6 +22,8 @@ enum HomeScreenCells: CaseIterable {
             return "Cookbook"
         case .CookingCalendar:
             return "Cooking Calendar"
+        case .ShoppingList:
+            return "Shopping List"
         }
     }
 }
@@ -32,7 +35,8 @@ class RearrangeHomeScreenView: UIView {
     
     var homeScreenCellsOrder = [HomeScreenCells.HomeIngredients,
                                 HomeScreenCells.Cookbook,
-                                HomeScreenCells.CookingCalendar]
+                                HomeScreenCells.CookingCalendar,
+                                HomeScreenCells.ShoppingList]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -72,6 +76,8 @@ class RearrangeHomeScreenView: UIView {
                     return .Cookbook
                 case HomeScreenCells.CookingCalendar.cellName:
                     return .CookingCalendar
+                case HomeScreenCells.ShoppingList.cellName:
+                    return .ShoppingList
                 default:
                     return .HomeIngredients
                 }
@@ -81,7 +87,8 @@ class RearrangeHomeScreenView: UIView {
         } else {
             return [HomeScreenCells.HomeIngredients,
                     HomeScreenCells.Cookbook,
-                    HomeScreenCells.CookingCalendar]
+                    HomeScreenCells.CookingCalendar,
+                    HomeScreenCells.ShoppingList]
         }
     }
     

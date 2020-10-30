@@ -35,7 +35,7 @@ class HomeIngredientDetailsView: UIView {
     var copyOfSelectedUnit: String?
     
     let volumeUnits = ["tsp", "tbsp", "cup", "cups", "ml", "L"]
-    let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg"]
+    let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg", "pcs"]
     
     var expirationdate: Date?
     

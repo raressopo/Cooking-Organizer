@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="shoppingListItemCell" rowHeight="132" id="EPv-7j-mRy" customClass="ShoppingListItemTableViewCell" customModule="Cooking_Organizer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="541" height="132"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EPv-7j-mRy" id="Lac-9U-V72">
+                <rect key="frame" x="0.0" y="0.0" width="541" height="132"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n8C-ng-cAH">
+                        <rect key="frame" x="48" y="10" width="365" height="112"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U3d-QH-Hlx">
+                        <rect key="frame" x="421" y="10" width="100" height="112"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="100" id="59E-Fv-zov"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ptE-eA-mbv">
+                        <rect key="frame" x="0.0" y="0.0" width="541" height="132"/>
+                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TrD-XV-UoA" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                        <rect key="frame" x="20" y="56" width="20" height="20"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="UCN-MB-Xe2"/>
+                            <constraint firstAttribute="height" constant="20" id="t2f-3m-vj9"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="n8C-ng-cAH" secondAttribute="bottom" constant="10" id="2i9-RR-GaK"/>
+                    <constraint firstItem="n8C-ng-cAH" firstAttribute="top" secondItem="Lac-9U-V72" secondAttribute="top" constant="10" id="42C-bC-gLb"/>
+                    <constraint firstItem="U3d-QH-Hlx" firstAttribute="top" secondItem="Lac-9U-V72" secondAttribute="top" constant="10" id="Jtu-P0-w30"/>
+                    <constraint firstAttribute="bottom" secondItem="U3d-QH-Hlx" secondAttribute="bottom" constant="10" id="TGc-77-5ff"/>
+                    <constraint firstAttribute="trailing" secondItem="U3d-QH-Hlx" secondAttribute="trailing" constant="20" id="XRH-Ra-LzQ"/>
+                    <constraint firstItem="TrD-XV-UoA" firstAttribute="leading" secondItem="Lac-9U-V72" secondAttribute="leading" constant="20" id="ZDt-B2-787"/>
+                    <constraint firstItem="ptE-eA-mbv" firstAttribute="leading" secondItem="Lac-9U-V72" secondAttribute="leading" id="cfg-sy-rY5"/>
+                    <constraint firstItem="TrD-XV-UoA" firstAttribute="centerY" secondItem="Lac-9U-V72" secondAttribute="centerY" id="gmJ-3E-fnE"/>
+                    <constraint firstItem="n8C-ng-cAH" firstAttribute="leading" secondItem="TrD-XV-UoA" secondAttribute="trailing" constant="8" id="hya-DJ-TPh"/>
+                    <constraint firstItem="ptE-eA-mbv" firstAttribute="top" secondItem="Lac-9U-V72" secondAttribute="top" id="jbb-0P-Ykg"/>
+                    <constraint firstItem="U3d-QH-Hlx" firstAttribute="leading" secondItem="n8C-ng-cAH" secondAttribute="trailing" constant="8" id="px6-Iw-hUd"/>
+                    <constraint firstAttribute="trailing" secondItem="ptE-eA-mbv" secondAttribute="trailing" id="q1s-xs-O3N"/>
+                    <constraint firstAttribute="bottom" secondItem="ptE-eA-mbv" secondAttribute="bottom" id="ttc-aB-ldI"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="boughtView" destination="ptE-eA-mbv" id="Am7-sy-sZF"/>
+                <outlet property="checkbox" destination="TrD-XV-UoA" id="yzx-GP-agv"/>
+                <outlet property="itemNameLabel" destination="n8C-ng-cAH" id="eU7-7j-T7I"/>
+                <outlet property="itemQuantityAndUnitLabel" destination="U3d-QH-Hlx" id="AE4-VZ-raE"/>
+            </connections>
+            <point key="canvasLocation" x="-244.20289855072465" y="50.892857142857139"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

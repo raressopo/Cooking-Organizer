@@ -13,6 +13,7 @@ class AddSelectionView: UIView {
     
     @IBOutlet weak var homeIngredientButton: UIButton!
     @IBOutlet weak var recipeButton: UIButton!
+    @IBOutlet weak var shoppingListButton: UIButton!
     @IBOutlet weak var dismissSelectionViewButton: UIButton!
     
     override init(frame: CGRect) {

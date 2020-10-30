@@ -17,6 +17,8 @@ protocol UserDataManagerDelegate: class {
     func recipeAdded()
     func recipeChanged()
     func recipeRemoved()
+    
+    func shoppingListsChanged()
 }
 
 extension UserDataManagerDelegate {
@@ -27,6 +29,8 @@ extension UserDataManagerDelegate {
     func recipeAdded() {}
     func recipeChanged() {}
     func recipeRemoved() {}
+    
+    func shoppingListsChanged() {}
 }
 
 class UserDataManager: NSObject {
@@ -34,6 +38,7 @@ class UserDataManager: NSObject {
     
     weak var delegate: UserDataManagerDelegate?
     weak var homeIngredientDelegate: UserDataManagerDelegate?
+    weak var shoppingListsDelegate: UserDataManagerDelegate?
     
     func observeHomeIngredientAdded(forUserId id: String) {
         FirebaseAPIManager.sharedInstance.observeHomeIngredientAdded(forUserId: id) { ingredient in
@@ -127,5 +132,63 @@ class UserDataManager: NSObject {
     
     func getCustomIngredients() {
         FirebaseAPIManager.sharedInstance.getCustomIngredients()
+    }
+    
+    func createShoppingList(withName name: String, andValues values: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.createShoppingList(withName: name,
+                                                             andValues: values,
+                                                             success: success,
+                                                             failure: failure)
+    }
+    
+    func observeShoppingListsChanged() {
+        FirebaseAPIManager.sharedInstance.observeShoppingListsChanged {
+            self.delegate?.shoppingListsChanged()
+            self.shoppingListsDelegate?.shoppingListsChanged()
+        }
+    }
+    
+    func changeShoppingListName(listName oldName: String, withNewName newName: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.changeShoppingListName(listName: oldName,
+                                                                 withNewName: newName,
+                                                                 success: success,
+                                                                 failure: failure)
+    }
+    
+    func removeShoppingList(withName name: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.removeShoppingList(withName: name,
+                                                             success: success,
+                                                             failure: failure)
+    }
+    
+    func addShoppingListItem(onList listName: String, withName itemName: String, andValues values: [String: Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.addShoppingListItem(onList: listName,
+                                                              withName: itemName,
+                                                              andValues: values,
+                                                              success: success,
+                                                              failure: failure)
+    }
+    
+    func removeShoppingListItem(fromList listName: String, withItemName itemName: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.removeShoppingListItem(fromList: listName,
+                                                                 withItemName: itemName,
+                                                                 success: success,
+                                                                 failure: failure)
+    }
+    
+    func changeShoppingListItem(fromList listName: String, withItemName itemName: String, andValues values: [String: Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.changeShoppingListItem(fromList: listName,
+                                                                 withItemName: itemName,
+                                                                 andValues: values,
+                                                                 success: success,
+                                                                 failure: failure)
+    }
+    
+    func markShoppingListAsBought(fromList listName: String, forItem itemName: String, bought: Bool, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        FirebaseAPIManager.sharedInstance.markShoppingListAsBought(fromList: listName,
+                                                                   forItem: itemName,
+                                                                   bought: bought,
+                                                                   success: success,
+                                                                   failure: failure)
     }
 }

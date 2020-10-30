@@ -290,4 +290,144 @@ class FirebaseAPIManager {
         
         usersDataRef.child(loggedInUserId).child("customIngredients").child(category).setValue([name])
     }
+    
+    func createShoppingList(withName name: String, andValues values: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(name).setValue(values) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func observeShoppingListsChanged(completion: @escaping () -> Void) {
+        guard let loggedInUser = UsersManager.shared.currentLoggedInUser else { return }
+        
+        usersDataRef.child(loggedInUser.loginData.id).child("shoppingLists").observe(.value) { snapshot in
+            guard let snapshotShoppingLists = snapshot.value else { return }
+            
+            do {
+                let shoppingLists = try FirebaseDecoder().decode([String:ShoppingList].self, from: snapshotShoppingLists)
+                
+                loggedInUser.data.shoppingLists = shoppingLists
+                
+                completion()
+            } catch let error {
+                print(error)
+            }
+        }
+    }
+    
+    func changeShoppingListName(listName oldName: String, withNewName newName: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(oldName).child("items").observeSingleEvent(of: .value) { snapshot in
+            let oldItems = snapshot.value
+            
+            self.usersDataRef.child(loggedInUserId).child("shoppingLists").child(newName).setValue(["name": newName, "items": oldItems]) { (error, _) in
+                if error == nil {
+                    self.usersDataRef.child(loggedInUserId).child("shoppingLists").child(oldName).removeValue { (error, _) in
+                        if error == nil {
+                            success()
+                        } else {
+                            failure()
+                        }
+                    }
+                } else {
+                    failure()
+                }
+            }
+        }
+        
+    }
+    
+    func removeShoppingList(withName name: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(name).removeValue { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func addShoppingListItem(onList listName: String, withName itemName: String, andValues values: [String: Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(listName).child("items").child(itemName).setValue(values) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func removeShoppingListItem(fromList listName: String, withItemName itemName: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(listName).child("items").child(itemName).removeValue { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func changeShoppingListItem(fromList listName: String, withItemName itemName: String, andValues values: [String: Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(listName).child("items").child(itemName).updateChildValues(values) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
+    
+    func markShoppingListAsBought(fromList listName: String, forItem itemName: String, bought: Bool, success: @escaping () -> Void, failure: @escaping () -> Void) {
+        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
+            failure()
+            
+            return
+        }
+        
+        usersDataRef.child(loggedInUserId).child("shoppingLists").child(listName).child("items").child(itemName).child("bought").setValue(bought) { (error, _) in
+            if error == nil {
+                success()
+            } else {
+                failure()
+            }
+        }
+    }
 }

@@ -69,7 +69,7 @@ class CustomPickerView: UIView {
 
 class UnitPickerView: CustomPickerView {
     private let volumeUnits = ["tsp", "tbsp", "cup", "cups", "ml", "L"]
-    private let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg"]
+    private let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg", "pcs"]
     
     private var allUnits = [String]()
     

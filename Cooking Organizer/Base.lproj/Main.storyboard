@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -360,6 +360,8 @@
                         <segue destination="5lQ-2z-7MV" kind="show" identifier="recipeDetailsSegue" id="6j1-gY-K4V"/>
                         <segue destination="yHv-OY-2us" kind="show" identifier="cookingCalendarSegue" id="58D-3O-yMv"/>
                         <segue destination="aez-B9-nM1" kind="show" identifier="settingsSegue" id="zOb-Qa-vax"/>
+                        <segue destination="1FD-Oc-dN5" kind="show" identifier="shoppingListSegue" id="mgO-oK-GTr"/>
+                        <segue destination="pMm-3M-iKM" kind="show" identifier="shoppingListWidgetSegue" id="ynl-O2-LWW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Twc-oc-aH7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -648,6 +650,93 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aeK-Jw-WgN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3505.7971014492755" y="1230.8035714285713"/>
+        </scene>
+        <!--Shopping Lists-->
+        <scene sceneID="6lT-Pn-y6z">
+            <objects>
+                <viewController id="1FD-Oc-dN5" customClass="ShoppingListsViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XHF-DB-0ou">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="h10-h6-1DN">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a0d-0f-To3">
+                                <rect key="frame" x="364" y="812" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="EzL-Cf-fK8"/>
+                                    <constraint firstAttribute="height" constant="30" id="gMQ-u3-a7k"/>
+                                </constraints>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="addPressed:" destination="1FD-Oc-dN5" eventType="touchUpInside" id="2Z0-cn-dhj"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6PC-Z0-W3b"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="6PC-Z0-W3b" firstAttribute="trailing" secondItem="a0d-0f-To3" secondAttribute="trailing" constant="20" id="15x-de-2zx"/>
+                            <constraint firstItem="h10-h6-1DN" firstAttribute="top" secondItem="6PC-Z0-W3b" secondAttribute="top" id="3sX-Pf-to0"/>
+                            <constraint firstAttribute="bottom" secondItem="h10-h6-1DN" secondAttribute="bottom" id="ENe-vo-3xx"/>
+                            <constraint firstItem="h10-h6-1DN" firstAttribute="trailing" secondItem="6PC-Z0-W3b" secondAttribute="trailing" id="ZcT-9Q-hjD"/>
+                            <constraint firstItem="h10-h6-1DN" firstAttribute="leading" secondItem="6PC-Z0-W3b" secondAttribute="leading" id="eEt-cI-0hy"/>
+                            <constraint firstItem="6PC-Z0-W3b" firstAttribute="bottom" secondItem="a0d-0f-To3" secondAttribute="bottom" constant="20" id="fIs-D9-JjM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Shopping Lists" id="XOL-xw-2vB"/>
+                    <connections>
+                        <outlet property="addButton" destination="a0d-0f-To3" id="SoF-p9-ZI9"/>
+                        <outlet property="listsTableView" destination="h10-h6-1DN" id="MHP-en-TAs"/>
+                        <segue destination="pMm-3M-iKM" kind="show" identifier="selectedShoppingListSegue" id="waY-AU-3f0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yzu-su-QDi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4686.9565217391309" y="1230.8035714285713"/>
+        </scene>
+        <!--Shopping List-->
+        <scene sceneID="hOu-3H-4jT">
+            <objects>
+                <viewController id="pMm-3M-iKM" customClass="ShoppingListViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="16u-jC-o8x">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6OK-ix-y6E">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="otL-40-X4V">
+                                <rect key="frame" x="364" y="812" width="30" height="30"/>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="addPressed:" destination="pMm-3M-iKM" eventType="touchUpInside" id="5S0-HA-fEt"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="B9p-LT-WbG"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="B9p-LT-WbG" firstAttribute="trailing" secondItem="otL-40-X4V" secondAttribute="trailing" constant="20" id="Lpv-an-O2h"/>
+                            <constraint firstItem="6OK-ix-y6E" firstAttribute="trailing" secondItem="B9p-LT-WbG" secondAttribute="trailing" id="PRZ-0Z-EZx"/>
+                            <constraint firstAttribute="bottom" secondItem="6OK-ix-y6E" secondAttribute="bottom" id="Swo-LX-NFw"/>
+                            <constraint firstItem="6OK-ix-y6E" firstAttribute="top" secondItem="B9p-LT-WbG" secondAttribute="top" id="fmh-nn-FFh"/>
+                            <constraint firstItem="6OK-ix-y6E" firstAttribute="leading" secondItem="B9p-LT-WbG" secondAttribute="leading" id="lZ5-Kc-s93"/>
+                            <constraint firstItem="B9p-LT-WbG" firstAttribute="bottom" secondItem="otL-40-X4V" secondAttribute="bottom" constant="20" id="oW2-Pv-CfJ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Shopping List" id="WgP-Mf-voF"/>
+                    <connections>
+                        <outlet property="addButton" destination="otL-40-X4V" id="TCP-Ro-vXk"/>
+                        <outlet property="itemsTableView" destination="6OK-ix-y6E" id="NV6-mo-1lQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FnM-re-Miz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5837.68115942029" y="1230.8035714285713"/>
         </scene>
         <!--Cookbook-->
         <scene sceneID="wZx-5h-1gm">
@@ -1071,6 +1160,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="6j1-gY-K4V"/>
+        <segue reference="ynl-O2-LWW"/>
         <segue reference="9zh-GO-iRb"/>
     </inferredMetricsTieBreakers>
     <resources>

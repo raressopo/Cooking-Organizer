@@ -13,6 +13,7 @@ enum MenuItems: CaseIterable {
     case HomeIngredients
     case Cookbook
     case CookingCalendar
+    case ShoppingList
     case Settings
     
     var index: Int {
@@ -23,8 +24,10 @@ enum MenuItems: CaseIterable {
             return 1
         case .CookingCalendar:
             return 2
-        case .Settings:
+        case .ShoppingList:
             return 3
+        case .Settings:
+            return 4
         }
     }
     
@@ -36,6 +39,8 @@ enum MenuItems: CaseIterable {
             return "Cookbook"
         case .CookingCalendar:
             return "Cooking Calendar"
+        case .ShoppingList:
+            return "Shopping List"
         case .Settings:
             return "Settings"
         }
@@ -57,6 +62,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     var widgetHomeIngredient: HomeIngredient?
     var selectedRecipe: Recipe?
     var selectedDate: Date?
+    var selectedShoppingList: ShoppingList?
     
     // MARK: - View Lifecycle
     
@@ -79,6 +85,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         homeTableView.register(UINib(nibName: "HIWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "hiWidgetCell")
         homeTableView.register(UINib(nibName: "CookbookWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "cookbookWidgetCell")
         homeTableView.register(UINib(nibName: "CookingCalendarWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "cookingCalendarCell")
+        homeTableView.register(UINib(nibName: "ShoppingListWidgetTableViewCell", bundle: nil), forCellReuseIdentifier: "shoppingListWidgetCell")
         
         menuButton.layer.borderColor = UIColor.black.cgColor
         addButton.layer.borderColor = UIColor.black.cgColor
@@ -115,6 +122,8 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             destinationVC.recipe = recipe
         } else if segue.identifier == "cookingCalendarSegue", let date = selectedDate, let destinationVC = segue.destination as? CookingCalendarViewController {
             destinationVC.homeScreenDate = date
+        } else if segue.identifier == "shoppingListWidgetSegue", let list = selectedShoppingList, let destinationVC = segue.destination as? ShoppingListViewController {
+            destinationVC.selectedShoppingList = list
         }
     }
     
@@ -151,6 +160,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         
         addSelectionView.homeIngredientButton.addTarget(self, action: #selector(addNewHomeIngredient(_:)), for: .touchUpInside)
         addSelectionView.recipeButton.addTarget(self, action: #selector(addNewRecipe), for: .touchUpInside)
+        addSelectionView.shoppingListButton.addTarget(self, action: #selector(addShoppingList), for: .touchUpInside)
     }
     
     @IBAction func dismissMenuPressed(_ sender: Any) {
@@ -163,7 +173,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == homeTableView {
-            return 3
+            return 4
         } else {
             return MenuItems.allCases.count
         }
@@ -174,7 +184,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             var savedOrder = RearrangeHomeScreenView.getSavedHomeScreenOrder()
             
             if savedOrder.isEmpty {
-                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar]
+                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar, .ShoppingList]
             }
             
             if indexPath.row == savedOrder.firstIndex(of: .HomeIngredients) ?? 0 {
@@ -195,7 +205,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.recipesTableView.reloadData()
                 
                 return cell
-            } else {
+            } else if indexPath.row == savedOrder.firstIndex(of: .CookingCalendar) ?? 0 {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cookingCalendarCell") as? CookingCalendarWidgetTableViewCell else {
                     fatalError("Cell type is not CookingCalendarWidgetTableViewCell")
                 }
@@ -205,6 +215,15 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.calendar.scope = .week
                 
                 cell.filterRecipesForDate(date: cell.calendar.selectedDate ?? Date())
+                
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "shoppingListWidgetCell") as! ShoppingListWidgetTableViewCell
+                
+                cell.selectionStyle = .none
+                
+                cell.delegate = self
+                cell.listOrItemsTableView.reloadData()
                 
                 return cell
             }
@@ -232,6 +251,10 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
                 
                 return
+            case MenuItems.ShoppingList.index:
+                performSegue(withIdentifier: "shoppingListSegue", sender: self)
+                
+                return
             case MenuItems.Settings.index:
                 performSegue(withIdentifier: "settingsSegue", sender: self)
                 
@@ -247,7 +270,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             var savedOrder = RearrangeHomeScreenView.getSavedHomeScreenOrder()
             
             if savedOrder.isEmpty {
-                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar]
+                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar, .ShoppingList]
             }
             
             if indexPath.row == savedOrder.firstIndex(of: .CookingCalendar) ?? 2 {
@@ -294,6 +317,33 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
         performSegue(withIdentifier: "addNewRecipeSegue", sender: self)
     }
     
+    @objc func addShoppingList() {
+        addSelectionView?.removeFromSuperview()
+        
+        let createListView = CreateShoppingListView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
+        createListView.translatesAutoresizingMaskIntoConstraints = false
+        
+        createListView.invalidName = {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Invalid List Name",
+                                                              message: "Please choose another list name!")
+        }
+        
+        createListView.creationFailed = {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Creation Failed",
+                                                              message: "Something went wrong creating the shopping list")
+        }
+        
+        view.addSubview(createListView)
+        
+        NSLayoutConstraint.activate([createListView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+                                     createListView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+                                     createListView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+                                     createListView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)])
+    }
+    
     // MARK: - User Data Manager Delegate
     
     func homeIngredientsAdded() {
@@ -317,6 +367,10 @@ extension HomeScreenViewController: UserDataManagerDelegate {
     func recipeChanged() {
         homeTableView.reloadData()
     }
+    
+    func shoppingListsChanged() {
+        homeTableView.reloadData()
+    }
 }
 
 extension HomeScreenViewController: CookingCalendarWidgetTableViewCellDelegate {
@@ -324,5 +378,13 @@ extension HomeScreenViewController: CookingCalendarWidgetTableViewCellDelegate {
         selectedDate = date
         
         performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
+    }
+}
+
+extension HomeScreenViewController: ShoppingListWidgetTableViewCellDelegate {
+    func didSelectShoppingList(list: ShoppingList) {
+        selectedShoppingList = list
+        
+        performSegue(withIdentifier: "shoppingListWidgetSegue", sender: self)
     }
 }

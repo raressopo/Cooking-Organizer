@@ -28,6 +28,14 @@ class User: NSObject {
         }
     }
     
+    var shoppingListsArray: [ShoppingList]? {
+        if let lists = data.shoppingLists {
+            return Array(lists.values)
+        } else {
+            return nil
+        }
+    }
+    
     init(loginData: UserLoginData, data: UserData) {
         self.loginData = loginData
         self.data = data
@@ -46,4 +54,6 @@ class UserData: Codable {
     
     var homeIngredients: [String:HomeIngredient]?
     var recipes: [String:Recipe]?
+    
+    var shoppingLists: [String:ShoppingList]?
 }
