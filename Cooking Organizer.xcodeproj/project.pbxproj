@@ -65,6 +65,7 @@
 		8EAD142C254AF0CF002AFAC9 /* ShoppingListWidgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAD142B254AF0CF002AFAC9 /* ShoppingListWidgetTableViewCell.swift */; };
 		8EAD142F254AF0DB002AFAC9 /* ShoppingListWidgetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAD142E254AF0DB002AFAC9 /* ShoppingListWidgetTableViewCell.xib */; };
 		8EB02E70249CFECE0013D1B2 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB02E6F249CFECE0013D1B2 /* Checkbox.swift */; };
+		8EB61BA625519BB300592833 /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB61BA525519BB300592833 /* UnitManager.swift */; };
 		8EB9DD632508D1DC0020BCA9 /* FirebaseAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */; };
 		8ED3A9992490C43300922BB2 /* AddSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED3A9982490C43300922BB2 /* AddSelectionView.swift */; };
 		8ED3A99B2490C43F00922BB2 /* AddSelectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8ED3A99A2490C43F00922BB2 /* AddSelectionView.xib */; };
@@ -149,6 +150,7 @@
 		8EAD142B254AF0CF002AFAC9 /* ShoppingListWidgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListWidgetTableViewCell.swift; sourceTree = "<group>"; };
 		8EAD142E254AF0DB002AFAC9 /* ShoppingListWidgetTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShoppingListWidgetTableViewCell.xib; sourceTree = "<group>"; };
 		8EB02E6F249CFECE0013D1B2 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		8EB61BA525519BB300592833 /* UnitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitManager.swift; sourceTree = "<group>"; };
 		8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAPIManager.swift; sourceTree = "<group>"; };
 		8ED3A9982490C43300922BB2 /* AddSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSelectionView.swift; sourceTree = "<group>"; };
 		8ED3A99A2490C43F00922BB2 /* AddSelectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddSelectionView.xib; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				8EEC0BD9247F9D29005BFA24 /* UtilsManager.swift */,
 				8EB9DD622508D1DC0020BCA9 /* FirebaseAPIManager.swift */,
 				8E4F7356253D9AB800E145A9 /* IngredientsManager.swift */,
+				8EB61BA525519BB300592833 /* UnitManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				8EF5BFD42475230F00C44646 /* SceneDelegate.swift in Sources */,
 				8ED3A99E2490D6BD00922BB2 /* RecipeTableViewCell.swift in Sources */,
 				8E3143032510FD8C00FCF59F /* ChangeRecipeStepCell.swift in Sources */,
+				8EB61BA625519BB300592833 /* UnitManager.swift in Sources */,
 				8E34D4902546CC5D00AE1BCD /* ShoppingList.swift in Sources */,
 				8E34D4932546CC8400AE1BCD /* ShoppingListItem.swift in Sources */,
 				8E64AA5C25233E4C00DCC3A8 /* CookingCalendarWidgetTableViewCell.swift in Sources */,
