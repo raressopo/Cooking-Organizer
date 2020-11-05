@@ -17,6 +17,14 @@ class NewRecipeIngredient: Codable, Equatable {
     var quantity: String?
     var unit: String?
     
+    var quantityAsDouble: Double? {
+        if let quantity = quantity {
+            return NumberFormatter().number(from: quantity)?.doubleValue
+        } else {
+            return nil
+        }
+    }
+    
     func asDictionary() -> [String:Any] {
         return ["name": name ?? "", "quantity": quantity ?? "", "unit": unit ?? ""]
     }

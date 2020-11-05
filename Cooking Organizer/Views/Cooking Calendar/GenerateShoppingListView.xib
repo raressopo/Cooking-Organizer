@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GenerateShoppingListView" customModule="Cooking_Organizer" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="sSG-vz-Dho"/>
+                <outlet property="endDateButton" destination="rKN-so-AqE" id="EL5-gw-jp5"/>
+                <outlet property="startDateButton" destination="nqR-jN-tfk" id="eeO-aQ-DpN"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LdN-8k-Ivh">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="dismissPressed:" destination="-1" eventType="touchUpInside" id="yWZ-ns-Yfc"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nFM-DG-Q0c">
+                    <rect key="frame" x="40" y="340.5" width="334" height="215"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rKN-so-AqE">
+                            <rect key="frame" x="30" y="110" width="274" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="V7T-7v-ozx"/>
+                            </constraints>
+                            <state key="normal" title="End Date"/>
+                            <connections>
+                                <action selector="endDatePressed:" destination="-1" eventType="touchUpInside" id="0EX-ep-Mvl"/>
+                            </connections>
+                        </button>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3CD-eS-KDK">
+                            <rect key="frame" x="0.0" y="150" width="334" height="65"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZEB-Mg-aBh">
+                                    <rect key="frame" x="0.0" y="0.0" width="167" height="65"/>
+                                    <state key="normal" title="Cancel"/>
+                                    <connections>
+                                        <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="L6D-Uy-Qy7"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MR7-mX-1uw">
+                                    <rect key="frame" x="167" y="0.0" width="167" height="65"/>
+                                    <state key="normal" title="Generate"/>
+                                    <connections>
+                                        <action selector="generatePressed:" destination="-1" eventType="touchUpInside" id="iE1-ib-9sR"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="65" id="0zY-yN-dpQ"/>
+                            </constraints>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nqR-jN-tfk">
+                            <rect key="frame" x="30" y="70" width="274" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="gCa-h4-LU5"/>
+                            </constraints>
+                            <state key="normal" title="Start Date"/>
+                            <connections>
+                                <action selector="startDatePressed:" destination="-1" eventType="touchUpInside" id="UHG-ym-w4l"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select range to generate shopping list" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3MJ-Yz-byM">
+                            <rect key="frame" x="10" y="10" width="314" height="50"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="3CD-eS-KDK" secondAttribute="bottom" id="4Lr-89-4nZ"/>
+                        <constraint firstAttribute="trailing" secondItem="3CD-eS-KDK" secondAttribute="trailing" id="AdS-At-ydJ"/>
+                        <constraint firstItem="3MJ-Yz-byM" firstAttribute="top" secondItem="nFM-DG-Q0c" secondAttribute="top" constant="10" id="CbM-F3-3bJ"/>
+                        <constraint firstItem="3CD-eS-KDK" firstAttribute="top" secondItem="rKN-so-AqE" secondAttribute="bottom" constant="10" id="HSD-sa-1Um"/>
+                        <constraint firstItem="nqR-jN-tfk" firstAttribute="leading" secondItem="nFM-DG-Q0c" secondAttribute="leading" constant="30" id="NNU-bw-74g"/>
+                        <constraint firstAttribute="trailing" secondItem="3MJ-Yz-byM" secondAttribute="trailing" constant="10" id="POU-xw-5XX"/>
+                        <constraint firstItem="3MJ-Yz-byM" firstAttribute="leading" secondItem="nFM-DG-Q0c" secondAttribute="leading" constant="10" id="Pjs-vY-Gyd"/>
+                        <constraint firstItem="rKN-so-AqE" firstAttribute="leading" secondItem="nFM-DG-Q0c" secondAttribute="leading" constant="30" id="RDo-kn-VSW"/>
+                        <constraint firstItem="rKN-so-AqE" firstAttribute="top" secondItem="nqR-jN-tfk" secondAttribute="bottom" constant="10" id="bDW-wy-n3M"/>
+                        <constraint firstItem="3CD-eS-KDK" firstAttribute="leading" secondItem="nFM-DG-Q0c" secondAttribute="leading" id="fnl-zq-bgQ"/>
+                        <constraint firstAttribute="trailing" secondItem="nqR-jN-tfk" secondAttribute="trailing" constant="30" id="pxt-VT-cmj"/>
+                        <constraint firstAttribute="trailing" secondItem="rKN-so-AqE" secondAttribute="trailing" constant="30" id="rPh-U8-Aae"/>
+                        <constraint firstAttribute="height" constant="215" id="tGZ-kk-NE7"/>
+                        <constraint firstItem="nqR-jN-tfk" firstAttribute="top" secondItem="3MJ-Yz-byM" secondAttribute="bottom" constant="10" id="ulY-Fn-a9g"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="LdN-8k-Ivh" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="02Q-af-wpz"/>
+                <constraint firstItem="LdN-8k-Ivh" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="90k-pP-lfj"/>
+                <constraint firstAttribute="bottom" secondItem="LdN-8k-Ivh" secondAttribute="bottom" id="OHI-5N-1Gr"/>
+                <constraint firstItem="nFM-DG-Q0c" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="40" id="P0y-g5-jfE"/>
+                <constraint firstItem="nFM-DG-Q0c" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Yti-A9-eqw"/>
+                <constraint firstItem="LdN-8k-Ivh" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="k0m-hJ-tmr"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="nFM-DG-Q0c" secondAttribute="trailing" constant="40" id="trr-yg-JND"/>
+            </constraints>
+            <point key="canvasLocation" x="86.956521739130437" y="145.98214285714286"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -11,6 +11,7 @@ import UIKit
 class CookingCalendarViewController: UIViewController {
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var recipesTableView: UITableView!
+    @IBOutlet weak var generateShoppingListButton: UIButton!
     
     var allRecipes = [CookingCalendarRecipe]()
     var allRecipesCopy = [CookingCalendarRecipe]()
@@ -121,6 +122,8 @@ class CookingCalendarViewController: UIViewController {
     }
     
     private func exitEditModeSetup() {
+        generateShoppingListButton.isHidden = false
+        
         navigationItem.leftBarButtonItem = nil
         navigationItem.hidesBackButton = false
         
@@ -159,6 +162,8 @@ class CookingCalendarViewController: UIViewController {
     
     @objc func editPressed() {
         if let rightBarButton = navigationItem.rightBarButtonItem, rightBarButton.title == "Edit" {
+            generateShoppingListButton.isHidden = true
+            
             navigationItem.hidesBackButton = true
             
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelPressed))
@@ -183,6 +188,19 @@ class CookingCalendarViewController: UIViewController {
         validateRecipeCookingDatesChanges()
         
         recipesTableView.reloadData()
+    }
+    
+    @IBAction func generateShoppingListPressed(_ sender: Any) {
+        let generateView = GenerateShoppingListView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
+        view.addSubview(generateView)
+        
+        generateView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([generateView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     generateView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     generateView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     generateView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
     }
 }
 

@@ -24,6 +24,10 @@ protocol LastCookDatePickerViewDelegate: class {
     func didSelectLastCookDate(date: Date?)
 }
 
+protocol SelectDatePickerViewDelegate: class {
+    func didSelectDate(date: Date?, forStartDate startDate: Bool)
+}
+
 class CustomPickerView: UIView {
     @IBOutlet var contentView: UIView!
     
@@ -285,6 +289,48 @@ class LastCookDatePickerView: CustomPickerView {
     
     @objc func neverCookedPressed() {
         delegate?.didSelectLastCookDate(date: nil)
+        
+        removeFromSuperview()
+    }
+}
+
+class SelectDatePickerView: CustomPickerView {
+    weak var delegate: SelectDatePickerViewDelegate?
+    
+    var isStartDate = false
+    
+    override func commonInit() {
+        super.commonInit()
+        
+        datePicker.isHidden = false
+        buttonsStackView.isHidden = false
+        buttonsStackView.distribution = .fillEqually
+        
+        setupSaveButton()
+    }
+    
+    // MARK: - Private Helpers
+    
+    private func setupSaveButton() {
+        let saveButton = UIButton()
+        
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        saveButton.backgroundColor = UIColor.white
+        
+        datePicker.backgroundColor = UIColor.white
+        
+        buttonsStackView.addArrangedSubview(saveButton)
+        
+        saveButton.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
+    }
+    
+    // MARK: - Selectors
+    
+    @objc func savePressed() {
+        delegate?.didSelectDate(date: datePicker.date, forStartDate: isStartDate)
         
         removeFromSuperview()
     }

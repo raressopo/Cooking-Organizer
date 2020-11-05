@@ -79,6 +79,22 @@ class UtilsManager: NSObject {
             (selectedDateYear == givenDateYear && selectedDateMonth > givenDateMonth) ||
             (selectedDateYear == givenDateYear && selectedDateMonth == givenDateMonth && selectedDateDay >= givenDateDay)
     }
+    
+    class func isSelectedDate(selectedDate: Date, inPastOrInPresentToGivenDate date: Date) -> Bool {
+        let calendar = Calendar.current
+        
+        let givenDateDay = calendar.component(.day, from: date)
+        let givenDateMonth = calendar.component(.month, from: date)
+        let givenDateYear = calendar.component(.year, from: date)
+        
+        let selectedDateDay = calendar.component(.day, from: selectedDate)
+        let selectedDateMonth = calendar.component(.month, from: selectedDate)
+        let selectedDateYear = calendar.component(.year, from: selectedDate)
+        
+        return (selectedDateYear < givenDateYear) ||
+            (selectedDateYear == givenDateYear && selectedDateMonth < givenDateMonth) ||
+            (selectedDateYear == givenDateYear && selectedDateMonth == givenDateMonth && selectedDateDay <= givenDateDay)
+    }
 }
 
 extension Array where Element: Comparable {

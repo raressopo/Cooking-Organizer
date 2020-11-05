@@ -10,6 +10,9 @@
 		0E42E6CE3C5433E4D688EC2A /* libPods-Cooking Organizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A042F1FBF23B5F4C25AE6768 /* libPods-Cooking Organizer.a */; };
 		8E06382B2513919A00199907 /* CookbookWidgetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E06382A2513919A00199907 /* CookbookWidgetTableViewCell.swift */; };
 		8E06382D251391AC00199907 /* CookbookWidgetTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E06382C251391AC00199907 /* CookbookWidgetTableViewCell.xib */; };
+		8E0951BB255423E700D4550D /* GenerateShoppingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0951BA255423E700D4550D /* GenerateShoppingListView.swift */; };
+		8E0951BE255423F200D4550D /* GenerateShoppingListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0951BD255423F200D4550D /* GenerateShoppingListView.xib */; };
+		8E0951C225543A9000D4550D /* GeneratedShoppingListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0951C125543A9000D4550D /* GeneratedShoppingListItem.swift */; };
 		8E0DE01F2525CA43007CFA31 /* CookingDatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0DE01E2525CA43007CFA31 /* CookingDatesView.swift */; };
 		8E0DE0232525CA58007CFA31 /* CookingDatesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0DE0222525CA58007CFA31 /* CookingDatesView.xib */; };
 		8E0F01D0248A616D00CBA319 /* HomeIngredientDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F01CF248A616D00CBA319 /* HomeIngredientDetailsView.swift */; };
@@ -94,6 +97,9 @@
 		80A38ADDFBDF7218AEEF2D79 /* Pods-Cooking Organizer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cooking Organizer.debug.xcconfig"; path = "Target Support Files/Pods-Cooking Organizer/Pods-Cooking Organizer.debug.xcconfig"; sourceTree = "<group>"; };
 		8E06382A2513919A00199907 /* CookbookWidgetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookbookWidgetTableViewCell.swift; sourceTree = "<group>"; };
 		8E06382C251391AC00199907 /* CookbookWidgetTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CookbookWidgetTableViewCell.xib; sourceTree = "<group>"; };
+		8E0951BA255423E700D4550D /* GenerateShoppingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateShoppingListView.swift; sourceTree = "<group>"; };
+		8E0951BD255423F200D4550D /* GenerateShoppingListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenerateShoppingListView.xib; sourceTree = "<group>"; };
+		8E0951C125543A9000D4550D /* GeneratedShoppingListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedShoppingListItem.swift; sourceTree = "<group>"; };
 		8E0DE01E2525CA43007CFA31 /* CookingDatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingDatesView.swift; sourceTree = "<group>"; };
 		8E0DE0222525CA58007CFA31 /* CookingDatesView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CookingDatesView.xib; sourceTree = "<group>"; };
 		8E0F01CF248A616D00CBA319 /* HomeIngredientDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngredientDetailsView.swift; sourceTree = "<group>"; };
@@ -217,6 +223,8 @@
 			children = (
 				8E402DA125272C7B00BC31A4 /* RecipesTableView.swift */,
 				8E402DA525272C8300BC31A4 /* RecipesTableView.xib */,
+				8E0951BA255423E700D4550D /* GenerateShoppingListView.swift */,
+				8E0951BD255423F200D4550D /* GenerateShoppingListView.xib */,
 			);
 			path = "Cooking Calendar";
 			sourceTree = "<group>";
@@ -287,6 +295,7 @@
 				8E4F7394253DB76800E145A9 /* CustomIngredients.swift */,
 				8E34D48F2546CC5D00AE1BCD /* ShoppingList.swift */,
 				8E34D4922546CC8400AE1BCD /* ShoppingListItem.swift */,
+				8E0951C125543A9000D4550D /* GeneratedShoppingListItem.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -481,6 +490,7 @@
 				8E3143012510FCD800FCF59F /* RecipeStepCell.xib in Resources */,
 				8EAD142F254AF0DB002AFAC9 /* ShoppingListWidgetTableViewCell.xib in Resources */,
 				8E64AA5F25233E5E00DCC3A8 /* CookingCalendarWidgetTableViewCell.xib in Resources */,
+				8E0951BE255423F200D4550D /* GenerateShoppingListView.xib in Resources */,
 				8EF5BFD92475230F00C44646 /* Main.storyboard in Resources */,
 				8E5B68DF253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib in Resources */,
 				8E93469D249A4DE20048F5B1 /* CategoriesView.xib in Resources */,
@@ -538,6 +548,7 @@
 				8E9346972499F64C0048F5B1 /* CustomPickerView.swift in Sources */,
 				8E9984382476C7E300C10B4F /* HomeScreenViewController.swift in Sources */,
 				8EB02E70249CFECE0013D1B2 /* Checkbox.swift in Sources */,
+				8E0951C225543A9000D4550D /* GeneratedShoppingListItem.swift in Sources */,
 				8E1AECE1247E75FF0041B6C4 /* Categories.swift in Sources */,
 				8E0DE01F2525CA43007CFA31 /* CookingDatesView.swift in Sources */,
 				8E9158AB247D2E93003590F7 /* HomeIngredientsViewController.swift in Sources */,
@@ -585,6 +596,7 @@
 				8E4F734B253D956200E145A9 /* BaseIngredients.swift in Sources */,
 				8ED3A9A12490DAA500922BB2 /* CookbookViewController.swift in Sources */,
 				8E95E52C249CDDD200ACCD44 /* RecipeDetailsViewController.swift in Sources */,
+				8E0951BB255423E700D4550D /* GenerateShoppingListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,13 +742,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 67967Q33R5;
+				DEVELOPMENT_TEAM = 6Y4ZS98UZF;
 				INFOPLIST_FILE = "Cooking Organizer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "raressoponar.Cooking-Organizer";
+				PRODUCT_BUNDLE_IDENTIFIER = "raressoponar.Cooking-Organizerr";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cooking Organizer/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
@@ -750,13 +762,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 67967Q33R5;
+				DEVELOPMENT_TEAM = 6Y4ZS98UZF;
 				INFOPLIST_FILE = "Cooking Organizer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "raressoponar.Cooking-Organizer";
+				PRODUCT_BUNDLE_IDENTIFIER = "raressoponar.Cooking-Organizerr";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cooking Organizer/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
