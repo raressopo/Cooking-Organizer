@@ -94,8 +94,6 @@ class CookingCalendarViewController: UIViewController {
             scheduleGroup.enter()
             
             if let recipeCookingDates = allRecipesCopy.first(where: { $0.id == recipeId })?.cookingDates {
-                
-                
                 UserDataManager.shared.changeCookingDates(forRecipeId: recipeId, withValue: recipeCookingDates) {
                     scheduleGroup.leave()
                 } failure: {

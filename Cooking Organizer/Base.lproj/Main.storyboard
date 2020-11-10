@@ -1117,6 +1117,16 @@
                                     <action selector="filterPressed:" destination="TVw-bQ-0hi" eventType="touchUpInside" id="RtH-Wn-FVh"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aLr-wI-qkm">
+                                <rect key="frame" x="79" y="808" width="245" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Y3M-Mr-bq6"/>
+                                </constraints>
+                                <state key="normal" title="Generate Recipes"/>
+                                <connections>
+                                    <action selector="generateRecipesPressed:" destination="TVw-bQ-0hi" eventType="touchUpInside" id="jn2-MC-cKv"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sU3-kA-P8A">
                                 <rect key="frame" x="344" y="808" width="46" height="30"/>
                                 <constraints>
@@ -1135,9 +1145,12 @@
                             <constraint firstItem="AH3-cm-Wb2" firstAttribute="top" secondItem="lGS-n7-3ux" secondAttribute="top" id="5rY-l2-B85"/>
                             <constraint firstItem="AH3-cm-Wb2" firstAttribute="leading" secondItem="lGS-n7-3ux" secondAttribute="leading" id="8Ng-iP-lPa"/>
                             <constraint firstItem="AH3-cm-Wb2" firstAttribute="trailing" secondItem="lGS-n7-3ux" secondAttribute="trailing" id="Cuc-vp-gbg"/>
+                            <constraint firstItem="lGS-n7-3ux" firstAttribute="bottom" secondItem="aLr-wI-qkm" secondAttribute="bottom" constant="24" id="RGy-4e-F3Q"/>
                             <constraint firstItem="lGS-n7-3ux" firstAttribute="bottom" secondItem="sU3-kA-P8A" secondAttribute="bottom" constant="24" id="SIq-6F-RRz"/>
+                            <constraint firstItem="sU3-kA-P8A" firstAttribute="leading" secondItem="aLr-wI-qkm" secondAttribute="trailing" constant="20" id="Tih-y1-EWp"/>
                             <constraint firstAttribute="bottom" secondItem="AH3-cm-Wb2" secondAttribute="bottom" id="UTH-9d-i21"/>
                             <constraint firstItem="lGS-n7-3ux" firstAttribute="bottom" secondItem="RRJ-ny-UdB" secondAttribute="bottom" constant="24" id="WKz-SI-wgb"/>
+                            <constraint firstItem="aLr-wI-qkm" firstAttribute="leading" secondItem="RRJ-ny-UdB" secondAttribute="trailing" constant="20" id="Wx0-gP-fDz"/>
                             <constraint firstItem="lGS-n7-3ux" firstAttribute="trailing" secondItem="sU3-kA-P8A" secondAttribute="trailing" constant="24" id="Z1r-jF-FBr"/>
                             <constraint firstItem="RRJ-ny-UdB" firstAttribute="leading" secondItem="lGS-n7-3ux" secondAttribute="leading" constant="24" id="dWo-Wr-lbu"/>
                         </constraints>
@@ -1146,6 +1159,7 @@
                     <connections>
                         <outlet property="addHomeIngrButton" destination="sU3-kA-P8A" id="6PX-7e-12f"/>
                         <outlet property="filterButton" destination="RRJ-ny-UdB" id="phf-BM-XK4"/>
+                        <outlet property="generateRecipesButton" destination="aLr-wI-qkm" id="Ubn-ry-H1w"/>
                         <outlet property="homeIngredientsTableView" destination="AH3-cm-Wb2" id="sAv-gZ-1Aa"/>
                     </connections>
                 </viewController>

@@ -12,6 +12,7 @@ import Firebase
 class HomeIngredientsViewController: UIViewController {
     @IBOutlet weak var addHomeIngrButton: UIButton!
     @IBOutlet weak var filterButton: UIButton!
+    @IBOutlet weak var generateRecipesButton: UIButton!
     @IBOutlet weak var homeIngredientsTableView: UITableView!
     
     var homeIngredients = [HomeIngredient]()
@@ -26,6 +27,7 @@ class HomeIngredientsViewController: UIViewController {
     var selectedSortOption: SortStackViewButtons?
     
     var sortView: SortView?
+    var generatedRecipesView: GeneratedRecipesView?
     
     // MARK: - View Lifecycle
     
@@ -86,6 +88,112 @@ class HomeIngredientsViewController: UIViewController {
                                      filterView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
     }
     
+    @IBAction func generateRecipesPressed(_ sender: Any) {
+        let spinnerView = SpinnerView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
+        spinnerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(spinnerView)
+        
+        NSLayoutConstraint.activate([spinnerView.topAnchor.constraint(equalTo: view.topAnchor),
+                                     spinnerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                                     spinnerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                     spinnerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+        
+        if let items = navigationItem.rightBarButtonItems {
+            for item in items {
+                item.isEnabled = false
+            }
+        }
+        
+        guard let homeIngredients = UsersManager.shared.currentLoggedInUser?.homeIngredients, !homeIngredients.isEmpty, let recipes = UsersManager.shared.currentLoggedInUser?.recipes, !recipes.isEmpty else {
+            spinnerView.removeFromSuperview()
+            
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Generation Failed",
+                                                              message: "EIther you don't have Home Ingredients or Recipes saved.")
+            
+            if let items = navigationItem.rightBarButtonItems {
+                for item in items {
+                    item.isEnabled = true
+                }
+            }
+            
+            return
+        }
+        
+        var generatedRecipes = [GeneratedRecipe]()
+        
+        for recipe in recipes {
+            var ingredientsCount = 0
+            
+            for homeIngredient in homeIngredients {
+                if let recipeIngredients = recipe.ingredients {
+                    for recipeIngredient in recipeIngredients {
+                        if let recipeIngredientQuantity = recipeIngredient.quantityAsDouble,
+                           let homeIngredientQuantity = homeIngredient.quantity,
+                           recipeIngredient.name == homeIngredient.name,
+                           recipeIngredientQuantity <= homeIngredientQuantity
+                        {
+                            ingredientsCount += 1
+                        }
+                    }
+                }
+            }
+            
+            if ((ingredientsCount == recipe.ingredients?.count || ingredientsCount == (recipe.ingredients?.count ?? 0) - 1) && ingredientsCount > 0) {
+                generatedRecipes.append(GeneratedRecipe(id:recipe.id,
+                                                        name: recipe.name,
+                                                        totalIngredients: recipe.ingredients?.count ?? 0,
+                                                        existingIngredients: ingredientsCount,
+                                                        cookingDates: recipe.cookingDates))
+            }
+        }
+        
+        if generatedRecipes.isEmpty {
+            spinnerView.removeFromSuperview()
+            
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Generation Failed",
+                                                              message: "You don't have enough home ingredients or the right home ingredients to generate saved recipes.")
+            
+            if let items = navigationItem.rightBarButtonItems {
+                for item in items {
+                    item.isEnabled = true
+                }
+            }
+            
+            return
+        }
+        
+        spinnerView.removeFromSuperview()
+        
+        if generatedRecipesView == nil {
+            generatedRecipesView = GeneratedRecipesView(withGeneratedRecipes: generatedRecipes, andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
+            if let generatedView = generatedRecipesView {
+                generatedView.translatesAutoresizingMaskIntoConstraints = false
+                
+                view.addSubview(generatedView)
+                
+                NSLayoutConstraint.activate([generatedView.topAnchor.constraint(equalTo: view.topAnchor),
+                                             generatedView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                                             generatedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                             generatedView.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+                
+                generatedView.delegate = self
+                
+                generatedView.dismissPressed = {
+                    if let items = self.navigationItem.rightBarButtonItems {
+                        for item in items {
+                            item.isEnabled = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: - Private Helpers
     
     private func displayHomeScreenHomeIngredient() {
@@ -133,6 +241,7 @@ class HomeIngredientsViewController: UIViewController {
         navigationItem.hidesBackButton = inEdit
         addHomeIngrButton.isHidden = inEdit
         filterButton.isHidden = inEdit
+        generateRecipesButton.isHidden = inEdit
         
         if inEdit {
             navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(savePressed))]
@@ -390,5 +499,34 @@ extension HomeIngredientsViewController: FilterViewDelegate {
         filteredHomeIngredients = nil
         
         homeIngredientsTableView.reloadData()
+    }
+}
+
+extension HomeIngredientsViewController: GeneratedRecipesViewDelegate {
+    func didSelectedRecipeToBeScheduled(recipe: GeneratedRecipe) {
+        let scheduleRecipeView = ScheduleRecipeView(withRecipe: recipe, andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        
+        scheduleRecipeView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(scheduleRecipeView)
+        
+        NSLayoutConstraint.activate([scheduleRecipeView.topAnchor.constraint(equalTo: view.topAnchor),
+                                     scheduleRecipeView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                                     scheduleRecipeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                     scheduleRecipeView.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+        
+        scheduleRecipeView.delegate = self
+    }
+}
+
+extension HomeIngredientsViewController: ScheduleRecipeViewDelegate {
+    func didScheduleRecipes() {
+        generatedRecipesView?.removeFromSuperview()
+        
+        if let items = self.navigationItem.rightBarButtonItems {
+            for item in items {
+                item.isEnabled = true
+            }
+        }
     }
 }

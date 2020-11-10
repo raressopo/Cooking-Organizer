@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScheduleRecipeView" customModule="Cooking_Organizer" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="krp-NZ-rtG"/>
+                <outlet property="scheduleDateButton" destination="H9q-TY-Nwa" id="zk6-OX-kJU"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTk-r2-Thl">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <action selector="dismissedPressed:" destination="-1" eventType="touchUpInside" id="BLp-J2-9sr"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-pm-SDF">
+                    <rect key="frame" x="48" y="337.5" width="318" height="221"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Schedule Recipe" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LoG-Pe-QPd">
+                            <rect key="frame" x="20" y="10" width="278" height="58"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="RfJ-CU-K0t">
+                            <rect key="frame" x="0.0" y="156" width="318" height="65"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1TC-eI-5om">
+                                    <rect key="frame" x="0.0" y="0.0" width="159" height="65"/>
+                                    <state key="normal" title="Cancel"/>
+                                    <connections>
+                                        <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="Yd9-2y-cCk"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WyH-6y-lHq">
+                                    <rect key="frame" x="159" y="0.0" width="159" height="65"/>
+                                    <state key="normal" title="Schedule"/>
+                                    <connections>
+                                        <action selector="schedulePressed:" destination="-1" eventType="touchUpInside" id="Kn2-IC-gbp"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="65" id="qIp-MG-Bry"/>
+                            </constraints>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9q-TY-Nwa">
+                            <rect key="frame" x="20" y="78" width="278" height="58"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="58" id="9kf-bg-2m0"/>
+                            </constraints>
+                            <state key="normal" title="Schedule Date"/>
+                            <connections>
+                                <action selector="scheduleDatePressed:" destination="-1" eventType="touchUpInside" id="COI-eS-bX8"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="H9q-TY-Nwa" firstAttribute="top" secondItem="LoG-Pe-QPd" secondAttribute="bottom" constant="10" id="2eV-AN-RgL"/>
+                        <constraint firstAttribute="trailing" secondItem="RfJ-CU-K0t" secondAttribute="trailing" id="Dxm-QL-Hfi"/>
+                        <constraint firstAttribute="height" constant="221" id="JCh-7b-zs5"/>
+                        <constraint firstAttribute="trailing" secondItem="H9q-TY-Nwa" secondAttribute="trailing" constant="20" id="OuB-Qr-Jho"/>
+                        <constraint firstItem="LoG-Pe-QPd" firstAttribute="top" secondItem="B5y-pm-SDF" secondAttribute="top" constant="10" id="Xbt-qX-1ZI"/>
+                        <constraint firstItem="RfJ-CU-K0t" firstAttribute="top" secondItem="H9q-TY-Nwa" secondAttribute="bottom" constant="20" id="Xkn-HV-iou"/>
+                        <constraint firstAttribute="bottom" secondItem="RfJ-CU-K0t" secondAttribute="bottom" id="bqI-JO-LkI"/>
+                        <constraint firstItem="H9q-TY-Nwa" firstAttribute="leading" secondItem="B5y-pm-SDF" secondAttribute="leading" constant="20" id="e1g-A1-4Fu"/>
+                        <constraint firstItem="RfJ-CU-K0t" firstAttribute="leading" secondItem="B5y-pm-SDF" secondAttribute="leading" id="mr9-8m-kCH"/>
+                        <constraint firstItem="LoG-Pe-QPd" firstAttribute="leading" secondItem="B5y-pm-SDF" secondAttribute="leading" constant="20" id="t6q-9Z-0Ax"/>
+                        <constraint firstAttribute="trailing" secondItem="LoG-Pe-QPd" secondAttribute="trailing" constant="20" id="uoz-vW-fgG"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="xTk-r2-Thl" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="4sl-2L-uWG"/>
+                <constraint firstItem="B5y-pm-SDF" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="48" id="TLo-e9-1PM"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="B5y-pm-SDF" secondAttribute="trailing" constant="48" id="ULm-Fz-fui"/>
+                <constraint firstAttribute="bottom" secondItem="xTk-r2-Thl" secondAttribute="bottom" id="Vs5-m2-foi"/>
+                <constraint firstItem="B5y-pm-SDF" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Wk5-nj-ild"/>
+                <constraint firstItem="xTk-r2-Thl" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="puV-wz-R0N"/>
+                <constraint firstItem="xTk-r2-Thl" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sqf-dN-Wou"/>
+            </constraints>
+            <point key="canvasLocation" x="-320.28985507246381" y="95.758928571428569"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
