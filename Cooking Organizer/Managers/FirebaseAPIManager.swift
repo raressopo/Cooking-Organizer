@@ -85,7 +85,7 @@ class FirebaseAPIManager {
         userDispatchGroup.enter()
         signUpFailed.enter()
         
-        usersLoginDataRef.child(loginEmail).setValue(loginDetails) { (error, ref) in
+        usersLoginDataRef.child(loginEmail.stringByAddingPercentEncodingForRFC3986()).setValue(loginDetails) { (error, ref) in
             if error == nil {
                 userDispatchGroup.leave()
             } else {

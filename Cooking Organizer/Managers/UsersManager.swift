@@ -30,7 +30,7 @@ class UsersManager: NSObject {
     }
     
     func validateUserAndLogIn(withEmail email: String, password: String, andCompletionHandler completion: @escaping (_ id: String?) -> Void) {
-        FirebaseAPIManager.sharedInstance.validateUser(withEmail: email) { loginData in
+        FirebaseAPIManager.sharedInstance.validateUser(withEmail: email.stringByAddingPercentEncodingForRFC3986()) { loginData in
             guard let loginData = loginData, loginData.password == password else {
                 completion(nil)
                 return

@@ -16,7 +16,7 @@ class UtilsManager: NSObject {
     override init() {
         super.init()
         
-        dateFormatter.dateFormat = "dd-MMM-yyyy"
+        dateFormatter.dateFormat = "dd MMMM yyyy"
     }
     
     class func resizeImageTo450x450AsData(image: UIImage) -> Data? {
@@ -95,10 +95,33 @@ class UtilsManager: NSObject {
             (selectedDateYear == givenDateYear && selectedDateMonth < givenDateMonth) ||
             (selectedDateYear == givenDateYear && selectedDateMonth == givenDateMonth && selectedDateDay <= givenDateDay)
     }
+    
+    class func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
 }
 
 extension Array where Element: Comparable {
     func containsSameElements(as other: [Element]) -> Bool {
         return self.count == other.count && self.sorted() == other.sorted()
+    }
+}
+
+extension String {
+    func stringByAddingPercentEncodingForRFC3986() -> String {
+        let unreserved = "@"
+        let allowed = NSMutableCharacterSet.alphanumeric()
+        allowed.addCharacters(in: unreserved)
+        return addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)!
+    }
+    
+    func stringByRemovingPercentEncodingForRFC3986() -> String {
+        let unreserved = "@"
+        let allowed = NSMutableCharacterSet.alphanumeric()
+        allowed.addCharacters(in: unreserved)
+        return addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)!.removingPercentEncoding!
     }
 }

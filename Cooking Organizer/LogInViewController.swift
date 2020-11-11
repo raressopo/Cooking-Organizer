@@ -13,16 +13,6 @@ class LogInViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passTextField: UITextField!
     
-    // MARK: - Sign Up
-    @IBOutlet weak var signUpView: UIView!
-    @IBOutlet weak var signUpEmailTextField: UITextField!
-    @IBOutlet weak var signUpConfirmEmailTextField: UITextField!
-    @IBOutlet weak var signUpPassTextField: UITextField!
-    @IBOutlet weak var signUpConfirmPassTextField: UITextField!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var createButton: UIButton!
-    @IBOutlet weak var dismissSignUpViewButton: UIButton!
-    
     @IBOutlet weak var spinnerView: UIView!
     
     // MARK: - View Lifecylce
@@ -52,50 +42,26 @@ class LogInViewController: UIViewController {
     
     // MARK: - IBActions
     
-    @IBAction func cancelPressed(_ sender: Any) {
-        signUpView.isHidden = true
-        dismissSignUpViewButton.isHidden = true
-    }
-    
-    @IBAction func createPressed(_ sender: Any) {
-        spinnerView.isHidden = false
-        dismissSignUpViewButton.isHidden = true
-        signUpView.isHidden = true
+    @IBAction func signUpPressed(_ sender: Any) {
+        let signUpView = SignUpView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
-        guard let email = signUpEmailTextField.text,
-            let password = signUpPassTextField.text,
-            email.count > 0,
-            password.count > 0 else
-        {
-            spinnerView.isHidden = true
-            
+        signUpView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(signUpView)
+        
+        NSLayoutConstraint.activate([signUpView.topAnchor.constraint(equalTo: view.topAnchor), signUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor), signUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor), signUpView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+        
+        signUpView.signUpValidationFailed = {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                               title: "Sign Up Failed",
                                                               message: "Please check that E-Mail and password are correct and valid")
-            return
         }
         
-        UsersManager.shared.createUser(withEmail: email, password: password) { success in
-            if success {
-                self.spinnerView.isHidden = true
-                
-                self.signUpEmailTextField.text = ""
-                self.signUpConfirmEmailTextField.text = ""
-                self.signUpPassTextField.text = ""
-                self.signUpConfirmPassTextField.text = ""
-            } else {
-                self.spinnerView.isHidden = true
-                
-                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                  title: "Sign Up Failed",
-                                                                  message: "Something went wrong with the sign up. Please try again later!")
-            }
+        signUpView.signUpFailed = {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Sign Up Failed",
+                                                              message: "Something went wrong with the sign up. Please try again later!")
         }
-    }
-    
-    @IBAction func signUpPressed(_ sender: Any) {
-        signUpView.isHidden = false
-        dismissSignUpViewButton.isHidden = false
     }
     
     @IBAction func logInPressed(_ sender: Any) {
@@ -122,15 +88,10 @@ class LogInViewController: UIViewController {
                 self.performSegue(withIdentifier: "logInSegue", sender: self)
             } else {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                  title: "Home Ingredients Fetch Failed",
-                                                                  message: "Something went wrong while fetching Home Ingredients")
+                                                                  title: "Log In Failed",
+                                                                  message: "Please make sure that your e-mail and / or password are correct!")
             }
         }
-    }
-    
-    @IBAction func dismissSignUpPressed(_ sender: Any) {
-        signUpView.isHidden = true
-        dismissSignUpViewButton.isHidden = true
     }
     
     // MARK: - Private Helpers
