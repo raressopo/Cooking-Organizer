@@ -22,22 +22,11 @@ class HomeIngredientDetailsView: UIView {
     @IBOutlet weak var createButton: UIButton!
     
     var selectedCategory: IngredientCategories?
-    
-    @IBOutlet weak var dismissDatePickerButton: UIButton!
-    @IBOutlet weak var datePickerView: UIView!
-    @IBOutlet weak var expirationDatePicker: UIDatePicker!
-    
-    @IBOutlet weak var dismissUnitViewButton: UIButton!
-    @IBOutlet weak var unitView: UIView!
-    @IBOutlet weak var unitsTableView: UITableView!
-    
     var selectedUnit: String?
-    var copyOfSelectedUnit: String?
+    var selectedExpirationDate: Date?
     
     let volumeUnits = ["tsp", "tbsp", "cup", "cups", "ml", "L"]
     let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg", "pcs"]
-    
-    var expirationdate: Date?
     
     var allIngredientCategoriesAsString: String?
     
@@ -64,9 +53,6 @@ class HomeIngredientDetailsView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
-        
-        unitsTableView.delegate = self
-        unitsTableView.dataSource = self
         
         categoriesButton.titleLabel?.numberOfLines = 3
         categoriesButton.setNeedsLayout()
@@ -116,7 +102,7 @@ class HomeIngredientDetailsView: UIView {
         
         var expirationDateString = ""
         
-        if let expirationDate = expirationdate {
+        if let expirationDate = selectedExpirationDate {
             expirationDateString = UtilsManager.shared.dateFormatter.string(from: expirationDate)
         }
         
@@ -178,7 +164,7 @@ class HomeIngredientDetailsView: UIView {
             ingredientChanged = true
         }
         
-        if let expirationDate = expirationdate, ingredient.expirationDate != UtilsManager.shared.dateFormatter.string(from: expirationDate) {
+        if let expirationDate = selectedExpirationDate, ingredient.expirationDate != UtilsManager.shared.dateFormatter.string(from: expirationDate) {
             changedDataDictionary["expirationDate"] = UtilsManager.shared.dateFormatter.string(from: expirationDate)
             
             ingredientChanged = true
@@ -282,32 +268,23 @@ class HomeIngredientDetailsView: UIView {
     // MARK: - Expiration, Bought or Opened date - IBActions
     
     @IBAction func expirationDatePressed(_ sender: Any) {
-        hideDatePickerView(hide: false)
+        displayDatePickerView()
     }
     
-    @IBAction func dismissDatePickerPressed(_ sender: Any) {
-        hideDatePickerView(hide: true)
-    }
-    
-    @IBAction func cancelDatePickerPressed(_ sender: Any) {
-        hideDatePickerView(hide: true)
-    }
-    
-    @IBAction func saveDatePickerPressed(_ sender: Any) {
-        expirationdate = expirationDatePicker.date
+    private func displayDatePickerView() {
+        let datePickerView = LastCookDatePickerView()
         
-        hideDatePickerView(hide: true)
-    }
-    
-    // MARK: - Expiration, Bought or Opened date - Private Helpers
-    
-    func hideDatePickerView(hide: Bool) {
-        dismissDatePickerButton.isHidden = hide
-        datePickerView.isHidden = hide
+        datePickerView.neverCookedButton.removeFromSuperview()
+        datePickerView.delegate = self
         
-        if let date = expirationdate {
-            expirationDateButton.setTitle(UtilsManager.shared.dateFormatter.string(from: date), for: .normal)
-        }
+        contentView.addSubview(datePickerView)
+        
+        datePickerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([datePickerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0.0),
+                                     datePickerView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0.0),
+                                     datePickerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0.0),
+                                     datePickerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 0.0)])
     }
     
     // MARK: - Unit
@@ -315,35 +292,23 @@ class HomeIngredientDetailsView: UIView {
     // MARK: - Unit - IBActions
     
     @IBAction func unitPressed(_ sender: Any) {
-        copyOfSelectedUnit = selectedUnit
+        let unitPickerView = UnitPickerView()
         
-        unitsTableView.reloadData()
+        unitPickerView.delegate = self
         
-        hideUnitView(hide: false)
-    }
-    
-    @IBAction func dismissUnitViewPressed(_ sender: Any) {
-        hideUnitView(hide: true)
-    }
-    
-    @IBAction func cancelUnitViewPressed(_ sender: Any) {
-        hideUnitView(hide: true)
-    }
-    
-    @IBAction func saveUnitViewPressed(_ sender: Any) {
-        selectedUnit = copyOfSelectedUnit
-        
-        hideUnitView(hide: true)
+        if let parentVCView = window?.rootViewController?.presentedViewController?.view {
+            parentVCView.addSubview(unitPickerView)
+            
+            unitPickerView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([unitPickerView.topAnchor.constraint(equalTo: parentVCView.topAnchor, constant: 0.0),
+                                         unitPickerView.bottomAnchor.constraint(equalTo: parentVCView.bottomAnchor, constant: 0.0),
+                                         unitPickerView.trailingAnchor.constraint(equalTo: parentVCView.trailingAnchor, constant: 0.0),
+                                         unitPickerView.leadingAnchor.constraint(equalTo: parentVCView.leadingAnchor, constant: 0.0)])
+        }
     }
     
     // MARK: - Unit - Private Helpers
-    
-    private func hideUnitView(hide: Bool) {
-        dismissUnitViewButton.isHidden = hide
-        unitView.isHidden = hide
-        
-        configureUnitButton()
-    }
     
     private func configureUnitButton() {
         if let unit = selectedUnit {
@@ -362,7 +327,7 @@ class HomeIngredientDetailsView: UIView {
         
         if let expDate = ingredient.expirationDate {
             expirationDateButton.setTitle(expDate, for: .normal)
-            expirationdate = UtilsManager.shared.dateFormatter.date(from: expDate)
+            selectedExpirationDate = UtilsManager.shared.dateFormatter.date(from: expDate)
         }
         
         quantityTextField.text = "\(ingredient.quantity ?? 0.0)"
@@ -375,94 +340,6 @@ class HomeIngredientDetailsView: UIView {
         selectedCategory = IngredientCategories.allCases.first(where: {$0.string == ingredient.category ?? ""})
         
         categoriesButton.setTitle(selectedCategory?.string, for: .normal)
-    }
-}
-
-extension HomeIngredientDetailsView:  UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == unitsTableView {
-            if section == 0 {
-                return volumeUnits.count
-            } else {
-                return massAndWeightUnits.count
-            }
-        } else {
-            return IngredientCategories.allCases.count
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "unitCell")
-        
-        if indexPath.section == 0 {
-            cell.textLabel?.text = volumeUnits[indexPath.row]
-            
-            if let unit = copyOfSelectedUnit,
-               volumeUnits.contains(unit),
-               indexPath.row == volumeUnits.firstIndex(of: unit) {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
-        } else {
-            cell.textLabel?.text = massAndWeightUnits[indexPath.row]
-            
-            if let unit = copyOfSelectedUnit,
-               massAndWeightUnits.contains(unit),
-               indexPath.row == massAndWeightUnits.firstIndex(of: unit) {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
-        }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let unit = copyOfSelectedUnit {
-            if let selectedVolumeUnitIndex = volumeUnits.firstIndex(of: unit)  {
-                tableView.cellForRow(at: IndexPath(item: selectedVolumeUnitIndex, section: 0))?.accessoryType = .none
-            } else if let selectedMassAndWeightUnitIndex = massAndWeightUnits.firstIndex(of: unit) {
-                tableView.cellForRow(at: IndexPath(item: selectedMassAndWeightUnitIndex, section: 1))?.accessoryType = .none
-            }
-        }
-        
-        if indexPath.section == 0 {
-            copyOfSelectedUnit = volumeUnits[indexPath.row]
-            
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        } else {
-            copyOfSelectedUnit = massAndWeightUnits[indexPath.row]
-            
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
-        
-        selectedUnit = copyOfSelectedUnit
-        
-        hideUnitView(hide: true)
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if tableView == unitsTableView {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return tableView == unitsTableView ? 2 : 1
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView == unitsTableView {
-            return section == 0 ? "Volume" : "Mass and Weight"
-        } else {
-            return ""
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
     }
 }
 
@@ -483,5 +360,23 @@ extension HomeIngredientDetailsView: CategoriesViewDelegate {
         selectedCategory = category
         
         categoriesButton.setTitle(category.string, for: .normal)
+    }
+}
+
+extension HomeIngredientDetailsView: LastCookDatePickerViewDelegate {
+    func didSelectLastCookDate(date: Date?) {
+        selectedExpirationDate = date
+        
+        if let selectedDate = date {
+            expirationDateButton.setTitle(UtilsManager.shared.dateFormatter.string(from: selectedDate), for: .normal)
+        }
+    }
+}
+
+extension HomeIngredientDetailsView: UnitPickerViewDelegate {
+    func didSelectUnit(unit: String) {
+        selectedUnit = unit
+        
+        unitButton.setTitle(unit, for: .normal)
     }
 }

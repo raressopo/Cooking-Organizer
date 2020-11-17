@@ -369,6 +369,8 @@ class HomeIngredientsViewController: UIViewController {
                     self.sortHomeIngredients(withSortOption: sortOption)
                     
                     sortView.removeFromSuperview()
+                    
+                    self.sortView = nil
                 }
                 
                 sortView.translatesAutoresizingMaskIntoConstraints = false
