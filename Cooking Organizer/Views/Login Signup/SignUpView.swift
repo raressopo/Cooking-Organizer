@@ -19,6 +19,8 @@ class SignUpView: UIView {
     var signUpValidationFailed: (() -> Void)?
     var signUpFailed: (() -> Void)?
     
+    var invalidPassword: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -36,6 +38,9 @@ class SignUpView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
+        
+        passwordTextField.isSecureTextEntry = true
+        confirmPasswordTextField.isSecureTextEntry = true
     }
     
     @IBAction func dismissPressed(_ sender: Any) {
@@ -49,12 +54,24 @@ class SignUpView: UIView {
     @IBAction func signUpPressed(_ sender: Any) {
         guard let email = eMailTextField.text,
             let password = passwordTextField.text,
-            email.count > 0,
-            UtilsManager.isValidEmail(email),
-            password.count > 0 else
+            !email.isEmpty,
+            !password.isEmpty,
+            let confirmEmail = confirmEMailTextField.text,
+            let confirmPass = confirmPasswordTextField.text,
+            !confirmEmail.isEmpty,
+            !confirmPass.isEmpty,
+            UtilsManager.isValidEmail(email) else
         {
             signUpValidationFailed?()
 
+            return
+        }
+        
+        let decimalCharacters = CharacterSet.decimalDigits
+        
+        guard let _ = password.rangeOfCharacter(from: decimalCharacters), password.count >= 6 else {
+            invalidPassword?()
+            
             return
         }
         

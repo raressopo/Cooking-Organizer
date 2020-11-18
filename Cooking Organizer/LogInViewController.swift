@@ -40,6 +40,13 @@ class LogInViewController: UIViewController {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        emailTextField.text = nil
+        passTextField.text = nil
+    }
+    
     // MARK: - IBActions
     
     @IBAction func signUpPressed(_ sender: Any) {
@@ -61,6 +68,12 @@ class LogInViewController: UIViewController {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                               title: "Sign Up Failed",
                                                               message: "Something went wrong with the sign up. Please try again later!")
+        }
+        
+        signUpView.invalidPassword = {
+            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                              title: "Invalid Password",
+                                                              message: "Your password should have at least 6 characters and at least 1 number!")
         }
     }
     

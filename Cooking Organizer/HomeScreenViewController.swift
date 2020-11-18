@@ -130,12 +130,12 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - IBActions
     
     @IBAction func logOutPressed(_ sender: Any) {
-        self.dismiss(animated: true) {
-            UserDefaults.standard.removeObject(forKey: "loggedInUserId")
-            
-            UserDefaults.standard.removeObject(forKey: "currentUserEmail")
-            UserDefaults.standard.removeObject(forKey: "currentUserPassword")
-        }
+        UserDefaults.standard.removeObject(forKey: "loggedInUserId")
+        
+        UserDefaults.standard.removeObject(forKey: "currentUserEmail")
+        UserDefaults.standard.removeObject(forKey: "currentUserPassword")
+        
+        self.dismiss(animated: true)
     }
     
     @IBAction func menuPressed(_ sender: Any) {

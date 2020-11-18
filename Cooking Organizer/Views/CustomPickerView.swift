@@ -72,11 +72,6 @@ class CustomPickerView: UIView {
 // MARK: - Unit Picker View
 
 class UnitPickerView: CustomPickerView {
-    private let volumeUnits = ["tsp", "tbsp", "cup", "cups", "ml", "L"]
-    private let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg", "pcs"]
-    
-    private var allUnits = [String]()
-    
     weak var delegate: UnitPickerViewDelegate?
     
     override func commonInit() {
@@ -86,8 +81,6 @@ class UnitPickerView: CustomPickerView {
         
         picker.delegate = self
         picker.dataSource = self
-        
-        allUnits = volumeUnits + massAndWeightUnits
     }
 }
 
@@ -99,15 +92,15 @@ extension UnitPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return allUnits.count
+        return Units.allCases.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return allUnits[row]
+        return Units.allCases[row].rawValue
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        delegate?.didSelectUnit(unit: allUnits[row])
+        delegate?.didSelectUnit(unit: Units.allCases[row].rawValue)
         
         removeFromSuperview()
     }

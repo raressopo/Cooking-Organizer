@@ -25,9 +25,6 @@ class HomeIngredientDetailsView: UIView {
     var selectedUnit: String?
     var selectedExpirationDate: Date?
     
-    let volumeUnits = ["tsp", "tbsp", "cup", "cups", "ml", "L"]
-    let massAndWeightUnits = ["lb", "oz", "mg", "g", "kg", "pcs"]
-    
     var allIngredientCategoriesAsString: String?
     
     @IBOutlet var contentView: UIView!

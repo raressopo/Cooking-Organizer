@@ -8,6 +8,21 @@
 
 import Foundation
 
+enum Units: String, CaseIterable {
+    case tsp = "tsp"
+    case tbsp = "tbsp"
+    case cup = "cup"
+    case cups = "cups"
+    case ml = "ml"
+    case L = "L"
+    case lb = "lb"
+    case oz = "oz"
+    case mg = "mg"
+    case g = "g"
+    case kg = "kg"
+    case pcs = "pcs"
+}
+
 class UnitManager {
     // Teaspoon conversions
     class func convertTspToTbsp(tspQuantity: Double) -> Double {
