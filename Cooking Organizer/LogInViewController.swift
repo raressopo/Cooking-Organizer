@@ -15,10 +15,16 @@ class LogInViewController: UIViewController {
     
     @IBOutlet weak var spinnerView: UIView!
     
+    var signUpView = SignUpView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    
+    var isKeyboardDisplayed = false
+    
     // MARK: - View Lifecylce
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.hideKeyboardWhenTappedAround()
         
         if let currentUserEmail = UserDefaults.standard.string(forKey: "currentUserEmail"),
             let currentUserPassword = UserDefaults.standard.string(forKey: "currentUserPassword") {
@@ -38,6 +44,8 @@ class LogInViewController: UIViewController {
                 }
             }
         }
+        
+        signUpView.signUpStackViewTopConstraint.constant = (view.frame.height - signUpView.stackViewHeightConstraint.constant) / 2
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -50,7 +58,7 @@ class LogInViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func signUpPressed(_ sender: Any) {
-        let signUpView = SignUpView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        signUpView = SignUpView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         signUpView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -81,8 +89,8 @@ class LogInViewController: UIViewController {
         guard let email = emailTextField.text, !email.isEmpty,
             let password = passTextField.text, !password.isEmpty else {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                                  title: "Invalid E-Mail and Password",
-                                                                  message: "Please introduce valid E-mail and Password")
+                                                                  title: "Log In Failed",
+                                                                  message: "Make sure you entered the correct E-Mail and / or Password!")
                 
                 return
         }
@@ -102,7 +110,7 @@ class LogInViewController: UIViewController {
             } else {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                                   title: "Log In Failed",
-                                                                  message: "Please make sure that your e-mail and / or password are correct!")
+                                                                  message: "Make sure you entered the correct E-Mail and / or Password!")
             }
         }
     }
@@ -121,6 +129,25 @@ class LogInViewController: UIViewController {
         UserDataManager.shared.getCustomIngredients()
         
         UserDataManager.shared.observeShoppingListsChanged()
+    }
+    
+    override func keyboardWillAppear(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            if !isKeyboardDisplayed {
+                signUpView.signUpStackViewTopConstraint.constant = (view.frame.height - keyboardHeight - signUpView.stackViewHeightConstraint.constant) / 2
+                
+                isKeyboardDisplayed = true
+            }
+        }
+    }
+    
+    override func keyboardWillDisappear() {
+        signUpView.signUpStackViewTopConstraint.constant = (view.frame.height - signUpView.stackViewHeightConstraint.constant) / 2
+        
+        isKeyboardDisplayed = false
     }
 }
 

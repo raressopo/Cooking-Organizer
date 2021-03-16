@@ -10,6 +10,12 @@ import UIKit
 
 protocol StepsViewDelegate: class {
     func stepDeleted()
+    func stepDetailFieldPressed(withText text: String?, atIndex index: Int)
+}
+
+extension StepsViewDelegate {
+    func stepDeleted() {}
+    func stepDetailFieldPressed(withText text: String?, atIndex: Int) {}
 }
 
 class StepsView: UIView {
@@ -26,12 +32,18 @@ class StepsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        populateStepsCopy()
-        setupTableView()
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        
+        commonInit()
+    }
+    
+    private func commonInit() {
+        populateStepsCopy()
+        setupTableView()
     }
     
     // MARK: - Helpers
@@ -214,6 +226,10 @@ extension StepsView: UITableViewDelegate, UITableViewDataSource {
 // MARK: - Change Recipe Step Cell Delegate
 
 extension StepsView: ChangeRecipeStepCellDelegate {
+    func stepDetailsFieldSelected(withText text: String?, atIndex index: Int) {
+        delegate?.stepDetailFieldPressed(withText: text, atIndex: index)
+    }
+    
     func stepChanged(withValue string: String?, atIndex index: Int) {
         stepsCopy[index] = string ?? ""
     }

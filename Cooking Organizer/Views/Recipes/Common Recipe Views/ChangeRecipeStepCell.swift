@@ -10,6 +10,7 @@ import UIKit
 
 protocol ChangeRecipeStepCellDelegate: class {
     func stepChanged(withValue string: String?, atIndex index: Int)
+    func stepDetailsFieldSelected(withText text: String?, atIndex index: Int)
 }
 
 class ChangeRecipeStepCell: UITableViewCell {
@@ -31,5 +32,11 @@ class ChangeRecipeStepCell: UITableViewCell {
 extension ChangeRecipeStepCell: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         delegate?.stepChanged(withValue: textField.text, atIndex: index)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.stepDetailsFieldSelected(withText: textField.text, atIndex: index)
+        
+        textField.endEditing(true)
     }
 }

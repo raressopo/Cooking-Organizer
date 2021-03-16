@@ -60,6 +60,14 @@ class CustomPickerView: UIView {
         
         picker.isHidden = true
         datePicker.isHidden = true
+        
+        if self.traitCollection.userInterfaceStyle == .dark {
+            picker.backgroundColor = .black
+            datePicker.backgroundColor = .black
+        } else {
+            picker.backgroundColor = .white
+            datePicker.backgroundColor = .white
+        }
     }
     
     // MARK: - IBActions
@@ -131,7 +139,8 @@ class CookingTimePickerView: CustomPickerView {
         
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        saveButton.backgroundColor = UIColor.white
+        
+        saveButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
         
         self.contentView.addSubview(saveButton)
         
@@ -249,9 +258,7 @@ class LastCookDatePickerView: CustomPickerView {
         
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        saveButton.backgroundColor = UIColor.white
-        
-        datePicker.backgroundColor = UIColor.white
+        saveButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
         
         buttonsStackView.addArrangedSubview(saveButton)
         
@@ -263,9 +270,7 @@ class LastCookDatePickerView: CustomPickerView {
         
         neverCookedButton.setTitle("Never Cooked", for: .normal)
         neverCookedButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        neverCookedButton.backgroundColor = UIColor.white
-        
-        datePicker.backgroundColor = UIColor.white
+        neverCookedButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
         
         buttonsStackView.addArrangedSubview(neverCookedButton)
         
@@ -311,7 +316,7 @@ class SelectDatePickerView: CustomPickerView {
         
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        saveButton.backgroundColor = UIColor.white
+        saveButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
         
         datePicker.backgroundColor = UIColor.white
         

@@ -9,7 +9,9 @@
 import UIKit
 import Firebase
 
-class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, DificultyPickerViewDelegate, LastCookDatePickerViewDelegate, CategoriesViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, IngredientsViewDelegate, StepsViewDelegate {
+class NewRecipeViewController: UIViewController,
+                               UIImagePickerControllerDelegate,
+                               UINavigationControllerDelegate {
     
     // MARK: - Recipe Name View
     @IBOutlet weak var addRecipeImage: UIButton!
@@ -17,6 +19,7 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
     @IBOutlet weak var recipeNameTextField: UITextField!
     @IBOutlet weak var cookingTimeButton: UIButton!
     @IBOutlet weak var portionsTextField: UITextField!
+    @IBOutlet weak var clearImageButton: UIButton!
     
     private var cookingTimeHours = 0
     private var cookingTimeMinutes = 0
@@ -36,24 +39,24 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
     private var categoriesAsString: String?
     
     // MARK: - Ingredients View
-    @IBOutlet weak var ingredientsView: UIView!
+    @IBOutlet var ingredientsView: IngredientsView!
     @IBOutlet weak var ingredientsStackView: UIStackView!
     
-    var ingrdsView: IngredientsView?
-    
-    @IBOutlet weak var ingredientsViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var ingredientsViewHeightConstraint: NSLayoutConstraint!
     
     private var ingredients = [NewRecipeIngredient]()
     
     // MARK: - Steps View
-    @IBOutlet weak var stepsView: UIView!
+    
+    @IBOutlet var stepsView: StepsView!
     @IBOutlet weak var stepsStackView: UIStackView!
     
-    var stpsView: StepsView?
-    
-    @IBOutlet weak var stepsViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var stepsViewHeightConstraint: NSLayoutConstraint!
     
     private var steps = [String]()
+    
+    var isKeyboardDisplayed = false
+    var stepExtendedTextView = StepExtendedTextView()
     
     // MARK: - View Lifecycle
     
@@ -61,6 +64,7 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
         super.viewDidLoad()
         
         setupViews()
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - IBActions
@@ -72,6 +76,13 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
             myPickerController.sourceType = .photoLibrary
             present(myPickerController, animated: true, completion: nil)
         }
+    }
+    
+    @IBAction func clearImagePressed(_ sender: Any) {
+        recipeImageView.image = nil
+        
+        clearImageButton.isHidden = true
+        addRecipeImage.setTitle("Add Photo", for: .normal)
     }
     
     @IBAction func cookingTimePressed(_ sender: Any) {
@@ -136,22 +147,12 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
     }
     
     @IBAction func createRecipePressed(_ sender: Any) {
-        guard let image = recipeImageView.image,
-            let imageData = image.jpegData(compressionQuality: 0.0) else
-        {
-            AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                              title: "Image Unavailable",
-                                                              message: "Please check that you selected a image for this recipe. If not please choose one!")
-            
-            return
-        }
-
         guard let recipeName = recipeNameTextField.text,
             !recipeName.isEmpty else
         {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
-                                                              title: "Recipe Name Unavailable",
-                                                              message: "Please check that you enetered a valid recipe name!")
+                                                              title: "Invalid Recipe Name",
+                                                              message: "Make sure you entered a Recipe Name!")
 
             return
         }
@@ -227,7 +228,7 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
         let id = UUID().uuidString
         
         let recipeDictionary = ["name": recipeName,
-                                "imageData": imageData.base64EncodedString(),
+                                "imageData": recipeImageView.image?.jpegData(compressionQuality: 0.0)?.base64EncodedString() ?? "",
                                 "portions": portionsNumber,
                                 "cookingTime": cookingTime,
                                 "dificulty": dificulty,
@@ -256,50 +257,6 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
     
     // MARK: - View private helpers
     
-    private func createIngredientsDictionary() -> [String:Any] {
-        var ingredientsDictionary = [String:Any]()
-        
-        ingredients.forEach { ingredientsDictionary["\(ingredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
-        
-        return ingredientsDictionary
-    }
-    
-    private func createStepsDictionary() -> [String:Any] {
-        var stepsDictionary = [String:Any]()
-        
-        steps.forEach { stepsDictionary["\(steps.firstIndex(of: $0) ?? 0)"] = $0 }
-        
-        return stepsDictionary
-    }
-    
-    private func areRecipeIngredientsValid(completion: @escaping (Bool) -> Void) {
-        if let ingrdsView = ingrdsView {
-            ingrdsView.validateChangedIngredients { failed in
-                if failed {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Incomplete Ingredients", message: "Make sure that all ingredients' details are completed")
-                } else {
-                    self.ingredients = ingrdsView.ingredientsCopy
-                }
-                
-                completion(!failed)
-            }
-        }
-    }
-    
-    private func areStepsValid(completion: @escaping (Bool) -> Void) {
-        if let stpsView = stpsView {
-            stpsView.validateChangedSteps { failed in
-                if failed {
-                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self, title: "Steps Ingredients", message: "Make sure that all steps' details are completed")
-                } else {
-                    self.steps = stpsView.stepsCopy
-                }
-                
-                completion(!failed)
-            }
-        }
-    }
-    
     private func addBorderToLayer(layer: CALayer) {
         layer.cornerRadius = 5.0
         layer.borderWidth = 0.5
@@ -321,35 +278,8 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
         addBackgroundColorToButton(button: lastCookButton)
         addBackgroundColorToButton(button: categoriesButton)
         
-        ingrdsView = IngredientsView(frame: CGRect(x: 0, y: 0, width: ingredientsStackView.frame.width, height: 0))
-        
-        if let ingrdsView = ingrdsView {
-            ingrdsView.setEditMode(editMode: true)
-            ingrdsView.delegate = self
-            
-            ingredientsStackView.addArrangedSubview(ingrdsView)
-            
-            ingredientsViewHeightConstraint.constant = 76.0
-            
-            ingrdsView.addIngredientButton.addTarget(self, action: #selector(addNewIngredientPressed), for: .touchUpInside)
-        }
-        
-        stpsView = StepsView(frame: CGRect(x: 0, y: 0, width: ingredientsStackView.frame.width, height: 0))
-        
-        if let stpsView = stpsView {
-            stpsView.setEditMode(editMode: true)
-            stpsView.delegate = self
-            
-            stepsStackView.addArrangedSubview(stpsView)
-            
-            stepsViewHeightConstraint.constant = 76.0
-            
-            stpsView.addStepButton.addTarget(self, action: #selector(addNewStepPressed), for: .touchUpInside)
-        }
-    }
-    
-    func ingredientDeleted() {
-        ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant - 60.0
+        ingredientsViewSetup()
+        stepsViewSetup()
     }
     
     @objc
@@ -357,13 +287,95 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
         ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant + 60.0
     }
     
-    func stepDeleted() {
-        stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant - 60.0
-    }
-    
     @objc
     func addNewStepPressed() {
         stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant + 60.0
+    }
+    
+    // MARK: - UIImagePickerController delegate
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            recipeImageView.image = image
+            
+            addRecipeImage.setTitle("Change Photo", for: .normal)
+            clearImageButton.isHidden = false
+            
+            picker.dismiss(animated: true, completion: nil)
+        } else{
+            print("Something went wrong")
+        }
+    }
+}
+
+// MARK: - Keyboard handlers
+
+extension NewRecipeViewController {
+    override func keyboardWillAppear(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            if !isKeyboardDisplayed {
+                stepExtendedTextView.topConstraint.constant = 40
+                stepExtendedTextView.bottomConstraint.constant = keyboardHeight + 40
+                
+                isKeyboardDisplayed = true
+            }
+        }
+    }
+    
+    override func keyboardWillDisappear() {
+        isKeyboardDisplayed = false
+    }
+}
+
+// MARK: - Cooking Time Picker
+
+extension NewRecipeViewController: CookingTimePickerViewDelegate {
+    func didSelectTime(hours: Int, minutes: Int) {
+        cookingTimeHours = hours
+        cookingTimeMinutes = minutes
+        
+        cookingTimeButton.setTitle("\(hours) hours \(minutes) minutes", for: .normal)
+    }
+}
+
+// MARK: - Dificulty Picker
+
+extension NewRecipeViewController: DificultyPickerViewDelegate {
+    func didSelectDificulty(dificulty: String) {
+        self.dificulty = dificulty
+        
+        dificultyButton.setTitle(dificulty, for: .normal)
+    }
+}
+
+// MARK: - Last Cooked Date Picker
+
+extension NewRecipeViewController: LastCookDatePickerViewDelegate {
+    func didSelectLastCookDate(date: Date?) {
+        if let date = date {
+            let dateString = UtilsManager.shared.dateFormatter.string(from: date)
+        
+            lastCookDateString = dateString
+        
+            lastCookButton.setTitle(dateString, for: .normal)
+        } else {
+            lastCookDateString = nil
+            
+            lastCookButton.setTitle("Never Cooked", for: .normal)
+        }
+    }
+}
+
+// MARK: - Categories View
+
+extension NewRecipeViewController: CategoriesViewDelegate {
+    func didSelectCategories(categories: [RecipeCategories]) {
+        selectedCategories = categories
+        
+        configureCategoriesButton()
     }
     
     private func configureCategoriesButton() {
@@ -390,59 +402,108 @@ class NewRecipeViewController: UIViewController, CookingTimePickerViewDelegate, 
         categoriesButton.setTitle(categoriesButtonTitle, for: .normal)
         categoriesButton.titleLabel?.textAlignment = .center
     }
+}
+
+// MARK: - Ingredients View
+
+extension NewRecipeViewController: IngredientsViewDelegate {
+    func ingredientDeleted() {
+        ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant - 60.0
+    }
     
-    // MARK: - UIImagePickerController delegate
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            recipeImageView.image = image
+    private func areRecipeIngredientsValid(completion: @escaping (Bool) -> Void) {
+        ingredientsView.validateChangedIngredients { failed in
+            if failed {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Incomplete Ingredients",
+                                                                  message: "Make sure that all ingredients' details are completed")
+            } else {
+                self.ingredients = self.ingredientsView.ingredientsCopy
+            }
             
-            addRecipeImage.isHidden = true
-            
-            picker.dismiss(animated: true, completion: nil)
-        } else{
-            print("Something went wrong")
+            completion(!failed)
         }
     }
     
-    // MARK: - Cooking Time Picker View delegate
-    
-    func didSelectTime(hours: Int, minutes: Int) {
-        cookingTimeHours = hours
-        cookingTimeMinutes = minutes
+    private func createIngredientsDictionary() -> [String:Any] {
+        var ingredientsDictionary = [String:Any]()
         
-        cookingTimeButton.setTitle("\(hours) hours \(minutes) minutes", for: .normal)
+        ingredients.forEach { ingredientsDictionary["\(ingredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
+        
+        return ingredientsDictionary
     }
     
-    // MARK: - Dificulty Picker View delegate
-    
-    func didSelectDificulty(dificulty: String) {
-        self.dificulty = dificulty
+    private func ingredientsViewSetup() {
+        ingredientsView.setEditMode(editMode: true)
+        ingredientsView.delegate = self
         
-        dificultyButton.setTitle(dificulty, for: .normal)
-    }
-    
-    // MARK: - Last Cook Picker Date delegate
-    
-    func didSelectLastCookDate(date: Date?) {
-        if let date = date {
-            let dateString = UtilsManager.shared.dateFormatter.string(from: date)
-        
-            lastCookDateString = dateString
-        
-            lastCookButton.setTitle(dateString, for: .normal)
-        } else {
-            lastCookDateString = nil
+        ingredientsViewHeightConstraint.constant = 76.0
+        ingredientsViewHeightConstraint.isActive = true
             
-            lastCookButton.setTitle("Never Cooked", for: .normal)
+        ingredientsView.addIngredientButton.addTarget(self, action: #selector(addNewIngredientPressed), for: .touchUpInside)
+    }
+}
+
+// MARK: - Steps View
+
+extension NewRecipeViewController: StepsViewDelegate, StepExtendedTextViewDelegate {
+    func stepDetailsSaved(withText text: String?, atIndex index: Int) {
+        stepsView.stepsCopy[index] = text ?? ""
+            
+        stepsView.tableView.reloadData()
+    }
+    
+    func stepDeleted() {
+        stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant - 60.0
+    }
+    
+    func stepDetailFieldPressed(withText text: String?, atIndex index: Int) {
+        stepExtendedTextView = StepExtendedTextView()
+        
+        view.addSubview(stepExtendedTextView)
+        
+        stepExtendedTextView.delegate = self
+        
+        stepExtendedTextView.becomeFirstResponder()
+        stepExtendedTextView.translatesAutoresizingMaskIntoConstraints = false
+        stepExtendedTextView.stepDetailsTextView.text = text
+        stepExtendedTextView.index = index
+        
+        NSLayoutConstraint.activate([stepExtendedTextView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     stepExtendedTextView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     stepExtendedTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     stepExtendedTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
+    private func areStepsValid(completion: @escaping (Bool) -> Void) {
+        stepsView.validateChangedSteps { failed in
+            if failed {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Steps Ingredients",
+                                                                  message: "Make sure that all steps' details are completed")
+            } else {
+                self.steps = self.stepsView.stepsCopy
+            }
+            
+            completion(!failed)
         }
     }
     
-    // MARK: - Categories View delegate
-    
-    func didSelectCategories(categories: [RecipeCategories]) {
-        selectedCategories = categories
+    private func createStepsDictionary() -> [String:Any] {
+        var stepsDictionary = [String:Any]()
         
-        configureCategoriesButton()
+        steps.forEach { stepsDictionary["\(steps.firstIndex(of: $0) ?? 0)"] = $0 }
+        
+        return stepsDictionary
+    }
+    
+    private func stepsViewSetup() {
+        stepsView.setEditMode(editMode: true)
+        stepsView.delegate = self
+        
+        stepsViewHeightConstraint.constant = 76.0
+        stepsViewHeightConstraint.isActive = true
+            
+        stepsView.addStepButton.addTarget(self, action: #selector(addNewStepPressed), for: .touchUpInside)
     }
 }

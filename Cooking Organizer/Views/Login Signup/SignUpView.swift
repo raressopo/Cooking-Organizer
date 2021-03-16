@@ -11,6 +11,9 @@ import UIKit
 class SignUpView: UIView {
     @IBOutlet var contentView: UIView!
     
+    @IBOutlet weak var signUpStackViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var stackViewHeightConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var eMailTextField: UITextField!
     @IBOutlet weak var confirmEMailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
