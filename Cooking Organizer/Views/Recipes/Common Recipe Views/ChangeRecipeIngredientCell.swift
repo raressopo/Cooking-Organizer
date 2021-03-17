@@ -9,12 +9,19 @@
 import UIKit
 import SearchTextField
 
+protocol ChangeRecipeIngredientCellDelegate: class {
+    func ingredientTextFieldSelected(withIndex index: Int)
+}
+
 class ChangeRecipeIngredientCell: UITableViewCell {
     @IBOutlet weak var ingredientNameTextField: SearchTextField!
     @IBOutlet weak var quantityTextField: UITextField!
     @IBOutlet weak var unitButton: UIButton!
     
+    weak var delegate: ChangeRecipeIngredientCellDelegate?
+    
     var ingredient: NewRecipeIngredient?
+    var index: Int = -1
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,6 +42,10 @@ extension ChangeRecipeIngredientCell: UITextFieldDelegate {
         } else {
             ingredient?.quantity = quantityTextField.text
         }
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.ingredientTextFieldSelected(withIndex: index)
     }
 }
 

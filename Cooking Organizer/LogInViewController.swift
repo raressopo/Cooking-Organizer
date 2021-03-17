@@ -144,7 +144,7 @@ class LogInViewController: UIViewController {
         }
     }
     
-    override func keyboardWillDisappear() {
+    override func keyboardWillDisappear(_ notification: Notification) {
         signUpView.signUpStackViewTopConstraint.constant = (view.frame.height - signUpView.stackViewHeightConstraint.constant) / 2
         
         isKeyboardDisplayed = false

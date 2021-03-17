@@ -10,6 +10,11 @@ import UIKit
 
 protocol IngredientsViewDelegate: class {
     func ingredientDeleted()
+    func ingredientTextFieldSelected(withIndex index: Int)
+}
+
+extension IngredientsViewDelegate {
+    func ingredientTextFieldSelected(withIndex index: Int) {}
 }
 
 class IngredientsView: UIView {
@@ -205,6 +210,8 @@ extension IngredientsView: UITableViewDelegate, UITableViewDataSource {
             }
             
             cell.ingredient = ingredient
+            cell.index = indexPath.row
+            cell.delegate = self
             
             cell.ingredientNameTextField.text = ingredient.name
             cell.quantityTextField.text = ingredient.quantity
@@ -253,5 +260,11 @@ extension IngredientsView: UITableViewDelegate, UITableViewDataSource {
             
             tableView.reloadData()
         }
+    }
+}
+
+extension IngredientsView: ChangeRecipeIngredientCellDelegate {
+    func ingredientTextFieldSelected(withIndex index: Int) {
+        delegate?.ingredientTextFieldSelected(withIndex: index)
     }
 }

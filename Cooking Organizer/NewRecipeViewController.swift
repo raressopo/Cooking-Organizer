@@ -57,7 +57,9 @@ class NewRecipeViewController: UIViewController,
     
     var isKeyboardDisplayed = false
     var stepExtendedTextView = StepExtendedTextView()
+    var selectedIngredientIndex = -1
     
+    @IBOutlet var scrollView: UIScrollView!
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -312,7 +314,22 @@ class NewRecipeViewController: UIViewController,
 
 extension NewRecipeViewController {
     override func keyboardWillAppear(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+        if selectedIngredientIndex >= 0 {
+            scrollView.isScrollEnabled = true
+            let info = notification.userInfo!
+            let keyboardSize = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.size
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize!.height - 40, right: 0.0)
+            
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+            
+            var aRect = self.view.frame
+            aRect.size.height -= keyboardSize!.height
+            
+            if !aRect.contains(CGPoint(x: 8, y: 288 + (selectedIngredientIndex + 1) * 60)) {
+                scrollView.scrollRectToVisible(CGRect(x: 8, y: 288 + (selectedIngredientIndex + 1) * 60, width: 374, height: 60), animated: true)
+            }
+        } else if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
@@ -325,8 +342,14 @@ extension NewRecipeViewController {
         }
     }
     
-    override func keyboardWillDisappear() {
+    override func keyboardWillDisappear(_ notification: Notification) {
+        let contentInsets = UIEdgeInsets.zero
+        
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        
         isKeyboardDisplayed = false
+        selectedIngredientIndex = -1
     }
 }
 
@@ -409,6 +432,10 @@ extension NewRecipeViewController: CategoriesViewDelegate {
 extension NewRecipeViewController: IngredientsViewDelegate {
     func ingredientDeleted() {
         ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant - 60.0
+    }
+    
+    func ingredientTextFieldSelected(withIndex index: Int) {
+        selectedIngredientIndex = index
     }
     
     private func areRecipeIngredientsValid(completion: @escaping (Bool) -> Void) {

@@ -25,5 +25,5 @@ extension UIViewController {
     }
     
     @objc func keyboardWillAppear(_ notification: Notification) {}
-    @objc func keyboardWillDisappear() {}
+    @objc func keyboardWillDisappear(_ notification: Notification) {}
 }

@@ -502,6 +502,7 @@
                         <outlet property="portionsTextField" destination="icy-Jz-rh4" id="xVX-aP-01F"/>
                         <outlet property="recipeImageView" destination="vnw-lW-gsh" id="OvK-T1-uB7"/>
                         <outlet property="recipeNameTextField" destination="BOu-jW-rei" id="e1W-5f-bmI"/>
+                        <outlet property="scrollView" destination="tQK-ZS-CDd" id="den-t2-Kf8"/>
                         <outlet property="stepsStackView" destination="YhY-BX-L6n" id="l5j-NI-Fko"/>
                         <outlet property="stepsView" destination="5R6-3P-eVZ" id="SuO-Q2-8bP"/>
                         <outlet property="stepsViewHeightConstraint" destination="UOA-sP-kF0" id="bCN-Uo-wn0"/>
