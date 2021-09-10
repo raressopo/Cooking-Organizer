@@ -9,18 +9,18 @@
 import Foundation
 
 enum Units: String, CaseIterable {
-    case tsp = "tsp"
-    case tbsp = "tbsp"
-    case cup = "cup"
-    case cups = "cups"
-    case ml = "ml"
-    case L = "L"
-    case lb = "lb"
-    case oz = "oz"
-    case mg = "mg"
-    case g = "g"
-    case kg = "kg"
-    case pcs = "pcs"
+    case tsp
+    case tbsp
+    case cup
+    case cups
+    case ml
+    case liters = "L"
+    case lb
+    case oz
+    case mg
+    case grams = "g"
+    case kg
+    case pcs
 }
 
 class UnitManager {

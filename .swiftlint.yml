@@ -1,0 +1,64 @@
+disabled_rules:
+ - trailing_whitespace
+ - implicit_getter
+
+excluded:
+ - Pods 
+  
+force_try: error
+force_cast: error
+
+# Remove it after refactoring
+shorthand_operator: warning
+
+# Needs to be updated after refactoring to something like error: 300
+line_length:
+  warning: 500
+  error: 1400
+
+# Needs to be updated after refactoring (error: 500)
+type_body_length:
+  warning: 500
+  error: 2000
+
+# Needs to be updated after refactoring (error: 500)
+file_length:
+  warning: 1000
+  error: 2200
+
+function_parameter_count:
+  warning: 15
+  error: 20
+
+# Needs to be updated after refactoring
+function_body_length:
+  warning: 300
+  error: 500
+
+type_name:
+  max_length: 70
+
+colon:
+  apply_to_dictionaries: false
+
+identifier_name:
+ allowed_symbols: "_"
+ min_length: 2
+ max_length: 70
+#variable_name:
+ excluded:
+   # Needed for cycles
+   - i
+   - os
+   - id
+   - at
+   - on
+
+# Needs to be updated / removed to use something like the default after refactoring
+cyclomatic_complexity:
+  ignores_case_statements: true
+  warning: 30
+  error: 40
+
+# statement_position:
+   # statement_mode: uncuddled_else

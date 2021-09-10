@@ -47,37 +47,37 @@ struct BaseIngredients: Codable {
     
     func ingredientCategoryWith(customIngredient ingredientName: String) -> IngredientCategories? {
         if dairy.contains(ingredientName) {
-            return .Dairy
+            return .dairy
         } else if vegetables.contains(ingredientName) {
-            return .Vegetables
+            return .vegetables
         } else if fruits.contains(ingredientName) {
-            return .Fruits
+            return .fruits
         } else if bakingAndGrains.contains(ingredientName) {
-            return .BakingAndGrains
-        }  else if spices.contains(ingredientName) {
-            return .Spices
+            return .bakingAndGrains
+        } else if spices.contains(ingredientName) {
+            return .spices
         } else if meat.contains(ingredientName) {
-            return .Meat
+            return .meat
         } else if fishAndSeafood.contains(ingredientName) {
-            return .FishAndSeafood
+            return .fishAndSeafood
         } else if condiments.contains(ingredientName) {
-            return .Condiments
+            return .condiments
         } else if oils.contains(ingredientName) {
-            return .Oils
+            return .oils
         } else if seasonings.contains(ingredientName) {
-            return .Seasonings
+            return .seasonings
         } else if sauces.contains(ingredientName) {
-            return .Sauces
+            return .sauces
         } else if legumes.contains(ingredientName) {
-            return .Legumes
+            return .legumes
         } else if alcohol.contains(ingredientName) {
-            return .Alcohol
+            return .alcohol
         } else if nuts.contains(ingredientName) {
-            return .Nuts
+            return .nuts
         } else if dessertAndSnacks.contains(ingredientName) {
-            return .DessetAndSnacks
+            return .dessetAndSnacks
         } else if beverages.contains(ingredientName) {
-            return .Beverages
+            return .beverages
         } else {
             return nil
         }

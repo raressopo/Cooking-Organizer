@@ -64,12 +64,10 @@ class StepsView: UIView {
     }
     
     func validateChangedSteps(validationFailed completion: @escaping (Bool) -> Void) {
-        for step in stepsCopy {
-            if step.isEmpty {
-                completion(true)
-                
-                return
-            }
+        for step in stepsCopy where step.isEmpty {
+            completion(true)
+            
+            return
         }
         
         completion(false)
@@ -79,10 +77,8 @@ class StepsView: UIView {
         if steps != stepsCopy {
             return true
         } else {
-            for index in steps.indices {
-                if steps[index] != stepsCopy[index] {
-                    return true
-                }
+            for index in steps.indices where steps[index] != stepsCopy[index] {
+                return true
             }
         }
         
@@ -176,7 +172,9 @@ extension StepsView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView.isEditing {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "changeStepCell") as! ChangeRecipeStepCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "changeStepCell") as? ChangeRecipeStepCell else {
+                fatalError("cell should be ChangeRecipeStepCell type")
+            }
             
             cell.index = indexPath.row
             
@@ -189,7 +187,9 @@ extension StepsView: UITableViewDelegate, UITableViewDataSource {
             
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "stepCell") as! RecipeStepCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "stepCell") as? RecipeStepCell else {
+                fatalError("cell should be RecipeStepCell type")
+            }
             
             cell.stepNrLabel.text = "\(indexPath.row + 1)"
             cell.stepDetailsTextView.text = steps[indexPath.row]

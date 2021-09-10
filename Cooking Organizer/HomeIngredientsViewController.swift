@@ -74,7 +74,9 @@ class HomeIngredientsViewController: UIViewController {
     }
     
     @IBAction func filterPressed(_ sender: Any) {
-        let filterView = HomeIngredientsFilterView(withCriterias: [.Availability, .Category], filterParams: filterParams, andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        let filterView = HomeIngredientsFilterView(withCriterias: [.availability, .category],
+                                                   filterParams: filterParams,
+                                                   andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         view.addSubview(filterView)
         
@@ -133,15 +135,14 @@ class HomeIngredientsViewController: UIViewController {
                         if let recipeIngredientQuantity = recipeIngredient.quantityAsDouble,
                            let homeIngredientQuantity = homeIngredient.quantity,
                            recipeIngredient.name == homeIngredient.name,
-                           recipeIngredientQuantity <= homeIngredientQuantity
-                        {
+                           recipeIngredientQuantity <= homeIngredientQuantity {
                             ingredientsCount += 1
                         }
                     }
                 }
             }
             
-            if ((ingredientsCount == recipe.ingredients?.count || ingredientsCount == (recipe.ingredients?.count ?? 0) - 1) && ingredientsCount > 0) {
+            if (ingredientsCount == recipe.ingredients?.count || ingredientsCount == (recipe.ingredients?.count ?? 0) - 1) && ingredientsCount > 0 {
                 generatedRecipes.append(GeneratedRecipe(id:recipe.id,
                                                         name: recipe.name,
                                                         totalIngredients: recipe.ingredients?.count ?? 0,
@@ -306,25 +307,25 @@ class HomeIngredientsViewController: UIViewController {
         
         ingredients.sort(by: { (ingredient1, ingredient2) -> Bool in
             switch option {
-            case .NameAscending:
+            case .nameAscending:
                 if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
                     return ingredient1Name.compare(ingredient2Name) == .orderedAscending
                 } else {
                     return false
                 }
-            case .NameDescending:
+            case .nameDescending:
                 if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
                     return ingredient1Name.compare(ingredient2Name) == .orderedDescending
                 } else {
                     return false
                 }
-            case .ExpirationDateAscending:
+            case .expirationDateAscending:
                 if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
                     return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedAscending
                 } else {
                     return false
                 }
-            case .ExpirationDateDescending:
+            case .expirationDateDescending:
                 if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
                     return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedDescending
                 } else {
@@ -360,7 +361,11 @@ class HomeIngredientsViewController: UIViewController {
             
             return
         } else {
-            sortView = SortView(withButtons: [.NameAscending, .NameDescending, .ExpirationDateAscending, .ExpirationDateDescending], andFrame: CGRect(x: 0, y: 0, width: 250, height: 140))
+            sortView = SortView(withButtons: [.nameAscending,
+                                              .nameDescending,
+                                              .expirationDateAscending,
+                                              .expirationDateDescending],
+                                andFrame: CGRect(x: 0, y: 0, width: 250, height: 140))
             
             if let sortView = sortView {
                 sortView.selectedSortOption = { sortOption in
@@ -422,7 +427,9 @@ extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "homeIngredientCell", for: indexPath) as! HomeIngredientTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "homeIngredientCell", for: indexPath) as? HomeIngredientTableViewCell else {
+            fatalError("cell should be HomeIngredientTableViewCell type")
+        }
         
         let homeIngredient = filteredHomeIngredients?[indexPath.row] ?? homeIngredients[indexPath.row]
         
@@ -460,7 +467,7 @@ extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSou
         if editingStyle == .delete {
             deletedHomeIngredientsIds.append(filteredHomeIngredients?[indexPath.row].id ?? homeIngredients[indexPath.row].id)
             
-            if let _ = filteredHomeIngredients {
+            if filteredHomeIngredients != nil {
                 filteredHomeIngredients?.remove(at: indexPath.row)
             } else {
                 homeIngredients.remove(at: indexPath.row)

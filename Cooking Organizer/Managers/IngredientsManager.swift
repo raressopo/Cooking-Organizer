@@ -32,8 +32,7 @@ class IngredientsManager {
                 bIngredients.dessertAndSnacks +
                 bIngredients.beverages
                 
-            
-            result = result + allBaseProducts
+            result += allBaseProducts
         }
         
         let allCustomIngredients = (customIngredients.dairy ?? [String]()) +
@@ -53,7 +52,7 @@ class IngredientsManager {
             (customIngredients.dessertAndSnacks ?? [String]()) +
             (customIngredients.beverages ?? [String]())
         
-        result = result + allCustomIngredients
+        result += allCustomIngredients
         
         return result
     }
@@ -107,67 +106,67 @@ class IngredientsManager {
     
     func addNewCustomIngredients(customIngredient: String, inCategory category: IngredientCategories) {
         switch category {
-        case .Dairy:
+        case .dairy:
             customIngredients.dairy = customIngredients.dairy ?? [String]()
             
             customIngredients.dairy?.append(customIngredient)
-        case .Vegetables:
+        case .vegetables:
             customIngredients.vegetables = customIngredients.vegetables ?? [String]()
             
             customIngredients.vegetables?.append(customIngredient)
-        case .Fruits:
+        case .fruits:
             customIngredients.fruits = customIngredients.fruits ?? [String]()
             
             customIngredients.fruits?.append(customIngredient)
-        case .BakingAndGrains:
+        case .bakingAndGrains:
             customIngredients.bakingAndGrains = customIngredients.bakingAndGrains ?? [String]()
             
             customIngredients.bakingAndGrains?.append(customIngredient)
-        case .Spices:
+        case .spices:
             customIngredients.spices = customIngredients.spices ?? [String]()
             
             customIngredients.spices?.append(customIngredient)
-        case .Meat:
+        case .meat:
             customIngredients.meat = customIngredients.meat ?? [String]()
             
             customIngredients.meat?.append(customIngredient)
-        case .FishAndSeafood:
+        case .fishAndSeafood:
             customIngredients.fishAndSeafood = customIngredients.fishAndSeafood ?? [String]()
             
             customIngredients.fishAndSeafood?.append(customIngredient)
-        case .Condiments:
+        case .condiments:
             customIngredients.condiments = customIngredients.condiments ?? [String]()
             
             customIngredients.condiments?.append(customIngredient)
-        case .Oils:
+        case .oils:
             customIngredients.oils = customIngredients.oils ?? [String]()
             
             customIngredients.oils?.append(customIngredient)
-        case .Seasonings:
+        case .seasonings:
             customIngredients.seasonings = customIngredients.seasonings ?? [String]()
             
             customIngredients.seasonings?.append(customIngredient)
-        case .Sauces:
+        case .sauces:
             customIngredients.spices = customIngredients.spices ?? [String]()
             
             customIngredients.sauces?.append(customIngredient)
-        case .Legumes:
+        case .legumes:
             customIngredients.legumes = customIngredients.legumes ?? [String]()
             
             customIngredients.legumes?.append(customIngredient)
-        case .Alcohol:
+        case .alcohol:
             customIngredients.alcohol = customIngredients.alcohol ?? [String]()
             
             customIngredients.alcohol?.append(customIngredient)
-        case .Nuts:
+        case .nuts:
             customIngredients.nuts = customIngredients.nuts ?? [String]()
             
             customIngredients.nuts?.append(customIngredient)
-        case .DessetAndSnacks:
+        case .dessetAndSnacks:
             customIngredients.dessertAndSnacks = customIngredients.dessertAndSnacks ?? [String]()
             
             customIngredients.dessertAndSnacks?.append(customIngredient)
-        case .Beverages:
+        case .beverages:
             customIngredients.beverages = customIngredients.beverages ?? [String]()
             
             customIngredients.beverages?.append(customIngredient)

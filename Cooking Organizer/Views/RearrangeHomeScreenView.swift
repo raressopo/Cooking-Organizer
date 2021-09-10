@@ -9,20 +9,20 @@
 import UIKit
 
 enum HomeScreenCells: CaseIterable {
-    case HomeIngredients
-    case Cookbook
-    case CookingCalendar
-    case ShoppingList
+    case homeIngredients
+    case cookbook
+    case cookingCalendar
+    case shoppingList
     
     var cellName: String {
         switch self {
-        case .HomeIngredients:
+        case .homeIngredients:
             return "Home Ingredients"
-        case .Cookbook:
+        case .cookbook:
             return "Cookbook"
-        case .CookingCalendar:
+        case .cookingCalendar:
             return "Cooking Calendar"
-        case .ShoppingList:
+        case .shoppingList:
             return "Shopping List"
         }
     }
@@ -33,10 +33,10 @@ class RearrangeHomeScreenView: UIView {
     
     @IBOutlet weak var homeScreenCellsTableView: UITableView!
     
-    var homeScreenCellsOrder = [HomeScreenCells.HomeIngredients,
-                                HomeScreenCells.Cookbook,
-                                HomeScreenCells.CookingCalendar,
-                                HomeScreenCells.ShoppingList]
+    var homeScreenCellsOrder = [HomeScreenCells.homeIngredients,
+                                HomeScreenCells.cookbook,
+                                HomeScreenCells.cookingCalendar,
+                                HomeScreenCells.shoppingList]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,27 +68,27 @@ class RearrangeHomeScreenView: UIView {
         var results = [HomeScreenCells]()
         
         if let savedOrder = UserDefaults.standard.object(forKey: "savedHomeScreenCellsOrder") as? [String] {
-            results = savedOrder.map( {
+            results = savedOrder.map {
                 switch $0 {
-                case HomeScreenCells.HomeIngredients.cellName:
-                    return .HomeIngredients
-                case HomeScreenCells.Cookbook.cellName:
-                    return .Cookbook
-                case HomeScreenCells.CookingCalendar.cellName:
-                    return .CookingCalendar
-                case HomeScreenCells.ShoppingList.cellName:
-                    return .ShoppingList
+                case HomeScreenCells.homeIngredients.cellName:
+                    return .homeIngredients
+                case HomeScreenCells.cookbook.cellName:
+                    return .cookbook
+                case HomeScreenCells.cookingCalendar.cellName:
+                    return .cookingCalendar
+                case HomeScreenCells.shoppingList.cellName:
+                    return .shoppingList
                 default:
-                    return .HomeIngredients
+                    return .homeIngredients
                 }
-            })
+            }
             
             return results
         } else {
-            return [HomeScreenCells.HomeIngredients,
-                    HomeScreenCells.Cookbook,
-                    HomeScreenCells.CookingCalendar,
-                    HomeScreenCells.ShoppingList]
+            return [HomeScreenCells.homeIngredients,
+                    HomeScreenCells.cookbook,
+                    HomeScreenCells.cookingCalendar,
+                    HomeScreenCells.shoppingList]
         }
     }
     
@@ -101,7 +101,7 @@ class RearrangeHomeScreenView: UIView {
     }
     
     @IBAction func savePressed(_ sender: Any) {
-        UserDefaults.standard.setValue(homeScreenCellsOrder.map( {$0.cellName} ), forKey: "savedHomeScreenCellsOrder")
+        UserDefaults.standard.setValue(homeScreenCellsOrder.map { $0.cellName }, forKey: "savedHomeScreenCellsOrder")
         
         removeFromSuperview()
     }

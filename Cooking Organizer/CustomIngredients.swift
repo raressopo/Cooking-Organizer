@@ -28,37 +28,37 @@ class CustomIngredients: Codable {
     
     func ingredientCategoryWith(customIngredient ingredientName: String) -> IngredientCategories? {
         if let dairy = dairy, dairy.contains(ingredientName) {
-            return .Dairy
+            return .dairy
         } else if let vegetables = vegetables, vegetables.contains(ingredientName) {
-            return .Vegetables
+            return .vegetables
         } else if let fruits = fruits, fruits.contains(ingredientName) {
-            return .Fruits
+            return .fruits
         } else if let bakingAndGrains = bakingAndGrains, bakingAndGrains.contains(ingredientName) {
-            return .BakingAndGrains
-        }  else if let spices = spices, spices.contains(ingredientName) {
-            return .Spices
+            return .bakingAndGrains
+        } else if let spices = spices, spices.contains(ingredientName) {
+            return .spices
         } else if let meat = meat, meat.contains(ingredientName) {
-            return .Meat
+            return .meat
         } else if let fishAndSeafood = fishAndSeafood, fishAndSeafood.contains(ingredientName) {
-            return .FishAndSeafood
+            return .fishAndSeafood
         } else if let condiments = condiments, condiments.contains(ingredientName) {
-            return .Condiments
+            return .condiments
         } else if let oils = oils, oils.contains(ingredientName) {
-            return .Oils
+            return .oils
         } else if let seasonings = seasonings, seasonings.contains(ingredientName) {
-            return .Seasonings
+            return .seasonings
         } else if let sauces = sauces, sauces.contains(ingredientName) {
-            return .Sauces
+            return .sauces
         } else if let legumes = legumes, legumes.contains(ingredientName) {
-            return .Legumes
+            return .legumes
         } else if let alcohol = alcohol, alcohol.contains(ingredientName) {
-            return .Alcohol
+            return .alcohol
         } else if let nuts = nuts, nuts.contains(ingredientName) {
-            return .Nuts
+            return .nuts
         } else if let dessertAndSnacks = dessertAndSnacks, dessertAndSnacks.contains(ingredientName) {
-            return .DessetAndSnacks
+            return .dessetAndSnacks
         } else if let beverages = beverages, beverages.contains(ingredientName) {
-            return .Beverages
+            return .beverages
         } else {
             return nil
         }

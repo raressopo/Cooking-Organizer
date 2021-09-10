@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CookingDatesViewDelegate: class {
+protocol CookingDatesViewDelegate: AnyObject {
     func cokingDatesChanged(withDates dates: [String])
 }
 
@@ -85,7 +85,7 @@ class CookingDatesView: UIView {
             
             datesTableView.setEditing(true, animated: true)
             
-            datesCopy = dates.map( {$0} )
+            datesCopy = dates.map { $0 } 
             
             setupAddDateButton()
             

@@ -17,9 +17,8 @@ class ShoppingListViewController: UIViewController {
     var items: [ShoppingListItem]? {
         if let selectedList = selectedShoppingList,
            let userList = UsersManager.shared.currentLoggedInUser?.shoppingListsArray,
-           let existingList = userList.first(where: {$0.name == selectedList.name})
-        {
-            return existingList.itemsArray?.sorted(by: {!$0.bought && $1.bought}) ?? nil
+           let existingList = userList.first(where: {$0.name == selectedList.name}) {
+            return existingList.itemsArray?.sorted(by: { !$0.bought && $1.bought }) ?? nil
         } else {
             return nil
         }
@@ -46,7 +45,8 @@ class ShoppingListViewController: UIViewController {
     }
     
     @IBAction func addPressed(_ sender: Any) {
-        let addListItemView = AddShoppingListItemView(shoppingList: selectedShoppingList,frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        let addListItemView = AddShoppingListItemView(shoppingList: selectedShoppingList,
+                                                      frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         addListItemView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -128,9 +128,13 @@ extension ShoppingListViewController: UITableViewDelegate, UITableViewDataSource
         cell.checkbox.isChecked = item?.bought ?? false
         cell.boughtView.isHidden = !cell.checkbox.isChecked
         
-        cell.checkbox.valueChanged = { (isChecked) in
+        cell.checkbox.valueChanged = { _ in
             if let listName = self.selectedShoppingList?.name, let itemName = item?.name, let bought = item?.bought {
-                UserDataManager.shared.markShoppingListAsBought(fromList: listName, forItem: itemName, bought: !bought, success: {}, failure: {})
+                UserDataManager.shared.markShoppingListAsBought(fromList: listName,
+                                                                forItem: itemName,
+                                                                bought: !bought,
+                                                                success: {},
+                                                                failure: {})
             }
         }
         

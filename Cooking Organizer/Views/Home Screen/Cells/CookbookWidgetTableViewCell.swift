@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CookbookWidgetTableViewCellDelegate: class {
+protocol CookbookWidgetTableViewCellDelegate: AnyObject {
     func recipePressed(withRecipe recipe: Recipe)
 }
 

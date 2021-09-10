@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol StepExtendedTextViewDelegate: class {
+protocol StepExtendedTextViewDelegate: AnyObject {
     func stepDetailsSaved(withText text: String?, atIndex index: Int)
 }
 

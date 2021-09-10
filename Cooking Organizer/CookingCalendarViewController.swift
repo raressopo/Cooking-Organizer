@@ -47,7 +47,7 @@ class CookingCalendarViewController: UIViewController {
     
     private func populateAllRecipes() {
         if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
-            allRecipes = userRecipes.map( {CookingCalendarRecipe(name: $0.name ?? "", id: $0.id, cookingDates: $0.cookingDates ?? [])} )
+            allRecipes = userRecipes.map { CookingCalendarRecipe(name: $0.name ?? "", id: $0.id, cookingDates: $0.cookingDates ?? []) }
         }
     }
     
@@ -267,7 +267,7 @@ extension CookingCalendarViewController: UITableViewDelegate, UITableViewDataSou
             }
             
             if allRecipes[index].cookingDates.containsSameElements(as: allRecipesCopy[index].cookingDates) {
-                if let changedRecipeIdIndex = changedRecipesCookingDatesIds.firstIndex( where: {$0 == filteredRecipes[indexPath.row].id} ) {
+                if let changedRecipeIdIndex = changedRecipesCookingDatesIds.firstIndex(where: { $0 == filteredRecipes[indexPath.row].id }) {
                     changedRecipesCookingDatesIds.remove(at: changedRecipeIdIndex)
                 }
             }
@@ -317,7 +317,6 @@ extension CookingCalendarViewController: UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    
 }
 
 // MARK: - User Data Manager Delegate
@@ -349,7 +348,7 @@ extension CookingCalendarViewController: RecipesTableViewDelegate {
         }
         
         if allRecipes[index].cookingDates.containsSameElements(as: allRecipesCopy[index].cookingDates) {
-            if let changedRecipeIdIndex = changedRecipesCookingDatesIds.firstIndex( where: {$0 == recipe.id} ) {
+            if let changedRecipeIdIndex = changedRecipesCookingDatesIds.firstIndex(where: { $0 == recipe.id }) {
                 changedRecipesCookingDatesIds.remove(at: changedRecipeIdIndex)
             }
         }

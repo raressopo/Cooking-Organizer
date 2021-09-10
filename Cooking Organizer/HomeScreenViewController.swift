@@ -10,38 +10,38 @@ import UIKit
 import Firebase
 
 enum MenuItems: CaseIterable {
-    case HomeIngredients
-    case Cookbook
-    case CookingCalendar
-    case ShoppingList
-    case Settings
+    case homeIngredients
+    case cookbook
+    case cookingCalendar
+    case shoppingList
+    case settings
     
     var index: Int {
         switch self {
-        case .HomeIngredients:
+        case .homeIngredients:
             return 0
-        case .Cookbook:
+        case .cookbook:
             return 1
-        case .CookingCalendar:
+        case .cookingCalendar:
             return 2
-        case .ShoppingList:
+        case .shoppingList:
             return 3
-        case .Settings:
+        case .settings:
             return 4
         }
     }
     
     var string: String {
         switch self {
-        case .HomeIngredients:
+        case .homeIngredients:
             return "Home Ingredients"
-        case .Cookbook:
+        case .cookbook:
             return "Cookbook"
-        case .CookingCalendar:
+        case .cookingCalendar:
             return "Cooking Calendar"
-        case .ShoppingList:
+        case .shoppingList:
             return "Shopping List"
-        case .Settings:
+        case .settings:
             return "Settings"
         }
     }
@@ -69,7 +69,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let user = UsersManager.shared.currentLoggedInUser  {
+        if let user = UsersManager.shared.currentLoggedInUser {
             signUpDateLabel.text = user.data.signUpDate
         }
         
@@ -114,9 +114,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "homeIngredients", let hi = widgetHomeIngredient {
-            let destinationVC = segue.destination as! HomeIngredientsViewController
-            
+        if segue.identifier == "homeIngredients", let hi = widgetHomeIngredient, let destinationVC = segue.destination as? HomeIngredientsViewController {
             destinationVC.widgetHomeIngredient = hi
         } else if segue.identifier == "recipeDetailsSegue", let recipe = selectedRecipe, let destinationVC = segue.destination as? RecipeDetailsViewController {
             destinationVC.recipe = recipe
@@ -184,11 +182,13 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             var savedOrder = RearrangeHomeScreenView.getSavedHomeScreenOrder()
             
             if savedOrder.isEmpty {
-                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar, .ShoppingList]
+                savedOrder = [.homeIngredients, .cookbook, .cookingCalendar, .shoppingList]
             }
             
-            if indexPath.row == savedOrder.firstIndex(of: .HomeIngredients) ?? 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "hiWidgetCell") as! HIWidgetTableViewCell
+            if indexPath.row == savedOrder.firstIndex(of: .homeIngredients) ?? 0 {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "hiWidgetCell") as? HIWidgetTableViewCell else {
+                    fatalError("cell should be HIWidgetTableViewCell type")
+                }
                 
                 cell.selectionStyle = .none
                 
@@ -196,8 +196,10 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.HIWidgetTableView.reloadData()
                 
                 return cell
-            } else if indexPath.row == savedOrder.firstIndex(of: .Cookbook) ?? 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cookbookWidgetCell") as! CookbookWidgetTableViewCell
+            } else if indexPath.row == savedOrder.firstIndex(of: .cookbook) ?? 0 {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "cookbookWidgetCell") as? CookbookWidgetTableViewCell else {
+                    fatalError("cell should be CookbookWidgetTableViewCell type")
+                }
                 
                 cell.selectionStyle = .none
                 
@@ -205,7 +207,7 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.recipesTableView.reloadData()
                 
                 return cell
-            } else if indexPath.row == savedOrder.firstIndex(of: .CookingCalendar) ?? 0 {
+            } else if indexPath.row == savedOrder.firstIndex(of: .cookingCalendar) ?? 0 {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cookingCalendarCell") as? CookingCalendarWidgetTableViewCell else {
                     fatalError("Cell type is not CookingCalendarWidgetTableViewCell")
                 }
@@ -218,7 +220,9 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "shoppingListWidgetCell") as! ShoppingListWidgetTableViewCell
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "shoppingListWidgetCell") as? ShoppingListWidgetTableViewCell else {
+                    fatalError("cell should be ShoppingListWidgetTableViewCell type")
+                }
                 
                 cell.selectionStyle = .none
                 
@@ -239,23 +243,23 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == menuTableView {
             switch indexPath.row {
-            case MenuItems.HomeIngredients.index:
+            case MenuItems.homeIngredients.index:
                 performSegue(withIdentifier: "homeIngredients", sender: self)
                 
                 return
-            case MenuItems.Cookbook.index:
+            case MenuItems.cookbook.index:
                 performSegue(withIdentifier: "cookbookSegue", sender: self)
                 
                 return
-            case MenuItems.CookingCalendar.index:
+            case MenuItems.cookingCalendar.index:
                 performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
                 
                 return
-            case MenuItems.ShoppingList.index:
+            case MenuItems.shoppingList.index:
                 performSegue(withIdentifier: "shoppingListSegue", sender: self)
                 
                 return
-            case MenuItems.Settings.index:
+            case MenuItems.settings.index:
                 performSegue(withIdentifier: "settingsSegue", sender: self)
                 
                 return
@@ -270,10 +274,13 @@ class HomeScreenViewController: UIViewController, UITableViewDelegate, UITableVi
             var savedOrder = RearrangeHomeScreenView.getSavedHomeScreenOrder()
             
             if savedOrder.isEmpty {
-                savedOrder = [.HomeIngredients, .Cookbook, .CookingCalendar, .ShoppingList]
+                savedOrder = [.homeIngredients,
+                              .cookbook,
+                              .cookingCalendar,
+                              .shoppingList]
             }
             
-            if indexPath.row == savedOrder.firstIndex(of: .CookingCalendar) ?? 2 {
+            if indexPath.row == savedOrder.firstIndex(of: .cookingCalendar) ?? 2 {
                 return 200
             } else {
                 return 300

@@ -55,7 +55,9 @@ class CookbookViewController: UIViewController {
     }
     
     @IBAction func filterPressed(_ sender: Any) {
-        let filterView = RecipesFilterView(withParams: filterParams, criterias: [.RecipeCategory, .CookingDate, .CookingTime, .Portions, .Difficulty], andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        let filterView = RecipesFilterView(withParams: filterParams,
+                                           criterias: [.recipeCategory, .cookingDate, .cookingTime, .portions, .difficulty],
+                                           andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         view.addSubview(filterView)
         
@@ -127,60 +129,46 @@ class CookbookViewController: UIViewController {
                 let filteringRecipes = filteredRecipes ?? userRecipes
                 
                 switch lastCookingDateString {
-                case .Never:
+                case .never:
                     filteredRecipes = filteringRecipes.filter({ recipe -> Bool in
                         return recipe.cookingDates == nil
                     })
-                    
-                    break
-                case .OneWeek:
+                case .oneWeek:
                     filteredRecipes = filteringRecipes.filter({ recipe -> Bool in
                         var result = false
                         
                         if let oneWeekAgoDate = Calendar.current.date(byAdding: .day, value: -7, to: Date()) {
-                            for date in recipe.cookingDatesAsDates {
-                                if !result {
-                                    result = UtilsManager.isSelectedDate(selectedDate: date, inFutureOrInPresentToGivenDate: oneWeekAgoDate)
-                                }
+                            for date in recipe.cookingDatesAsDates where !result {
+                                result = UtilsManager.isSelectedDate(selectedDate: date, inFutureOrInPresentToGivenDate: oneWeekAgoDate)
                             }
                         }
                         
                         return result
                     })
-                    
-                    break
-                case .TwoWeeks:
+                case .twoWeeks:
                     filteredRecipes = filteringRecipes.filter({ recipe -> Bool in
                         var result = false
                         
                         if let twoWeeksAgoDate = Calendar.current.date(byAdding: .day, value: -14, to: Date()) {
-                            for date in recipe.cookingDatesAsDates {
-                                if !result {
-                                    result = UtilsManager.isSelectedDate(selectedDate: date, inFutureOrInPresentToGivenDate: twoWeeksAgoDate)
-                                }
+                            for date in recipe.cookingDatesAsDates where !result {
+                                result = UtilsManager.isSelectedDate(selectedDate: date, inFutureOrInPresentToGivenDate: twoWeeksAgoDate)
                             }
                         }
                         
                         return result
                     })
-                    
-                    break
-                case .OneMonthPlus:
+                case .oneMonthPlus:
                     filteredRecipes = filteringRecipes.filter({ recipe -> Bool in
                         var result = false
                         
                         if let oneMonthAgoDate = Calendar.current.date(byAdding: .month, value: -1, to: Date()) {
-                            for date in recipe.cookingDatesAsDates {
-                                if !result {
-                                    result = UtilsManager.isSelectedDate(selectedDate: date, inFutureOrInPresentToGivenDate: oneMonthAgoDate)
-                                }
+                            for date in recipe.cookingDatesAsDates where !result {
+                                result = UtilsManager.isSelectedDate(selectedDate: date, inFutureOrInPresentToGivenDate: oneMonthAgoDate)
                             }
                         }
                         
                         return result
                     })
-                    
-                    break
                 }
             }
             
@@ -237,45 +225,45 @@ class CookbookViewController: UIViewController {
         
         sortedRecipes.sort(by: { (r1, r2) -> Bool in
             switch option {
-            case .RecipeNameAscending:
+            case .recipeNameAscending:
                 if let r1Name = r1.name, let r2Name = r2.name {
                     return r1Name.compare(r2Name) == .orderedAscending
                 } else {
                     return false
                 }
-            case .RecipeNameDescending:
+            case .recipeNameDescending:
                 if let r1Name = r1.name, let r2Name = r2.name {
                     return r1Name.compare(r2Name) == .orderedDescending
                 } else {
                     return false
                 }
-            case .CookingTimeAscending:
+            case .cookingTimeAscending:
                 return r1.cookingTimeHours < r2.cookingTimeHours || (r1.cookingTimeHours == r2.cookingTimeHours && r1.cookingTimeMinutes < r2.cookingTimeMinutes)
-            case .CookingTimeDescending:
+            case .cookingTimeDescending:
                 return r1.cookingTimeHours > r2.cookingTimeHours || (r1.cookingTimeHours == r2.cookingTimeHours && r1.cookingTimeMinutes > r2.cookingTimeMinutes)
-            case .DifficultyAscending:
+            case .difficultyAscending:
                 if let r1Difficulty = r1.dificulty, let r2Difficulty = r2.dificulty {
                     return r1Difficulty.compare(r2Difficulty) == .orderedAscending
                 } else {
                     return false
                 }
-            case .DifficultyDescending:
+            case .difficultyDescending:
                 if let r1Difficulty = r1.dificulty, let r2Difficulty = r2.dificulty {
                     return r1Difficulty.compare(r2Difficulty) == .orderedDescending
                 } else {
                     return false
                 }
-            case .PortionsAscending:
+            case .portionsAscending:
                 return r1.portions < r2.portions
-            case .PortionsDescending:
+            case .portionsDescending:
                 return r1.portions > r2.portions
-            case .LastCookingDateAscending:
+            case .lastCookingDateAscending:
                 if let r1LastCookingDate = r1.lastCookingDate, let r2LastCookingDate = r2.lastCookingDate {
                     return r1LastCookingDate.compare(r2LastCookingDate) == .orderedAscending
                 } else {
                     return false
                 }
-            case .LastCookingDateDescending:
+            case .lastCookingDateDescending:
                 if let r1LastCookingDate = r1.lastCookingDate, let r2LastCookingDate = r2.lastCookingDate {
                     return r1LastCookingDate.compare(r2LastCookingDate) == .orderedDescending
                 } else {
@@ -309,7 +297,20 @@ class CookbookViewController: UIViewController {
             
             self.sortView = nil
         } else {
-            sortView = SortView(withButtons: [.RecipeNameAscending, .RecipeNameDescending, .CookingTimeAscending, .CookingTimeDescending, .DifficultyAscending, .DifficultyDescending, .PortionsAscending, .PortionsDescending, .LastCookingDateAscending, .LastCookingDateDescending], andFrame: CGRect(x: 0, y: 0, width: 250, height: 500))
+            sortView = SortView(withButtons: [.recipeNameAscending,
+                                              .recipeNameDescending,
+                                              .cookingTimeAscending,
+                                              .cookingTimeDescending,
+                                              .difficultyAscending,
+                                              .difficultyDescending,
+                                              .portionsAscending,
+                                              .portionsDescending,
+                                              .lastCookingDateAscending,
+                                              .lastCookingDateDescending],
+                                andFrame: CGRect(x: 0,
+                                                 y: 0,
+                                                 width: 250,
+                                                 height: 500))
             
             if let sortView = sortView {
                 sortView.selectedSortOption = { sortOption in
@@ -369,7 +370,9 @@ extension CookbookViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "recipeCell", for: indexPath) as! RecipeTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "recipeCell", for: indexPath) as? RecipeTableViewCell else {
+            fatalError("cell should be RecipeTableViewCell type")
+        }
         
         let recipe = filteredRecipes?[indexPath.row] ?? recipes[indexPath.row]
         
@@ -408,7 +411,7 @@ extension CookbookViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             deletedRecipesIds.append(filteredRecipes?[indexPath.row].id ?? recipes[indexPath.row].id)
             
-            if let _ = filteredRecipes {
+            if filteredRecipes != nil {
                 filteredRecipes?.remove(at: indexPath.row)
             } else {
                 recipes.remove(at: indexPath.row)

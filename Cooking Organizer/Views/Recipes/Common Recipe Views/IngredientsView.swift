@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol IngredientsViewDelegate: class {
+protocol IngredientsViewDelegate: AnyObject {
     func ingredientDeleted()
     func ingredientTextFieldSelected(withIndex index: Int)
 }
@@ -66,10 +66,9 @@ class IngredientsView: UIView {
         removeEmptyIngredients()
         
         for ingredient in ingredientsCopy {
-            guard let _ = ingredient.name,
-                let _ = ingredient.unit,
-                let _ = ingredient.quantity else
-            {
+            guard ingredient.name != nil,
+                  ingredient.unit != nil,
+                  ingredient.quantity != nil else {
                 completion(true)
                 
                 return
@@ -86,8 +85,7 @@ class IngredientsView: UIView {
             for index in ingredients.indices {
                 if ingredients[index].name != ingredientsCopy[index].name ||
                     ingredients[index].unit != ingredientsCopy[index].unit ||
-                    ingredients[index].quantity != ingredientsCopy[index].quantity
-                {
+                    ingredients[index].quantity != ingredientsCopy[index].quantity {
                     return true
                 }
             }
@@ -116,16 +114,11 @@ class IngredientsView: UIView {
     }
     
     private func removeEmptyIngredients() {
-        for ingredient in ingredientsCopy {
-            if ingredient.name == nil,
-                ingredient.unit == nil,
-                ingredient.quantity == nil
-            {
-                let ingredientIndex = ingredientsCopy.lastIndex(of: ingredient)
-                
-                if let index = ingredientIndex {
-                    ingredientsCopy.remove(at: index)
-                }
+        for ingredient in ingredientsCopy where (ingredient.name == nil && ingredient.unit == nil && ingredient.quantity == nil) {
+            let ingredientIndex = ingredientsCopy.lastIndex(of: ingredient)
+            
+            if let index = ingredientIndex {
+                ingredientsCopy.remove(at: index)
             }
         }
     }
@@ -230,8 +223,7 @@ extension IngredientsView: UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.text = ingredient.name
             
             if let quantity = ingredient.quantity,
-                let unit = ingredient.unit
-            {
+               let unit = ingredient.unit {
                 cell.quantityUnitLabel.text = quantity + " " + unit
             }
             

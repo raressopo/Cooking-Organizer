@@ -88,6 +88,7 @@ PODS:
   - nanopb/encode (2.30908.0)
   - PromisesObjC (2.0.0)
   - SearchTextField (1.2.4)
+  - SwiftLint (0.43.1)
 
 DEPENDENCIES:
   - CodableFirebase
@@ -95,6 +96,7 @@ DEPENDENCIES:
   - Firebase/Database
   - FSCalendar
   - SearchTextField
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
@@ -113,6 +115,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SearchTextField
+    - SwiftLint
 
 SPEC CHECKSUMS:
   CodableFirebase: 0bf201991eeec35eb9fcd987d271ea463cf34a80
@@ -130,7 +133,8 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
+  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
 
-PODFILE CHECKSUM: 455bd3051b0d4c6fba27fad0abf4d8a04dacac3c
+PODFILE CHECKSUM: fd9943970174cb4417a250c89a18c7d434770d18
 
 COCOAPODS: 1.11.0

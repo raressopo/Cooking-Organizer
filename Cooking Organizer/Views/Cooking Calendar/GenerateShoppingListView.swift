@@ -55,8 +55,7 @@ class GenerateShoppingListView: UIView {
                 if let sDate = startDate,
                    let eDate = endDate,
                    UtilsManager.isSelectedDate(selectedDate: recipeCookingDate, inFutureOrInPresentToGivenDate: sDate),
-                   UtilsManager.isSelectedDate(selectedDate: recipeCookingDate, inPastOrInPresentToGivenDate: eDate)
-                {
+                   UtilsManager.isSelectedDate(selectedDate: recipeCookingDate, inPastOrInPresentToGivenDate: eDate) {
                     rangedRecipes.append(recipe)
                 }
             }
@@ -71,8 +70,7 @@ class GenerateShoppingListView: UIView {
                     
                     if let index = existingIngredientIndex,
                        let existingQuantity = recipesIngredients[index].quantity,
-                       let ingredientQuantity = ingredient.quantityAsDouble
-                    {
+                       let ingredientQuantity = ingredient.quantityAsDouble {
                         recipesIngredients[index].quantity = existingQuantity + ingredientQuantity
                     } else {
                         recipesIngredients.append(GeneratedShoppingListItem(name: ingredient.name,
@@ -90,8 +88,7 @@ class GenerateShoppingListView: UIView {
                 
                 if let index = existingIngredientIndex,
                    let existingQuantity = recipesIngredients[index].quantity,
-                   let homeIngredientQuantity = homeIngredient.quantity
-                {
+                   let homeIngredientQuantity = homeIngredient.quantity {
                     let remaningQuantity = existingQuantity - homeIngredientQuantity
                     
                     if remaningQuantity <= 0 {
@@ -176,8 +173,7 @@ extension GenerateShoppingListView: SelectDatePickerViewDelegate {
         if startDate {
             if let eDate = endDate,
                !UtilsManager.isSelectedDate(selectedDate: eDate, inFutureOrInPresentToGivenDate: selectedDate),
-               let parentVC = self.window?.rootViewController?.presentedViewController
-            {
+               let parentVC = self.window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: parentVC,
                                                                   title: "Invalid Start Date",
                                                                   message: "Please select a valid start date that should be before or at least the same date as end date!")
@@ -191,8 +187,7 @@ extension GenerateShoppingListView: SelectDatePickerViewDelegate {
         } else {
             if let sDate = self.startDate,
                !UtilsManager.isSelectedDate(selectedDate: selectedDate, inFutureOrInPresentToGivenDate: sDate),
-               let parentVC = self.window?.rootViewController?.presentedViewController
-            {
+               let parentVC = self.window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: parentVC,
                                                                   title: "Invalid End Date",
                                                                   message: "Please select a valid start date that should be before or at least the same date as end date!")

@@ -93,7 +93,7 @@ class UserDataManager: NSObject {
         }
     }
     
-    func addNewHomeIngredient(withDetails details: [String:Any],
+    func addNewHomeIngredient(withDetails details: [String: Any],
                               success: @escaping () -> Void,
                               failure: @escaping () -> Void) {
         FirebaseAPIManager.sharedInstance.addHomeIngredient(withDetails: details,
@@ -102,7 +102,7 @@ class UserDataManager: NSObject {
     }
     
     func changeHomeIngredient(withId id: String,
-                              andDetails details: [String:Any],
+                              andDetails details: [String: Any],
                               success: @escaping () -> Void,
                               failure: @escaping () -> Void) {
         FirebaseAPIManager.sharedInstance.changeHomeIngrdient(withId: id,
@@ -134,7 +134,10 @@ class UserDataManager: NSObject {
         FirebaseAPIManager.sharedInstance.getCustomIngredients()
     }
     
-    func createShoppingList(withName name: String, andValues values: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+    func createShoppingList(withName name: String,
+                            andValues values: [String: Any],
+                            success: @escaping () -> Void,
+                            failure: @escaping () -> Void) {
         FirebaseAPIManager.sharedInstance.createShoppingList(withName: name,
                                                              andValues: values,
                                                              success: success,

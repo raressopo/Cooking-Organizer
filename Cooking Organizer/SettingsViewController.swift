@@ -9,11 +9,11 @@
 import UIKit
 
 enum SettingsOptions: CaseIterable {
-    case HomeScreenOrder
+    case homeScreenOrder
     
     var cellTitle: String {
         switch self {
-        case .HomeScreenOrder:
+        case .homeScreenOrder:
             return "Rearrange Home Screen"
         }
     }
@@ -47,7 +47,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SettingsOptions.allCases[indexPath.row] {
-        case .HomeScreenOrder:
+        case .homeScreenOrder:
             let rearrangeHomeScreenView = RearrangeHomeScreenView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
             
             rearrangeHomeScreenView.translatesAutoresizingMaskIntoConstraints = false

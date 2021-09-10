@@ -72,7 +72,7 @@ class NewRecipeViewController: UIViewController,
     // MARK: - IBActions
     
     @IBAction func addPhotoPressed(_ sender: Any) {
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             let myPickerController = UIImagePickerController()
             myPickerController.delegate = self
             myPickerController.sourceType = .photoLibrary
@@ -150,8 +150,7 @@ class NewRecipeViewController: UIViewController,
     
     @IBAction func createRecipePressed(_ sender: Any) {
         guard let recipeName = recipeNameTextField.text,
-            !recipeName.isEmpty else
-        {
+            !recipeName.isEmpty else {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                               title: "Invalid Recipe Name",
                                                               message: "Make sure you entered a Recipe Name!")
@@ -160,8 +159,7 @@ class NewRecipeViewController: UIViewController,
         }
 
         guard let portionsString = portionsTextField.text,
-            let portionsNumber = NumberFormatter().number(from: portionsString) else
-        {
+            let portionsNumber = NumberFormatter().number(from: portionsString) else {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                               title: "Portions Unavailable",
                                                               message: "Please check that you enetered a valid portions value. (Ex. 1, 4, 11, 20 etc.)")
@@ -238,7 +236,7 @@ class NewRecipeViewController: UIViewController,
                                 "ingredients": createIngredientsDictionary(),
                                 "steps": createStepsDictionary(),
                                 "cookingDates": lastCookDateString != nil ? [lastCookDateString!] : [],
-                                "id": id] as [String:Any]
+                                "id": id] as [String: Any]
         
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
 
@@ -246,7 +244,7 @@ class NewRecipeViewController: UIViewController,
             .child(loggedInUserId)
             .child("recipes")
             .child(id)
-            .setValue(recipeDictionary) { (error, ref) in
+            .setValue(recipeDictionary) { (error, _) in
                 if error == nil {
                     self.navigationController?.popViewController(animated: true)
                 } else {
@@ -286,17 +284,19 @@ class NewRecipeViewController: UIViewController,
     
     @objc
     func addNewIngredientPressed() {
-        ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant + 60.0
+        ingredientsViewHeightConstraint.constant += 60.0
     }
     
     @objc
     func addNewStepPressed() {
-        stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant + 60.0
+        stepsViewHeightConstraint.constant += 60.0
     }
     
     // MARK: - UIImagePickerController delegate
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             recipeImageView.image = image
             
@@ -304,7 +304,7 @@ class NewRecipeViewController: UIViewController,
             clearImageButton.isHidden = false
             
             picker.dismiss(animated: true, completion: nil)
-        } else{
+        } else {
             print("Something went wrong")
         }
     }
@@ -411,9 +411,9 @@ extension NewRecipeViewController: CategoriesViewDelegate {
         } else {
             for category in selectedCategories {
                 if selectedCategories.last! == category {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string)"
+                    categoriesButtonTitle += "\(category.string)"
                 } else {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string), "
+                    categoriesButtonTitle += "\(category.string), "
                 }
             }
         }
@@ -431,7 +431,7 @@ extension NewRecipeViewController: CategoriesViewDelegate {
 
 extension NewRecipeViewController: IngredientsViewDelegate {
     func ingredientDeleted() {
-        ingredientsViewHeightConstraint.constant = ingredientsViewHeightConstraint.constant - 60.0
+        ingredientsViewHeightConstraint.constant -= 60.0
     }
     
     func ingredientTextFieldSelected(withIndex index: Int) {
@@ -452,8 +452,8 @@ extension NewRecipeViewController: IngredientsViewDelegate {
         }
     }
     
-    private func createIngredientsDictionary() -> [String:Any] {
-        var ingredientsDictionary = [String:Any]()
+    private func createIngredientsDictionary() -> [String: Any] {
+        var ingredientsDictionary = [String: Any]()
         
         ingredients.forEach { ingredientsDictionary["\(ingredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
         
@@ -481,7 +481,7 @@ extension NewRecipeViewController: StepsViewDelegate, StepExtendedTextViewDelega
     }
     
     func stepDeleted() {
-        stepsViewHeightConstraint.constant = stepsViewHeightConstraint.constant - 60.0
+        stepsViewHeightConstraint.constant -= 60.0
     }
     
     func stepDetailFieldPressed(withText text: String?, atIndex index: Int) {
@@ -516,8 +516,8 @@ extension NewRecipeViewController: StepsViewDelegate, StepExtendedTextViewDelega
         }
     }
     
-    private func createStepsDictionary() -> [String:Any] {
-        var stepsDictionary = [String:Any]()
+    private func createStepsDictionary() -> [String: Any] {
+        var stepsDictionary = [String: Any]()
         
         steps.forEach { stepsDictionary["\(steps.firstIndex(of: $0) ?? 0)"] = $0 }
         

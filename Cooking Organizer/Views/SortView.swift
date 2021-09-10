@@ -10,22 +10,22 @@ import UIKit
 
 enum SortStackViewButtons: String, CaseIterable {
     /// Home Ingredients
-    case NameAscending = "Name Ascending"
-    case NameDescending = "Name Descending"
-    case ExpirationDateAscending = "Expiration Date Ascending"
-    case ExpirationDateDescending = "Expiration Date Descending"
+    case nameAscending = "Name Ascending"
+    case nameDescending = "Name Descending"
+    case expirationDateAscending = "Expiration Date Ascending"
+    case expirationDateDescending = "Expiration Date Descending"
     
     /// Recipes
-    case RecipeNameAscending = "Recipe Name Ascending"
-    case RecipeNameDescending = "Recipe Name Descending"
-    case CookingTimeAscending = "Cooking Time Ascending"
-    case CookingTimeDescending = "Cooking Time Descending"
-    case DifficultyAscending = "Difficulty Ascending"
-    case DifficultyDescending = "Difficulty Descending"
-    case PortionsAscending = "Portions Ascending"
-    case PortionsDescending = "Portions Descending"
-    case LastCookingDateAscending = "Last Cooking Date Ascending"
-    case LastCookingDateDescending = "Last Cooking Date Descending"
+    case recipeNameAscending = "Recipe Name Ascending"
+    case recipeNameDescending = "Recipe Name Descending"
+    case cookingTimeAscending = "Cooking Time Ascending"
+    case cookingTimeDescending = "Cooking Time Descending"
+    case difficultyAscending = "Difficulty Ascending"
+    case difficultyDescending = "Difficulty Descending"
+    case portionsAscending = "Portions Ascending"
+    case portionsDescending = "Portions Descending"
+    case lastCookingDateAscending = "Last Cooking Date Ascending"
+    case lastCookingDateDescending = "Last Cooking Date Descending"
 }
 
 protocol SortViewDelegate: AnyObject {
@@ -77,35 +77,35 @@ class SortView: UIView {
             
             switch sortButton {
             /// Home Ingredients
-            case .NameAscending:
+            case .nameAscending:
                 button.addTarget(self, action: #selector(nameAscendingPressed), for: .touchUpInside)
-            case .NameDescending:
+            case .nameDescending:
                 button.addTarget(self, action: #selector(nameDescendingPressed), for: .touchUpInside)
-            case .ExpirationDateAscending:
+            case .expirationDateAscending:
                 button.addTarget(self, action: #selector(expirationDateAscendingPressed), for: .touchUpInside)
-            case .ExpirationDateDescending:
+            case .expirationDateDescending:
                 button.addTarget(self, action: #selector(expirationDateDescendingPressed), for: .touchUpInside)
                 
             /// Recipes
-            case .RecipeNameAscending:
+            case .recipeNameAscending:
                 button.addTarget(self, action: #selector(recipeNameAscendingPressed), for: .touchUpInside)
-            case .RecipeNameDescending:
+            case .recipeNameDescending:
                 button.addTarget(self, action: #selector(recipeNameDescendingPressed), for: .touchUpInside)
-            case .CookingTimeAscending:
+            case .cookingTimeAscending:
                 button.addTarget(self, action: #selector(cookingTimeAscendingPressed), for: .touchUpInside)
-            case .CookingTimeDescending:
+            case .cookingTimeDescending:
                 button.addTarget(self, action: #selector(cookingTimeDescendingPressed), for: .touchUpInside)
-            case .DifficultyAscending:
+            case .difficultyAscending:
                 button.addTarget(self, action: #selector(difficultyAscendingPressed), for: .touchUpInside)
-            case .DifficultyDescending:
+            case .difficultyDescending:
                 button.addTarget(self, action: #selector(difficultyDescendingPressed), for: .touchUpInside)
-            case .PortionsAscending:
+            case .portionsAscending:
                 button.addTarget(self, action: #selector(portionAscendingPressed), for: .touchUpInside)
-            case .PortionsDescending:
+            case .portionsDescending:
                 button.addTarget(self, action: #selector(portionDescendingPressed), for: .touchUpInside)
-            case .LastCookingDateAscending:
+            case .lastCookingDateAscending:
                 button.addTarget(self, action: #selector(lastCookingDateAscendingPressed), for: .touchUpInside)
-            case .LastCookingDateDescending:
+            case .lastCookingDateDescending:
                 button.addTarget(self, action: #selector(lastCookingDateDescendingPressed), for: .touchUpInside)
             }
             
@@ -118,72 +118,72 @@ class SortView: UIView {
     /// Home Ingredients
     @objc
     private func nameAscendingPressed() {
-        self.selectedSortOption?(.NameAscending)
+        self.selectedSortOption?(.nameAscending)
     }
     
     @objc
     private func nameDescendingPressed() {
-        self.selectedSortOption?(.NameDescending)
+        self.selectedSortOption?(.nameDescending)
     }
     
     @objc
     private func expirationDateAscendingPressed() {
-        self.selectedSortOption?(.ExpirationDateAscending)
+        self.selectedSortOption?(.expirationDateAscending)
     }
     
     @objc
     private func expirationDateDescendingPressed() {
-        self.selectedSortOption?(.ExpirationDateDescending)
+        self.selectedSortOption?(.expirationDateDescending)
     }
     
     /// Recipes
     @objc
     private func recipeNameAscendingPressed() {
-        self.selectedSortOption?(.RecipeNameAscending)
+        self.selectedSortOption?(.recipeNameAscending)
     }
     
     @objc
     private func recipeNameDescendingPressed() {
-        self.selectedSortOption?(.RecipeNameDescending)
+        self.selectedSortOption?(.recipeNameDescending)
     }
     
     @objc
     private func cookingTimeAscendingPressed() {
-        self.selectedSortOption?(.CookingTimeAscending)
+        self.selectedSortOption?(.cookingTimeAscending)
     }
     
     @objc
     private func cookingTimeDescendingPressed() {
-        self.selectedSortOption?(.CookingTimeDescending)
+        self.selectedSortOption?(.cookingTimeDescending)
     }
     
     @objc
     private func difficultyAscendingPressed() {
-        self.selectedSortOption?(.DifficultyAscending)
+        self.selectedSortOption?(.difficultyAscending)
     }
     
     @objc
     private func difficultyDescendingPressed() {
-        self.selectedSortOption?(.DifficultyDescending)
+        self.selectedSortOption?(.difficultyDescending)
     }
     
     @objc
     private func portionAscendingPressed() {
-        self.selectedSortOption?(.PortionsAscending)
+        self.selectedSortOption?(.portionsAscending)
     }
     
     @objc
     private func portionDescendingPressed() {
-        self.selectedSortOption?(.PortionsDescending)
+        self.selectedSortOption?(.portionsDescending)
     }
     
     @objc
     private func lastCookingDateAscendingPressed() {
-        self.selectedSortOption?(.LastCookingDateAscending)
+        self.selectedSortOption?(.lastCookingDateAscending)
     }
     
     @objc
     private func lastCookingDateDescendingPressed() {
-        self.selectedSortOption?(.LastCookingDateDescending)
+        self.selectedSortOption?(.lastCookingDateDescending)
     }
 }

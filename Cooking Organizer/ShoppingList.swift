@@ -10,7 +10,7 @@ import Foundation
 
 class ShoppingList: Codable {
     var name: String?
-    var items: [String:ShoppingListItem]?
+    var items: [String: ShoppingListItem]?
     
     var itemsArray: [ShoppingListItem]? {
         if let itemsDict = items {

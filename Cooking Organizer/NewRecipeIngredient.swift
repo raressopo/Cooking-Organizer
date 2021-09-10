@@ -25,7 +25,7 @@ class NewRecipeIngredient: Codable, Equatable {
         }
     }
     
-    func asDictionary() -> [String:Any] {
+    func asDictionary() -> [String: Any] {
         return ["name": name ?? "", "quantity": quantity ?? "", "unit": unit ?? ""]
     }
 }
@@ -35,7 +35,7 @@ struct CopyOfIngredientRecipe {
     var quantity: String?
     var unit: String?
     
-    func asDictionary() -> [String:Any] {
+    func asDictionary() -> [String: Any] {
         return ["name": name ?? "", "quantity": quantity ?? "", "unit": unit ?? ""]
     }
 }

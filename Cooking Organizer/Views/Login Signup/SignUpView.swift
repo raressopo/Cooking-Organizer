@@ -56,23 +56,22 @@ class SignUpView: UIView {
     
     @IBAction func signUpPressed(_ sender: Any) {
         guard let email = eMailTextField.text,
-            let password = passwordTextField.text,
-            !email.isEmpty,
-            !password.isEmpty,
-            let confirmEmail = confirmEMailTextField.text,
-            let confirmPass = confirmPasswordTextField.text,
-            !confirmEmail.isEmpty,
-            !confirmPass.isEmpty,
-            UtilsManager.isValidEmail(email) else
-        {
+              let password = passwordTextField.text,
+              !email.isEmpty,
+              !password.isEmpty,
+              let confirmEmail = confirmEMailTextField.text,
+              let confirmPass = confirmPasswordTextField.text,
+              !confirmEmail.isEmpty,
+              !confirmPass.isEmpty,
+              UtilsManager.isValidEmail(email) else {
             signUpValidationFailed?()
-
+            
             return
         }
         
         let decimalCharacters = CharacterSet.decimalDigits
         
-        guard let _ = password.rangeOfCharacter(from: decimalCharacters), password.count >= 6 else {
+        guard password.rangeOfCharacter(from: decimalCharacters) != nil, password.count >= 6 else {
             invalidPassword?()
             
             return

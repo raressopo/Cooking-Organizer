@@ -52,8 +52,8 @@ class UserData: Codable {
     let email: String
     let signUpDate: String
     
-    var homeIngredients: [String:HomeIngredient]?
-    var recipes: [String:Recipe]?
+    var homeIngredients: [String: HomeIngredient]?
+    var recipes: [String: Recipe]?
     
-    var shoppingLists: [String:ShoppingList]?
+    var shoppingLists: [String: ShoppingList]?
 }

@@ -56,13 +56,13 @@ class FirebaseAPIManager {
         }
     }
     
-    func createUser(withDetails details: [String:Any],
-                    andLoginDetails loginDetails: [String:Any],
+    func createUser(withDetails details: [String: Any],
+                    andLoginDetails loginDetails: [String: Any],
                     success: @escaping (Bool) -> Void) {
         
         guard let loginEmail = loginDetails["email"] as? String,
-            let id = loginDetails["id"] as? String else
-        {
+            let id = loginDetails["id"] as? String else {
+            
             success(false)
             
             return
@@ -74,7 +74,7 @@ class FirebaseAPIManager {
         userDispatchGroup.enter()
         signUpFailed.enter()
         
-        usersDataRef.child(id).setValue(details) { (error, ref) in
+        usersDataRef.child(id).setValue(details) { (error, _) in
             if error == nil {
                 userDispatchGroup.leave()
             } else {
@@ -85,7 +85,7 @@ class FirebaseAPIManager {
         userDispatchGroup.enter()
         signUpFailed.enter()
         
-        usersLoginDataRef.child(loginEmail.stringByAddingPercentEncodingForRFC3986()).setValue(loginDetails) { (error, ref) in
+        usersLoginDataRef.child(loginEmail.stringByAddingPercentEncodingForRFC3986()).setValue(loginDetails) { (error, _) in
             if error == nil {
                 userDispatchGroup.leave()
             } else {
@@ -180,17 +180,18 @@ class FirebaseAPIManager {
     
     func updateRecipe(froUserId id: String,
                       andForRecipeId recipeId: String,
-                      withDetails details: [String:Any],
+                      withDetails details: [String: Any],
                       andCompletionHandler completion: @escaping (Bool) -> Void) {
         usersDataRef.child(id).child("recipes").child(recipeId).updateChildValues(details) { (error, _) in
             completion(error == nil)
         }
     }
     
-    func addHomeIngredient(withDetails details: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+    func addHomeIngredient(withDetails details: [String: Any],
+                           success: @escaping () -> Void,
+                           failure: @escaping () -> Void) {
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id,
-            let ingredientId = details["id"] as? String else
-        {
+            let ingredientId = details["id"] as? String else {
             failure()
             
             return
@@ -205,7 +206,10 @@ class FirebaseAPIManager {
         }
     }
     
-    func changeHomeIngrdient(withId id: String, andDetails details: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+    func changeHomeIngrdient(withId id: String,
+                             andDetails details: [String: Any],
+                             success: @escaping () -> Void,
+                             failure: @escaping () -> Void) {
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
             failure()
             
@@ -291,7 +295,10 @@ class FirebaseAPIManager {
         usersDataRef.child(loggedInUserId).child("customIngredients").child(category).setValue([name])
     }
     
-    func createShoppingList(withName name: String, andValues values: [String:Any], success: @escaping () -> Void, failure: @escaping () -> Void) {
+    func createShoppingList(withName name: String,
+                            andValues values: [String: Any],
+                            success: @escaping () -> Void,
+                            failure: @escaping () -> Void) {
         guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
             failure()
             

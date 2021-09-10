@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CategoriesViewDelegate: class {
+protocol CategoriesViewDelegate: AnyObject {
     func didSelectCategories(categories: [RecipeCategories])
     func didSelectRecipeCategory(withCategoryName name: String)
     

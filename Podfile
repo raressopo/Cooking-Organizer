@@ -17,4 +17,6 @@ pod 'FSCalendar'
 
 pod 'SearchTextField'
 
+pod 'SwiftLint' 
+
 end

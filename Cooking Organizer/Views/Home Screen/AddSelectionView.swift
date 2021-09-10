@@ -37,7 +37,6 @@ class AddSelectionView: UIView {
         contentView.frame = self.bounds
     }
     
-    
     // MARK: - IBActions
     
     @IBAction func dismissSelectionViewPressed(_ sender: Any) {

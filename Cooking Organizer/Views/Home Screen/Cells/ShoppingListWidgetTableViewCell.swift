@@ -24,8 +24,7 @@ class ShoppingListWidgetTableViewCell: UITableViewCell {
     var items: [ShoppingListItem]? {
         if shoppingLists?.count == 1, let shoppingList = shoppingLists?.first {
             if let userList = UsersManager.shared.currentLoggedInUser?.shoppingListsArray,
-               let existingList = userList.first(where: {$0.name == shoppingList.name})
-            {
+               let existingList = userList.first(where: {$0.name == shoppingList.name}) {
                 return existingList.itemsArray?.sorted(by: {!$0.bought && $1.bought}) ?? nil
             } else {
                 return nil
@@ -74,7 +73,7 @@ extension ShoppingListWidgetTableViewCell: UITableViewDelegate, UITableViewDataS
             cell.checkbox.isChecked = item.bought
             cell.boughtView.isHidden = !cell.checkbox.isChecked
             
-            cell.checkbox.valueChanged = { (isChecked) in
+            cell.checkbox.valueChanged = { _ in
                 if let listName = list.name, let itemName = item.name {
                     UserDataManager.shared.markShoppingListAsBought(fromList: listName,
                                                                     forItem: itemName,

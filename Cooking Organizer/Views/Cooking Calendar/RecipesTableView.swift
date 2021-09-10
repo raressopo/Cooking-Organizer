@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol RecipesTableViewDelegate: class {
+protocol RecipesTableViewDelegate: AnyObject {
     func recipeSelectedForSchedule(withRecipe recipe: CookingCalendarRecipe)
 }
 

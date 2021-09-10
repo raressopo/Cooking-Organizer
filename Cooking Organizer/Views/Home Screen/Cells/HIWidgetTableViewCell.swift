@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol HIWidgetTableViewCellDelegate: class {
+protocol HIWidgetTableViewCellDelegate: AnyObject {
     func homeIngredientPressed(withHomeIngredient hi: HomeIngredient)
 }
 

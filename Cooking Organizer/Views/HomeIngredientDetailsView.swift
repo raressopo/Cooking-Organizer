@@ -58,10 +58,9 @@ class HomeIngredientDetailsView: UIView {
         ingredientNameTextField.delegate = self
     }
     
-    private func validateNewIngredientsDetails(completion: @escaping ([String:Any]) -> Void) {
+    private func validateNewIngredientsDetails(completion: @escaping ([String: Any]) -> Void) {
         guard let ingredientName = ingredientNameTextField.text,
-              !ingredientName.isEmpty else
-        {
+              !ingredientName.isEmpty else {
             if let rootVC = window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
                                                                   title: "Invalid Ingredient Name",
@@ -74,8 +73,7 @@ class HomeIngredientDetailsView: UIView {
         guard let ingredientQuantity = quantityTextField.text,
               !ingredientQuantity.isEmpty,
               let ingredientQuantityAsNumber = NumberFormatter().number(from: ingredientQuantity),
-              let quantity = ingredientQuantityAsNumber as? Double else
-        {
+              let quantity = ingredientQuantityAsNumber as? Double else {
             if let rootVC = window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: rootVC,
                                                                   title: "Invalid Quantity",
@@ -139,7 +137,7 @@ class HomeIngredientDetailsView: UIView {
                     "id": uuid])
     }
     
-    private func validateChangedIngredient(completion: @escaping ([String:Any], String) -> Void) {
+    private func validateChangedIngredient(completion: @escaping ([String: Any], String) -> Void) {
         guard let ingredient = homeIngredient else {
             if let presentedViewController = window?.rootViewController?.presentedViewController {
                 AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
@@ -151,7 +149,7 @@ class HomeIngredientDetailsView: UIView {
         }
         
         var ingredientChanged = false
-        var changedDataDictionary = [String:Any]()
+        var changedDataDictionary = [String: Any]()
         
         var changedName = ""
         if let name = ingredientNameTextField.text, ingredient.name != name {
@@ -179,7 +177,7 @@ class HomeIngredientDetailsView: UIView {
             ingredientChanged = true
         }
         
-        if let categoryString = selectedCategory?.string, ingredient.category != categoryString  {
+        if let categoryString = selectedCategory?.string, ingredient.category != categoryString {
             changedDataDictionary["category"] = categoryString
             
             ingredientChanged = true
@@ -209,25 +207,25 @@ class HomeIngredientDetailsView: UIView {
             validateNewIngredientsDetails { newIngredientDetails in
                 UserDataManager.shared.addNewHomeIngredient(withDetails: newIngredientDetails, success: {
                     self.removeFromSuperview()
-                }) {
+                }, failure: {
                     if let presentedViewController = self.window?.rootViewController?.presentedViewController {
                         AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
                                                                           title: "Ingredient Creation Failed",
                                                                           message: "Something went wrong creating new ingredient. Please try again later!")
                     }
-                }
+                })
             }
         } else {
             validateChangedIngredient { (changedIngredientDetails, ingredientId) in
                 UserDataManager.shared.changeHomeIngredient(withId: ingredientId, andDetails: changedIngredientDetails, success: {
                     self.removeFromSuperview()
-                }) {
+                }, failure: {
                     if let presentedViewController = self.window?.rootViewController?.presentedViewController {
                         AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: presentedViewController,
                                                                           title: "Update Failed",
                                                                           message: "Something went wrong changing the selected ingredient. Please try again later!")
                     }
-                }
+                })
             }
         }
     }

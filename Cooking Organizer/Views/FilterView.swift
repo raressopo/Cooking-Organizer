@@ -29,27 +29,27 @@ extension FilterViewDelegate {
 // MARK: - Filter Criteria enum
 
 enum FilterCriteria {
-    case Category
-    case Availability
+    case category
+    case availability
     
-    case RecipeCategory
-    case CookingTime
-    case Difficulty
-    case Portions
-    case CookingDate
+    case recipeCategory
+    case cookingTime
+    case difficulty
+    case portions
+    case cookingDate
 }
 
 enum LastDateCriteriaStrings: String {
-    case Never = "Never"
-    case OneWeek = "1 Week Old"
-    case TwoWeeks = "2 Weeks Old"
-    case OneMonthPlus = "1 Month +"
+    case never = "Never"
+    case oneWeek = "1 Week Old"
+    case twoWeeks = "2 Weeks Old"
+    case oneMonthPlus = "1 Month +"
 }
 
 enum DifficultyCriteriaStrings: String {
-    case Easy = "Easy"
-    case Medium = "Medium"
-    case Hard = "Hard"
+    case easy = "Easy"
+    case medium = "Medium"
+    case hard = "Hard"
 }
 
 enum CookingTimeCriteriaStrings: String {
@@ -155,11 +155,9 @@ class HomeIngredientsFilterView: FilterView {
         
         for criteria in criterias {
             switch criteria {
-            case .Category:
+            case .category:
                 setupCategoryButton()
-                
-                break
-            case .Availability:
+            case .availability:
                 let availabilityButtonsStackView = UIStackView()
                 
                 availabilityButtonsStackView.distribution = .fillEqually
@@ -192,9 +190,6 @@ class HomeIngredientsFilterView: FilterView {
                 availabilityButtonsStackView.addArrangedSubview(expiredButton)
                 
                 criteriaStackView.addArrangedSubview(availabilityButtonsStackView)
-                
-                break
-                
             default:
                 break
             }
@@ -310,7 +305,7 @@ class RecipesFilterView: FilterView {
         
         for criteria in criterias {
             switch criteria {
-            case .RecipeCategory:
+            case .recipeCategory:
                 addCriteriaTitleLabel(withTitle: "Category")
                 
                 categoryButton.setTitle(filterParams.categoryString ?? "Category", for: .normal)
@@ -318,25 +313,25 @@ class RecipesFilterView: FilterView {
                 categoryButton.addTarget(self, action: #selector(categoriesPressed), for: .touchUpInside)
                 
                 criteriaStackView.addArrangedSubview(categoryButton)
-            case .CookingDate:
+            case .cookingDate:
                 addCriteriaTitleLabel(withTitle: "Last Cooking Date")
                 
                 cookingDatesStackView.selectedLastCookingDateTime = filterParams.cookingDate
                 
                 criteriaStackView.addArrangedSubview(cookingDatesStackView)
-            case .Difficulty:
+            case .difficulty:
                 addCriteriaTitleLabel(withTitle: "Difficulty")
                 
                 difficultyStackView.selectedDifficulty = filterParams.difficulty
                 
                 criteriaStackView.addArrangedSubview(difficultyStackView)
-            case .CookingTime:
+            case .cookingTime:
                 addCriteriaTitleLabel(withTitle: "Cooking Time")
                 
                 cookingTimeStackView.selectedCookingTime = filterParams.cookingTime
                 
                 criteriaStackView.addArrangedSubview(cookingTimeStackView)
-            case .Portions:
+            case .portions:
                 addCriteriaTitleLabel(withTitle: "Portions")
                 
                 portionsStackView.selectedPortions = filterParams.portions
@@ -463,22 +458,14 @@ class CookingDateFilterParamsStackView: FilterCriteriaStackView {
     var selectedLastCookingDateTime: LastDateCriteriaStrings? {
         didSet {
             switch selectedLastCookingDateTime {
-            case .Never:
+            case .never:
                 configureButtonsAfterSelection(withSelectedButton: neverButton)
-                
-                break
-            case .OneWeek:
+            case .oneWeek:
                 configureButtonsAfterSelection(withSelectedButton: oneWeekOldButton)
-                
-                break
-            case .TwoWeeks:
+            case .twoWeeks:
                 configureButtonsAfterSelection(withSelectedButton: twoWeeksOldButton)
-                
-                break
-            case .OneMonthPlus:
+            case .oneMonthPlus:
                 configureButtonsAfterSelection(withSelectedButton: oneMonthPlusButton)
-                
-                break
             case .none:
                 break
             }
@@ -494,32 +481,40 @@ class CookingDateFilterParamsStackView: FilterCriteriaStackView {
     }
     
     private func setupAllButtons() {
-        setupButton(button: neverButton, withTitle: LastDateCriteriaStrings.Never.rawValue, andSelector: #selector(neverButtonPressed))
-        setupButton(button: oneWeekOldButton, withTitle: LastDateCriteriaStrings.OneWeek.rawValue, andSelector: #selector(oneWeekOldPressed))
-        setupButton(button: twoWeeksOldButton, withTitle: LastDateCriteriaStrings.TwoWeeks.rawValue, andSelector: #selector(twoWeeksOldPressed))
-        setupButton(button: oneMonthPlusButton, withTitle: LastDateCriteriaStrings.OneMonthPlus.rawValue, andSelector: #selector(oneMonthPlusPressed))
+        setupButton(button: neverButton,
+                    withTitle: LastDateCriteriaStrings.never.rawValue,
+                    andSelector: #selector(neverButtonPressed))
+        setupButton(button: oneWeekOldButton,
+                    withTitle: LastDateCriteriaStrings.oneWeek.rawValue,
+                    andSelector: #selector(oneWeekOldPressed))
+        setupButton(button: twoWeeksOldButton,
+                    withTitle: LastDateCriteriaStrings.twoWeeks.rawValue,
+                    andSelector: #selector(twoWeeksOldPressed))
+        setupButton(button: oneMonthPlusButton,
+                    withTitle: LastDateCriteriaStrings.oneMonthPlus.rawValue,
+                    andSelector: #selector(oneMonthPlusPressed))
     }
     
     // MARK: - Private Selectors
     
     @objc
     private func neverButtonPressed() {
-        selectedLastCookingDateTime = .Never
+        selectedLastCookingDateTime = .never
     }
     
     @objc
     private func oneWeekOldPressed() {
-        selectedLastCookingDateTime = .OneWeek
+        selectedLastCookingDateTime = .oneWeek
     }
     
     @objc
     private func twoWeeksOldPressed() {
-        selectedLastCookingDateTime = .TwoWeeks
+        selectedLastCookingDateTime = .twoWeeks
     }
     
     @objc
     private func oneMonthPlusPressed() {
-        selectedLastCookingDateTime = .OneMonthPlus
+        selectedLastCookingDateTime = .oneMonthPlus
     }
 }
 
@@ -533,18 +528,12 @@ class DifficultyCriteriaStackView: FilterCriteriaStackView {
     var selectedDifficulty: DifficultyCriteriaStrings? {
         didSet {
             switch selectedDifficulty {
-            case .Easy:
+            case .easy:
                 configureButtonsAfterSelection(withSelectedButton: easyButton)
-                
-                break
-            case .Medium:
+            case .medium:
                 configureButtonsAfterSelection(withSelectedButton: mediumButton)
-                
-                break
-            case .Hard:
+            case .hard:
                 configureButtonsAfterSelection(withSelectedButton: hardButton)
-                
-                break
             case .none:
                 break
             }
@@ -560,30 +549,36 @@ class DifficultyCriteriaStackView: FilterCriteriaStackView {
     }
     
     private func setupAllButtons() {
-        setupButton(button: easyButton, withTitle: DifficultyCriteriaStrings.Easy.rawValue, andSelector: #selector(easyPressed))
-        setupButton(button: mediumButton, withTitle: DifficultyCriteriaStrings.Medium.rawValue, andSelector: #selector(mediumPressed))
-        setupButton(button: hardButton, withTitle: DifficultyCriteriaStrings.Hard.rawValue, andSelector: #selector(hardPressed))
+        setupButton(button: easyButton,
+                    withTitle: DifficultyCriteriaStrings.easy.rawValue,
+                    andSelector: #selector(easyPressed))
+        setupButton(button: mediumButton,
+                    withTitle: DifficultyCriteriaStrings.medium.rawValue,
+                    andSelector: #selector(mediumPressed))
+        setupButton(button: hardButton,
+                    withTitle: DifficultyCriteriaStrings.hard.rawValue,
+                    andSelector: #selector(hardPressed))
     }
     
     @objc
     private func easyPressed() {
         configureButtonsAfterSelection(withSelectedButton: easyButton)
         
-        selectedDifficulty = .Easy
+        selectedDifficulty = .easy
     }
     
     @objc
     private func mediumPressed() {
         configureButtonsAfterSelection(withSelectedButton: mediumButton)
         
-        selectedDifficulty = .Medium
+        selectedDifficulty = .medium
     }
     
     @objc
     private func hardPressed() {
         configureButtonsAfterSelection(withSelectedButton: hardButton)
         
-        selectedDifficulty = .Hard
+        selectedDifficulty = .hard
     }
 }
 
@@ -600,20 +595,12 @@ class CookingTimeCriteriaStackView: FilterCriteriaStackView {
             switch selectedCookingTime {
             case .under15Min:
                 configureButtonsAfterSelection(withSelectedButton: under15MinsButton)
-                
-                break
             case .between16And30Mins:
                 configureButtonsAfterSelection(withSelectedButton: between16And30MinsButton)
-                
-                break
             case .between31And60Mins:
                 configureButtonsAfterSelection(withSelectedButton: between31And60MinsButton)
-                
-                break
             case .oneHourPlus:
                 configureButtonsAfterSelection(withSelectedButton: oneHourPlusButton)
-                
-                break
             case .none:
                 break
             }
@@ -677,20 +664,12 @@ class PortionsCriteriaStackView: FilterCriteriaStackView {
             switch selectedPortions {
             case .oneOrTwo:
                 configureButtonsAfterSelection(withSelectedButton: oneOrTwoButton)
-                
-                break
             case .threeOrFour:
                 configureButtonsAfterSelection(withSelectedButton: threeOrFourButton)
-                
-                break
             case .betweenFiveAndEight:
                 configureButtonsAfterSelection(withSelectedButton: betweenFiveAndEightButton)
-                
-                break
             case .ninePlus:
                 configureButtonsAfterSelection(withSelectedButton: ninePlusButton)
-                
-                break
             case .none:
                 break
             }

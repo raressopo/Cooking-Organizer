@@ -148,16 +148,16 @@ class RecipeDetailsViewController: UIViewController {
         }
     }
     
-    private func changedRecipeDictionary() -> [String:Any] {
-        var changedRecipeDictionary = [String:Any]()
+    private func changedRecipeDictionary() -> [String: Any] {
+        var changedRecipeDictionary = [String: Any]()
         
         guard let recipe = recipe else { return changedRecipeDictionary }
         
         // Recipe Image
         if let originalImage = recipe.imageData,
             let changedImage = changedRecipe.imageData,
-            originalImage != changedImage
-        {
+            originalImage != changedImage {
+            
             changedRecipeDictionary["imageData"] = changedImage
             
             recipe.imageData = changedImage
@@ -166,8 +166,8 @@ class RecipeDetailsViewController: UIViewController {
         // Recipe Name
         if let name = recipeNametextField.text,
             !name.isEmpty,
-            name != recipe.name
-        {
+            name != recipe.name {
+            
             changedRecipeDictionary["name"] = name
         }
         
@@ -175,15 +175,15 @@ class RecipeDetailsViewController: UIViewController {
         if let portions = portionsTextField.text,
             !portions.isEmpty,
             let portionsAsNumber = NumberFormatter().number(from: portions),
-            portionsAsNumber.intValue != recipe.portions
-        {
+            portionsAsNumber.intValue != recipe.portions {
+            
             changedRecipeDictionary["portions"] = portionsAsNumber
         }
         
         // Cooking Time
         if (cookingTimeHours != 0 || cookingTimeMinutes != 0),
-            "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes" != recipe.cookingTime
-        {
+            "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes" != recipe.cookingTime {
+            
             changedRecipeDictionary["cookingTime"] = "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes"
         }
         
@@ -252,8 +252,8 @@ class RecipeDetailsViewController: UIViewController {
                         
                         if let userId = UsersManager.shared.currentLoggedInUser?.loginData.id,
                             let recipeId = self.recipe?.id,
-                            !changedRecipeDetails.isEmpty
-                        {
+                            !changedRecipeDetails.isEmpty {
+                            
                             FirebaseAPIManager.sharedInstance.updateRecipe(froUserId: userId,
                                                                            andForRecipeId: recipeId,
                                                                            withDetails: changedRecipeDetails) { success in
@@ -284,7 +284,7 @@ extension RecipeDetailsViewController: UIImagePickerControllerDelegate, UINaviga
     // MARK: - IBActions
     
     @IBAction func changeImagePressed(_ sender: Any) {
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             let myPickerController = UIImagePickerController()
             
             myPickerController.delegate = self
@@ -296,7 +296,7 @@ extension RecipeDetailsViewController: UIImagePickerControllerDelegate, UINaviga
     
     // MARK: - UIImagePickerController Delegate
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let imageData = UtilsManager.resizeImageTo450x450AsData(image: image) {
                 changedRecipe.imageData = imageData.base64EncodedString()
@@ -305,7 +305,7 @@ extension RecipeDetailsViewController: UIImagePickerControllerDelegate, UINaviga
             }
             
             picker.dismiss(animated: true, completion: nil)
-        } else{
+        } else {
             print("Something went wrong")
         }
     }
@@ -430,9 +430,9 @@ extension RecipeDetailsViewController: CategoriesViewDelegate {
         } else {
             for category in selectedCategories {
                 if selectedCategories.last! == category {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string)"
+                    categoriesButtonTitle += "\(category.string)"
                 } else {
-                    categoriesButtonTitle = categoriesButtonTitle + "\(category.string), "
+                    categoriesButtonTitle += "\(category.string), "
                 }
             }
         }
@@ -469,7 +469,7 @@ extension RecipeDetailsViewController {
                 
                 ingredientsStackView.addArrangedSubview(ingredientsView)
                 
-                ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + (CGFloat(ingredients.count) * 60.0)
+                ingredientsStackViewHeightConstraint.constant += (CGFloat(ingredients.count) * 60.0)
             }
         }
     }
@@ -478,7 +478,7 @@ extension RecipeDetailsViewController {
         if let ingredientsView = ingredientsView {
             ingredientsView.setEditMode(editMode: true)
             
-            ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 76.0
+            ingredientsStackViewHeightConstraint.constant += 76.0
             
             ingredientsView.addIngredientButton.addTarget(self, action: #selector(addNewIngredientPressed), for: .touchUpInside)
         }
@@ -486,7 +486,7 @@ extension RecipeDetailsViewController {
     
     @objc
     func addNewIngredientPressed() {
-        ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 60.0
+        ingredientsStackViewHeightConstraint.constant += 60.0
     }
     
     private func ingredientsStackViewHeaderSetup() {
@@ -498,17 +498,17 @@ extension RecipeDetailsViewController {
         
         ingredientsStackView.addArrangedSubview(ingredientsHeaderTitle)
         
-        ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant + 30.0
+        ingredientsStackViewHeightConstraint.constant += 30.0
     }
     
     private func clearIngredientsStackView() {
         ingredientsStackViewHeightConstraint.constant = 0
         
-        ingredientsStackView.subviews.forEach( { $0.removeFromSuperview() } )
+        ingredientsStackView.subviews.forEach { $0.removeFromSuperview() }
     }
     
-    private func createIngredientsDictionary() -> [String:Any] {
-        var ingredientsDictionary = [String:Any]()
+    private func createIngredientsDictionary() -> [String: Any] {
+        var ingredientsDictionary = [String: Any]()
         
         changedIngredients.forEach { ingredientsDictionary["\(changedIngredients.firstIndex(of: $0) ?? 0)"] = $0.asDictionary() }
         
@@ -543,7 +543,7 @@ extension RecipeDetailsViewController {
                 stepsStackView.distribution = .fill
                 stepsStackView.addArrangedSubview(stepsView)
                 
-                stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + CGFloat(steps.count * 60)
+                stepsStackViewHeightConstraint.constant += CGFloat(steps.count * 60)
             }
         }
     }
@@ -552,7 +552,7 @@ extension RecipeDetailsViewController {
         if let stepsView = stepsView {
             stepsView.setEditMode(editMode: true)
             
-            stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 76.0
+            stepsStackViewHeightConstraint.constant += 76.0
             
             stepsView.addStepButton.addTarget(self, action: #selector(addNewStepPressed), for: .touchUpInside)
         }
@@ -560,7 +560,7 @@ extension RecipeDetailsViewController {
     
     @objc
     func addNewStepPressed() {
-        stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 60.0
+        stepsStackViewHeightConstraint.constant += 60.0
     }
     
     private func stepsStackViewHeaderSetup() {
@@ -572,17 +572,17 @@ extension RecipeDetailsViewController {
         
         stepsStackView.addArrangedSubview(stepsHeaderTitle)
         
-        stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant + 30.0
+        stepsStackViewHeightConstraint.constant += 30.0
     }
     
     private func clearStepsStackView() {
         stepsStackViewHeightConstraint.constant = 0
         
-        stepsStackView.subviews.forEach( { $0.removeFromSuperview() } )
+        stepsStackView.subviews.forEach { $0.removeFromSuperview() }
     }
     
-    private func createStepsDictionary() -> [String:Any] {
-        var stepsDictionary = [String:Any]()
+    private func createStepsDictionary() -> [String: Any] {
+        var stepsDictionary = [String: Any]()
         
         changedSteps.forEach { stepsDictionary["\(changedSteps.firstIndex(of: $0) ?? 0)"] = $0 }
         
@@ -598,13 +598,13 @@ extension RecipeDetailsViewController {
 
 extension RecipeDetailsViewController: IngredientsViewDelegate {
     func ingredientDeleted() {
-        ingredientsStackViewHeightConstraint.constant = ingredientsStackViewHeightConstraint.constant - 60.0
+        ingredientsStackViewHeightConstraint.constant -= 60.0
     }
 }
 
 extension RecipeDetailsViewController: StepsViewDelegate {
     func stepDeleted() {
-        stepsStackViewHeightConstraint.constant = stepsStackViewHeightConstraint.constant - 60.0
+        stepsStackViewHeightConstraint.constant -= 60.0
     }
 }
 

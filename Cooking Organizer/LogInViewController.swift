@@ -150,4 +150,3 @@ class LogInViewController: UIViewController {
         isKeyboardDisplayed = false
     }
 }
-

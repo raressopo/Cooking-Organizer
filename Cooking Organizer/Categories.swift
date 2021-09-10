@@ -9,130 +9,130 @@
 import UIKit
 
 public enum IngredientCategories: CaseIterable {
-    case Dairy
-    case Vegetables
-    case Fruits
-    case BakingAndGrains
-    case Spices
-    case Meat
-    case FishAndSeafood
-    case Condiments
-    case Oils
-    case Seasonings
-    case Sauces
-    case Legumes
-    case Alcohol
-    case Nuts
-    case DessetAndSnacks
-    case Beverages
+    case dairy
+    case vegetables
+    case fruits
+    case bakingAndGrains
+    case spices
+    case meat
+    case fishAndSeafood
+    case condiments
+    case oils
+    case seasonings
+    case sauces
+    case legumes
+    case alcohol
+    case nuts
+    case dessetAndSnacks
+    case beverages
     
     var index: Int {
         switch self {
-        case .Dairy:
+        case .dairy:
             return 0
-        case .Vegetables:
+        case .vegetables:
             return 1
-        case .Fruits:
+        case .fruits:
             return 2
-        case .BakingAndGrains:
+        case .bakingAndGrains:
             return 3
-        case .Spices:
+        case .spices:
             return 4
-        case .Meat:
+        case .meat:
             return 5
-        case .FishAndSeafood:
+        case .fishAndSeafood:
             return 6
-        case .Condiments:
+        case .condiments:
             return 7
-        case .Oils:
+        case .oils:
             return 8
-        case .Seasonings:
+        case .seasonings:
             return 9
-        case .Sauces:
+        case .sauces:
             return 10
-        case .Legumes:
+        case .legumes:
             return 11
-        case .Alcohol:
+        case .alcohol:
             return 12
-        case .Nuts:
+        case .nuts:
             return 13
-        case .DessetAndSnacks:
+        case .dessetAndSnacks:
             return 14
-        case .Beverages:
+        case .beverages:
             return 15
         }
     }
     
     var string: String {
         switch self {
-        case .Dairy:
+        case .dairy:
             return "Dairy"
-        case .Vegetables:
+        case .vegetables:
             return "Vegetables"
-        case .Fruits:
+        case .fruits:
             return "Fruits"
-        case .BakingAndGrains:
+        case .bakingAndGrains:
             return "Baking and Beans"
-        case .Spices:
+        case .spices:
             return "Spices"
-        case .Meat:
+        case .meat:
             return "Meat"
-        case .FishAndSeafood:
+        case .fishAndSeafood:
             return "Fish and Seafood"
-        case .Condiments:
+        case .condiments:
             return "Condiments"
-        case .Oils:
+        case .oils:
             return "Oils"
-        case .Seasonings:
+        case .seasonings:
             return "Seasonings"
-        case .Sauces:
+        case .sauces:
             return "Sauces"
-        case .Legumes:
+        case .legumes:
             return "Legumes"
-        case .Alcohol:
+        case .alcohol:
             return "Alcohol"
-        case .Nuts:
+        case .nuts:
             return "Nuts"
-        case .DessetAndSnacks:
+        case .dessetAndSnacks:
             return "Desserts and Snacks"
-        case .Beverages:
+        case .beverages:
             return "Beverages"
         }
     }
     
     var dbKeyString: String {
         switch self {
-        case .Dairy:
+        case .dairy:
             return "dairy"
-        case .Vegetables:
+        case .vegetables:
             return "vegetables"
-        case .Fruits:
+        case .fruits:
             return "Fruits"
-        case .BakingAndGrains:
+        case .bakingAndGrains:
             return "bakingAndBeans"
-        case .Spices:
+        case .spices:
             return "spices"
-        case .Meat:
+        case .meat:
             return "meat"
-        case .FishAndSeafood:
+        case .fishAndSeafood:
             return "fishAndSeafood"
-        case .Condiments:
+        case .condiments:
             return "condiments"
-        case .Oils:
+        case .oils:
             return "oils"
-        case .Seasonings:
+        case .seasonings:
             return "seasonings"
-        case .Sauces:
+        case .sauces:
             return "sauces"
-        case .Legumes:
+        case .legumes:
             return "legumes"
-        case .Alcohol:
+        case .alcohol:
             return "alcohol"
-        case .Nuts:
+        case .nuts:
             return "nuts"
-        case .DessetAndSnacks:
+        case .dessetAndSnacks:
             return "dessertsAndSnacks"
-        case .Beverages:
+        case .beverages:
             return "beverages"
         }
     }
@@ -141,37 +141,37 @@ public enum IngredientCategories: CaseIterable {
 class IngredientCategory: NSObject {
     class func categoryNameForIndex(index: Int) -> String {
         switch index {
-        case IngredientCategories.Vegetables.index:
+        case IngredientCategories.vegetables.index:
             return "Vegetables"
-        case IngredientCategories.Fruits.index:
+        case IngredientCategories.fruits.index:
             return "Fruits"
-        case IngredientCategories.Spices.index:
+        case IngredientCategories.spices.index:
             return "Spices"
-        case IngredientCategories.FishAndSeafood.index:
+        case IngredientCategories.fishAndSeafood.index:
             return "Fish and Seafood"
-        case IngredientCategories.Meat.index:
+        case IngredientCategories.meat.index:
             return "Meat"
-        case IngredientCategories.DessetAndSnacks.index:
+        case IngredientCategories.dessetAndSnacks.index:
             return "Dessert and Snacks"
-        case IngredientCategories.Alcohol.index:
+        case IngredientCategories.alcohol.index:
             return "Alcohol"
-        case IngredientCategories.Beverages.index:
+        case IngredientCategories.beverages.index:
             return "Beverages"
-        case IngredientCategories.Legumes.index:
+        case IngredientCategories.legumes.index:
             return "Legumes"
-        case IngredientCategories.BakingAndGrains.index:
+        case IngredientCategories.bakingAndGrains.index:
             return "Baking and Grains"
-        case IngredientCategories.Condiments.index:
+        case IngredientCategories.condiments.index:
             return "Condiments"
-        case IngredientCategories.Dairy.index:
+        case IngredientCategories.dairy.index:
             return "Dairy"
-        case IngredientCategories.Oils.index:
+        case IngredientCategories.oils.index:
             return "Oils"
-        case IngredientCategories.Sauces.index:
+        case IngredientCategories.sauces.index:
             return "Sauces"
-        case IngredientCategories.Nuts.index:
+        case IngredientCategories.nuts.index:
             return "Nuts"
-        case IngredientCategories.Seasonings.index:
+        case IngredientCategories.seasonings.index:
             return "Seasonings"
         default:
             return ""
@@ -180,37 +180,37 @@ class IngredientCategory: NSObject {
     
     class func categoryIndexForIndex(index: Int) -> Int {
         switch index {
-        case IngredientCategories.Dairy.index:
+        case IngredientCategories.dairy.index:
             return 0
-        case IngredientCategories.Vegetables.index:
+        case IngredientCategories.vegetables.index:
             return 1
-        case IngredientCategories.Fruits.index:
+        case IngredientCategories.fruits.index:
             return 2
-        case IngredientCategories.BakingAndGrains.index:
+        case IngredientCategories.bakingAndGrains.index:
             return 3
-        case IngredientCategories.Spices.index:
+        case IngredientCategories.spices.index:
             return 4
-        case IngredientCategories.Meat.index:
+        case IngredientCategories.meat.index:
             return 5
-        case IngredientCategories.FishAndSeafood.index:
+        case IngredientCategories.fishAndSeafood.index:
             return 6
-        case IngredientCategories.Condiments.index:
+        case IngredientCategories.condiments.index:
             return 7
-        case IngredientCategories.Oils.index:
+        case IngredientCategories.oils.index:
             return 8
-        case IngredientCategories.Seasonings.index:
+        case IngredientCategories.seasonings.index:
             return 9
-        case IngredientCategories.Sauces.index:
+        case IngredientCategories.sauces.index:
             return 10
-        case IngredientCategories.Legumes.index:
+        case IngredientCategories.legumes.index:
             return 11
-        case IngredientCategories.Alcohol.index:
+        case IngredientCategories.alcohol.index:
             return 12
-        case IngredientCategories.Nuts.index:
+        case IngredientCategories.nuts.index:
             return 13
-        case IngredientCategories.DessetAndSnacks.index:
+        case IngredientCategories.dessetAndSnacks.index:
             return 14
-        case IngredientCategories.Beverages.index:
+        case IngredientCategories.beverages.index:
             return 15
         default:
             return -1
@@ -219,93 +219,93 @@ class IngredientCategory: NSObject {
 }
 
 public enum RecipeCategories: CaseIterable {
-    case Breakfast
-    case Lunch
-    case Beverages
-    case Appetizers
-    case Soups
-    case Salads
-    case MainDishesBeef
-    case MainDishesPoultry
-    case MainDishesPork
-    case MainDishesSeafood
-    case MainDishesVegetarian
-    case MainDishesVegetables
-    case Desserts
-    case Breads
-    case Holidays
-    case Traditional
+    case breakfast
+    case lunch
+    case beverages
+    case appetizers
+    case soups
+    case salads
+    case mainDishesBeef
+    case mainDishesPoultry
+    case mainDishesPork
+    case mainDishesSeafood
+    case mainDishesVegetarian
+    case mainDishesVegetables
+    case desserts
+    case breads
+    case holidays
+    case traditional
     
     var index: Int {
         switch self {
-        case .Breakfast:
+        case .breakfast:
             return 0
-        case .Lunch:
+        case .lunch:
             return 1
-        case .Beverages:
+        case .beverages:
             return 2
-        case .Appetizers:
+        case .appetizers:
             return 3
-        case .Soups:
+        case .soups:
             return 4
-        case .Salads:
+        case .salads:
             return 5
-        case .MainDishesBeef:
+        case .mainDishesBeef:
             return 6
-        case .MainDishesPoultry:
+        case .mainDishesPoultry:
             return 7
-        case .MainDishesPork:
+        case .mainDishesPork:
             return 8
-        case .MainDishesSeafood:
+        case .mainDishesSeafood:
             return 9
-        case .MainDishesVegetarian:
+        case .mainDishesVegetarian:
             return 10
-        case .MainDishesVegetables:
+        case .mainDishesVegetables:
             return 11
-        case .Desserts:
+        case .desserts:
             return 12
-        case .Breads:
+        case .breads:
             return 13
-        case .Holidays:
+        case .holidays:
             return 14
-        case .Traditional:
+        case .traditional:
             return 15
         }
     }
     
     var string: String {
         switch self {
-        case .Breakfast:
+        case .breakfast:
             return "Breakfast"
-        case .Lunch:
+        case .lunch:
             return "Lunch"
-        case .Beverages:
+        case .beverages:
             return "Beverages"
-        case .Appetizers:
+        case .appetizers:
             return "Appetizers"
-        case .Soups:
+        case .soups:
             return "Soups"
-        case .Salads:
+        case .salads:
             return "Salads"
-        case .MainDishesBeef:
+        case .mainDishesBeef:
             return "Main Dishes: Beef"
-        case .MainDishesPoultry:
+        case .mainDishesPoultry:
             return "Main Dishes: Poultry"
-        case .MainDishesPork:
+        case .mainDishesPork:
             return "Main Dishes: Pork"
-        case .MainDishesSeafood:
+        case .mainDishesSeafood:
             return "Main Dishes: Seafood"
-        case .MainDishesVegetarian:
+        case .mainDishesVegetarian:
             return "Main Dishes: Vegetarian"
-        case .MainDishesVegetables:
+        case .mainDishesVegetables:
             return "Main Dishes: Vegetables"
-        case .Desserts:
+        case .desserts:
             return "Desserts"
-        case .Breads:
+        case .breads:
             return "Breads"
-        case .Holidays:
+        case .holidays:
             return "Holidays"
-        case .Traditional:
+        case .traditional:
             return "Traditional"
         }
     }
@@ -314,37 +314,37 @@ public enum RecipeCategories: CaseIterable {
 class RecipeCategory: NSObject {
     class func categoryNameForIndex(index: Int) -> String {
         switch index {
-        case RecipeCategories.Breakfast.index:
+        case RecipeCategories.breakfast.index:
             return "Breakfast"
-        case RecipeCategories.Lunch.index:
+        case RecipeCategories.lunch.index:
             return "Lunch"
-        case RecipeCategories.Beverages.index:
+        case RecipeCategories.beverages.index:
             return "Beverages"
-        case RecipeCategories.Appetizers.index:
+        case RecipeCategories.appetizers.index:
             return "Appetizers"
-        case RecipeCategories.Soups.index:
+        case RecipeCategories.soups.index:
             return "Soups"
-        case RecipeCategories.Salads.index:
+        case RecipeCategories.salads.index:
             return "Salads"
-        case RecipeCategories.MainDishesBeef.index:
+        case RecipeCategories.mainDishesBeef.index:
             return "Main Dishes: Beef"
-        case RecipeCategories.MainDishesPoultry.index:
+        case RecipeCategories.mainDishesPoultry.index:
             return "Main Dishes: Poultry"
-        case RecipeCategories.MainDishesPork.index:
+        case RecipeCategories.mainDishesPork.index:
             return "Main Dishes: Pork"
-        case RecipeCategories.MainDishesSeafood.index:
+        case RecipeCategories.mainDishesSeafood.index:
             return "Main Dishes: Seafood"
-        case RecipeCategories.MainDishesVegetarian.index:
+        case RecipeCategories.mainDishesVegetarian.index:
             return "Main Dishes: Vegetarian"
-        case RecipeCategories.MainDishesVegetables.index:
+        case RecipeCategories.mainDishesVegetables.index:
             return "Main Dishes: Vegetables"
-        case RecipeCategories.Desserts.index:
+        case RecipeCategories.desserts.index:
             return "Desserts"
-        case RecipeCategories.Breads.index:
+        case RecipeCategories.breads.index:
             return "Breads"
-        case RecipeCategories.Holidays.index:
+        case RecipeCategories.holidays.index:
             return "Holidays"
-        case RecipeCategories.Traditional.index:
+        case RecipeCategories.traditional.index:
             return "Traditional"
         default:
             return ""
@@ -353,37 +353,37 @@ class RecipeCategory: NSObject {
     
     class func categoryIndexForIndex(index: Int) -> Int {
         switch index {
-        case RecipeCategories.Breakfast.index:
+        case RecipeCategories.breakfast.index:
             return 0
-        case RecipeCategories.Lunch.index:
+        case RecipeCategories.lunch.index:
             return 1
-        case RecipeCategories.Beverages.index:
+        case RecipeCategories.beverages.index:
             return 2
-        case RecipeCategories.Appetizers.index:
+        case RecipeCategories.appetizers.index:
             return 3
-        case RecipeCategories.Soups.index:
+        case RecipeCategories.soups.index:
             return 4
-        case RecipeCategories.Salads.index:
+        case RecipeCategories.salads.index:
             return 5
-        case RecipeCategories.MainDishesBeef.index:
+        case RecipeCategories.mainDishesBeef.index:
             return 6
-        case RecipeCategories.MainDishesPoultry.index:
+        case RecipeCategories.mainDishesPoultry.index:
             return 7
-        case RecipeCategories.MainDishesPork.index:
+        case RecipeCategories.mainDishesPork.index:
             return 8
-        case RecipeCategories.MainDishesSeafood.index:
+        case RecipeCategories.mainDishesSeafood.index:
             return 9
-        case RecipeCategories.MainDishesVegetarian.index:
+        case RecipeCategories.mainDishesVegetarian.index:
             return 10
-        case RecipeCategories.MainDishesVegetables.index:
+        case RecipeCategories.mainDishesVegetables.index:
             return 11
-        case RecipeCategories.Desserts.index:
+        case RecipeCategories.desserts.index:
             return 12
-        case RecipeCategories.Breads.index:
+        case RecipeCategories.breads.index:
             return 13
-        case RecipeCategories.Holidays.index:
+        case RecipeCategories.holidays.index:
             return 14
-        case RecipeCategories.Traditional.index:
+        case RecipeCategories.traditional.index:
             return 15
         default:
             return -1
