@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol GeneratedRecipesViewDelegate: class {
+protocol GeneratedRecipesViewDelegate: AnyObject {
     func didSelectedRecipeToBeScheduled(recipe: GeneratedRecipe)
 }
 

@@ -8,23 +8,23 @@
 
 import UIKit
 
-protocol UnitPickerViewDelegate: class {
+protocol UnitPickerViewDelegate: AnyObject {
     func didSelectUnit(unit: String)
 }
 
-protocol CookingTimePickerViewDelegate: class {
+protocol CookingTimePickerViewDelegate: AnyObject {
     func didSelectTime(hours: Int, minutes: Int)
 }
 
-protocol DificultyPickerViewDelegate: class {
+protocol DificultyPickerViewDelegate: AnyObject {
     func didSelectDificulty(dificulty: String)
 }
 
-protocol LastCookDatePickerViewDelegate: class {
+protocol LastCookDatePickerViewDelegate: AnyObject {
     func didSelectLastCookDate(date: Date?)
 }
 
-protocol SelectDatePickerViewDelegate: class {
+protocol SelectDatePickerViewDelegate: AnyObject {
     func didSelectDate(date: Date?, forStartDate startDate: Bool)
 }
 

@@ -9,7 +9,7 @@
 import UIKit
 import SearchTextField
 
-protocol ChangeRecipeIngredientCellDelegate: class {
+protocol ChangeRecipeIngredientCellDelegate: AnyObject {
     func ingredientTextFieldSelected(withIndex index: Int)
 }
 

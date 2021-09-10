@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-protocol UserDataManagerDelegate: class {
+protocol UserDataManagerDelegate: AnyObject {
     func homeIngredientsChanged()
     func homeIngredientsAdded()
     func homeIngredientRemoved()

@@ -28,7 +28,7 @@ enum SortStackViewButtons: String, CaseIterable {
     case LastCookingDateDescending = "Last Cooking Date Descending"
 }
 
-protocol SortViewDelegate: class {
+protocol SortViewDelegate: AnyObject {
     func didSelect(sortOption option: SortStackViewButtons)
 }
 

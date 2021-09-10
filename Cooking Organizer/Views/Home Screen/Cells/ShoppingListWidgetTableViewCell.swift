@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ShoppingListWidgetTableViewCellDelegate: class {
+protocol ShoppingListWidgetTableViewCellDelegate: AnyObject {
     func didSelectShoppingList(list: ShoppingList)
 }
 

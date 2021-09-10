@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - Filter View Protocol
 
-protocol FilterViewDelegate: class {
+protocol FilterViewDelegate: AnyObject {
     func homeIngredientFilterPressed(withParams params: HomeIngredientsFilterParams)
     func homeIngredientResetFilterPressed()
     

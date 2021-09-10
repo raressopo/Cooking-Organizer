@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol StepsViewDelegate: class {
+protocol StepsViewDelegate: AnyObject {
     func stepDeleted()
     func stepDetailFieldPressed(withText text: String?, atIndex index: Int)
 }

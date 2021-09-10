@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ScheduleRecipeViewDelegate: class {
+protocol ScheduleRecipeViewDelegate: AnyObject {
     func didScheduleRecipes()
 }
 

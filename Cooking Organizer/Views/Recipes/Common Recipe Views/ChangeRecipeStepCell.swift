@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ChangeRecipeStepCellDelegate: class {
+protocol ChangeRecipeStepCellDelegate: AnyObject {
     func stepChanged(withValue string: String?, atIndex index: Int)
     func stepDetailsFieldSelected(withText text: String?, atIndex index: Int)
 }
