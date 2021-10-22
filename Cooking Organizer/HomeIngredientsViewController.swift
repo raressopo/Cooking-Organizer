@@ -219,10 +219,8 @@ class HomeIngredientsViewController: UIViewController {
     private func populateHomeIngredients() {
         if let params = filterParams {
             filterHomeIngredients(withParams: params)
-        } else {
-            if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-                homeIngredients = ingredients
-            }
+        } else if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            homeIngredients = ingredients
         }
         
         if let sortOption = selectedSortOption {
