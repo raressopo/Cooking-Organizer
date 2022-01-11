@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -641,24 +641,6 @@
             </objects>
             <point key="canvasLocation" x="5837.68115942029" y="1230.8035714285713"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="dbo-zT-QL4">
-            <objects>
-                <tabBarController id="JuW-8J-swn" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="tLv-0F-R23">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="NhX-S7-dga" kind="relationship" relationship="viewControllers" id="Rjp-xd-bdJ"/>
-                        <segue destination="A8k-X4-CKf" kind="relationship" relationship="viewControllers" id="1Zq-Tx-iOP"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HUX-q6-WVT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="7127" y="-92"/>
-        </scene>
         <!--Cookbook-->
         <scene sceneID="wZx-5h-1gm">
             <objects>
@@ -1105,132 +1087,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P6c-jg-dXz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1228.985507246377" y="137.94642857142856"/>
-        </scene>
-        <!--Cooking Calendar-->
-        <scene sceneID="8np-MJ-GCD">
-            <objects>
-                <viewController id="NhX-S7-dga" customClass="CookingCalendarViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="caO-Q4-JUV">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="yjT-XM-Rfl">
-                                <rect key="frame" x="0.0" y="378" width="414" height="435"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r8C-Mf-U6O" customClass="FSCalendar">
-                                <rect key="frame" x="0.0" y="44" width="414" height="326"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="326" id="vRU-5J-AmI"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="07U-It-LZe">
-                                <rect key="frame" x="117" y="763" width="180" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="UdQ-ez-2Gq"/>
-                                    <constraint firstAttribute="width" constant="180" id="dn1-bH-Wfe"/>
-                                </constraints>
-                                <state key="normal" title="Generate Shopping List"/>
-                                <connections>
-                                    <action selector="generateShoppingListPressed:" destination="NhX-S7-dga" eventType="touchUpInside" id="9c0-p3-mkU"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="8Qy-XA-ce2"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="yjT-XM-Rfl" firstAttribute="trailing" secondItem="8Qy-XA-ce2" secondAttribute="trailing" id="4pg-OI-Caa"/>
-                            <constraint firstItem="r8C-Mf-U6O" firstAttribute="leading" secondItem="8Qy-XA-ce2" secondAttribute="leading" id="8KP-6L-0Jl"/>
-                            <constraint firstItem="r8C-Mf-U6O" firstAttribute="trailing" secondItem="8Qy-XA-ce2" secondAttribute="trailing" id="AgI-ln-cqM"/>
-                            <constraint firstItem="07U-It-LZe" firstAttribute="centerX" secondItem="caO-Q4-JUV" secondAttribute="centerX" id="QMH-29-RgM"/>
-                            <constraint firstItem="yjT-XM-Rfl" firstAttribute="leading" secondItem="8Qy-XA-ce2" secondAttribute="leading" id="cBy-rW-anG"/>
-                            <constraint firstItem="r8C-Mf-U6O" firstAttribute="top" secondItem="8Qy-XA-ce2" secondAttribute="top" id="nNH-Ys-cnN"/>
-                            <constraint firstItem="8Qy-XA-ce2" firstAttribute="bottom" secondItem="07U-It-LZe" secondAttribute="bottom" constant="20" id="qCc-fC-7gc"/>
-                            <constraint firstItem="yjT-XM-Rfl" firstAttribute="top" secondItem="r8C-Mf-U6O" secondAttribute="bottom" constant="8" id="wKl-PC-94f"/>
-                            <constraint firstItem="8Qy-XA-ce2" firstAttribute="bottom" secondItem="yjT-XM-Rfl" secondAttribute="bottom" id="zPQ-8e-biB"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Calendar" id="T2e-33-pxX"/>
-                    <navigationItem key="navigationItem" title="Cooking Calendar" id="LfB-Ho-hgP"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="calendar" destination="r8C-Mf-U6O" id="rgz-g0-wEL"/>
-                        <outlet property="generateShoppingListButton" destination="07U-It-LZe" id="M0C-yV-HhS"/>
-                        <outlet property="recipesTableView" destination="yjT-XM-Rfl" id="k8Y-pR-N8D"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3Xi-Pv-eEW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="8170" y="-1211"/>
-        </scene>
-        <!--Cookbook-->
-        <scene sceneID="vn3-NS-ly6">
-            <objects>
-                <viewController id="A8k-X4-CKf" customClass="CookbookViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="XNp-rE-Jc3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Nxw-4b-hKf">
-                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="recipeCell" rowHeight="130" id="DAy-u8-dnA" customClass="RecipeTableViewCell" customModule="Cooking_Organizer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="130"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DAy-u8-dnA" id="HZF-MC-4Zq">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="130"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hD-Es-gBD">
-                                <rect key="frame" x="24" y="759" width="35" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="sgv-Ov-Bnf"/>
-                                    <constraint firstAttribute="height" constant="30" id="tEW-xW-EVd"/>
-                                </constraints>
-                                <state key="normal" title="Filter"/>
-                                <connections>
-                                    <action selector="filterPressed:" destination="A8k-X4-CKf" eventType="touchUpInside" id="4v1-Ws-Wem"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bdX-lN-ikN">
-                                <rect key="frame" x="348" y="763" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="46" id="6ZX-Rm-9IJ"/>
-                                    <constraint firstAttribute="height" constant="30" id="dcK-Ph-9Gh"/>
-                                </constraints>
-                                <state key="normal" title="Add"/>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="UNm-ww-MC5"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="Nxw-4b-hKf" secondAttribute="bottom" id="16F-lX-9sG"/>
-                            <constraint firstItem="Nxw-4b-hKf" firstAttribute="top" secondItem="UNm-ww-MC5" secondAttribute="top" id="MYB-rb-Qri"/>
-                            <constraint firstItem="4hD-Es-gBD" firstAttribute="leading" secondItem="UNm-ww-MC5" secondAttribute="leading" constant="24" id="X7d-zc-Eig"/>
-                            <constraint firstItem="UNm-ww-MC5" firstAttribute="bottom" secondItem="bdX-lN-ikN" secondAttribute="bottom" constant="20" id="f7E-ao-Caq"/>
-                            <constraint firstItem="Nxw-4b-hKf" firstAttribute="leading" secondItem="UNm-ww-MC5" secondAttribute="leading" id="k5r-1c-Sw3"/>
-                            <constraint firstItem="Nxw-4b-hKf" firstAttribute="trailing" secondItem="UNm-ww-MC5" secondAttribute="trailing" id="mlT-yp-am9"/>
-                            <constraint firstItem="UNm-ww-MC5" firstAttribute="trailing" secondItem="bdX-lN-ikN" secondAttribute="trailing" constant="20" id="qaM-5Z-jsO"/>
-                            <constraint firstItem="UNm-ww-MC5" firstAttribute="bottom" secondItem="4hD-Es-gBD" secondAttribute="bottom" constant="24" id="wWG-1c-3ZF"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Retete" id="5BU-hn-J1d"/>
-                    <navigationItem key="navigationItem" title="Cookbook" id="uI8-tl-wnC"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="addRecipeButton" destination="bdX-lN-ikN" id="DAD-ui-9kx"/>
-                        <outlet property="filterButton" destination="4hD-Es-gBD" id="dud-JN-pDD"/>
-                        <outlet property="recipesTableView" destination="Nxw-4b-hKf" id="UNi-sJ-83O"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZWP-i0-Qra" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="8170" y="-544"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

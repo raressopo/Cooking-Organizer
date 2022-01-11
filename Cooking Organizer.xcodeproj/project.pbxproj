@@ -823,13 +823,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6Y4ZS98UZF;
+				DEVELOPMENT_TEAM = 67967Q33R5;
 				INFOPLIST_FILE = "Cooking Organizer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = raress.COrganizer;
+				PRODUCT_BUNDLE_IDENTIFIER = raressoponar.COrganizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cooking Organizer/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
@@ -843,13 +843,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6Y4ZS98UZF;
+				DEVELOPMENT_TEAM = 67967Q33R5;
 				INFOPLIST_FILE = "Cooking Organizer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = raress.COrganizer;
+				PRODUCT_BUNDLE_IDENTIFIER = raressoponar.COrganizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cooking Organizer/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
