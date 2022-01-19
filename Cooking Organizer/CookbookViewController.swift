@@ -47,7 +47,7 @@ class CookbookViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "recipeDetailsSegue", let destinationVC = segue.destination as? RecipeDetailsViewController {
+        if segue.identifier == "recipeDetailsSegue", let destinationVC = segue.destination as? RecipeDetailsViewControllerv2 {
             destinationVC.recipe = selectedRecipe
             
             selectedRecipe = nil
