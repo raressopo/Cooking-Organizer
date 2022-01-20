@@ -377,28 +377,25 @@ extension CookbookViewController: UITableViewDelegate, UITableViewDataSource {
         let recipe = filteredRecipes?[indexPath.row] ?? recipes[indexPath.row]
         
         cell.nameLabel.text = recipe.name
-        cell.categoriesLabel.text = recipe.categories
-        cell.cookingTimeLabel.text = recipe.cookingTime
+        cell.cookingTimeLabel.text = "Cooking Time: \(recipe.formattedCookingTime)"
         
         var lastCookingDateString = "Never Cooked"
         
         if let lastDate = recipe.lastCookingDate {
             lastCookingDateString = UtilsManager.shared.dateFormatter.string(from: lastDate)
+        } else if let lastDateString = recipe.cookingDates?.first {
+            lastCookingDateString = lastDateString
         }
         
-        cell.lastCookLabel.text = lastCookingDateString
-        
-        if let ingredients = recipe.ingredients {
-            cell.nrOfIngredientsLabel.text = "\(ingredients.count) ingr."
-        }
-        
-        cell.portionsLabel.text = "\(recipe.portions) portions"
+        cell.lastCookLabel.text = "Last Cook: \(lastCookingDateString)"
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 130
+        let recipe = filteredRecipes?[indexPath.row] ?? recipes[indexPath.row]
+        
+        return 99 - 25 + RecipeTableViewCell.recipeCellHeight(forString: recipe.name ?? "")
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

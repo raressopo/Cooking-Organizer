@@ -69,6 +69,18 @@ class NewRecipeViewController: UIViewController,
         hideKeyboardWhenTappedAround()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "createRecipeIngredientsSegue", let destinationVC = segue.destination as? IngredientsViewController {
+            destinationVC.createRecipeMode = true
+            destinationVC.createRecipeIngredients = ingredients
+            destinationVC.delegate = self
+        } else if segue.identifier == "createRecipeStepsSegue", let destinationVC = segue.destination as? StepsViewController {
+            destinationVC.createRecipeMode = true
+            destinationVC.createRecipeSteps = steps
+            destinationVC.delegate = self
+        }
+    }
+    
     // MARK: - IBActions
     
     @IBAction func addPhotoPressed(_ sender: Any) {
@@ -270,16 +282,14 @@ class NewRecipeViewController: UIViewController,
     
     private func setupViews() {
         addBorderToLayer(layer: addRecipeImage.layer)
-        addBorderToLayer(layer: ingredientsView.layer)
-        addBorderToLayer(layer: stepsView.layer)
         
         addBackgroundColorToButton(button: cookingTimeButton)
         addBackgroundColorToButton(button: dificultyButton)
         addBackgroundColorToButton(button: lastCookButton)
         addBackgroundColorToButton(button: categoriesButton)
         
-        ingredientsViewSetup()
-        stepsViewSetup()
+        //ingredientsViewSetup()
+        //stepsViewSetup()
     }
     
     @objc
@@ -533,4 +543,20 @@ extension NewRecipeViewController: StepsViewDelegate, StepExtendedTextViewDelega
             
         stepsView.addStepButton.addTarget(self, action: #selector(addNewStepPressed), for: .touchUpInside)
     }
+}
+
+extension NewRecipeViewController: CreateRecipeIngredientsProtocol {
+    
+    func ingredientsAdded(ingredients: [NewRecipeIngredient]) {
+        self.ingredients = ingredients
+    }
+    
+}
+
+extension NewRecipeViewController: CreateRecipeStepsProtocol {
+    
+    func stepsAdded(steps: [String]) {
+        self.steps = steps
+    }
+    
 }

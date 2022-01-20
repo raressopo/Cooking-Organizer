@@ -12,6 +12,7 @@ enum HomeItems: Int, CaseIterable {
     case Recipes
     case Pantry
     case ShoppingLists
+    case CookingCalendar
     case Account
     
     var asString: String {
@@ -22,6 +23,8 @@ enum HomeItems: Int, CaseIterable {
             return "Cămară"
         case .ShoppingLists:
             return "Liste"
+        case .CookingCalendar:
+            return "Calendar Rețete"
         case .Account:
             return "Cont"
         }
@@ -40,6 +43,10 @@ class HomeCollectionViewController: UICollectionViewController {
         
         collectionView?.contentInsetAdjustmentBehavior = .always
         collectionView.register(UINib(nibName: "HomeCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "homeCell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
@@ -55,7 +62,7 @@ class HomeCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return HomeItems.allCases.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -78,6 +85,8 @@ class HomeCollectionViewController: UICollectionViewController {
             performSegue(withIdentifier: "listsSegue", sender: self)
         case HomeItems.Account.rawValue:
             performSegue(withIdentifier: "settingsSegue", sender: self)
+        case HomeItems.CookingCalendar.rawValue:
+            performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
         default:
             fatalError("All Home Items need to have a destination screen")
         }

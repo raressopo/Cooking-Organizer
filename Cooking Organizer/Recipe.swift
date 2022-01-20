@@ -73,6 +73,16 @@ class Recipe: Codable {
             return sortedDates.first
         }
     }
+    
+    var formattedCookingTime: String {
+        if cookingTimeHours == 0 && cookingTimeMinutes != 0 {
+            return "\(cookingTimeMinutes) minutes"
+        } else if cookingTimeHours != 0 && cookingTimeMinutes == 0 {
+            return "\(cookingTimeHours) hours"
+        } else {
+            return cookingTime ?? "Undefined"
+        }
+    }
 }
 
 class ChangedRecipe {

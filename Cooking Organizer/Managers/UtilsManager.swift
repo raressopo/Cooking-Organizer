@@ -125,4 +125,29 @@ extension String {
         allowed.addCharacters(in: unreserved)
         return addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)!.removingPercentEncoding!
     }
+    
+    // calculate label size to show
+    func size(for label:UILabel) -> CGSize{
+        let alabel = label.clone()
+        alabel.text = self
+        alabel.sizeToFit()
+        
+        return alabel.bounds.size
+    }
+}
+
+extension UILabel{
+    // clone UILabel object
+    func clone() -> UILabel {
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+            
+            //return NSKeyedUnarchiver.unarchiveObject(with: data) as! UILabel
+            return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as! UILabel
+        } catch {
+            print(error)
+            
+            return UILabel()
+        }
+    }
 }

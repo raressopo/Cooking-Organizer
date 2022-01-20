@@ -10,11 +10,14 @@ import UIKit
 
 enum SettingsOptions: CaseIterable {
     case homeScreenOrder
+    case logout
     
     var cellTitle: String {
         switch self {
         case .homeScreenOrder:
             return "Rearrange Home Screen"
+        case .logout:
+            return "Log Out"
         }
     }
 }
@@ -28,6 +31,15 @@ class SettingsViewController: UIViewController {
         
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
+    }
+    
+    @IBAction func logOutPressed(_ sender: Any) {
+        UserDefaults.standard.removeObject(forKey: "loggedInUserId")
+        
+        UserDefaults.standard.removeObject(forKey: "currentUserEmail")
+        UserDefaults.standard.removeObject(forKey: "currentUserPassword")
+        
+        self.dismiss(animated: true)
     }
 }
 
@@ -55,6 +67,13 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             view.addSubview(rearrangeHomeScreenView)
             
             NSLayoutConstraint.activate([rearrangeHomeScreenView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0), rearrangeHomeScreenView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0), rearrangeHomeScreenView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0), rearrangeHomeScreenView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)])
+        case .logout:
+            UserDefaults.standard.removeObject(forKey: "loggedInUserId")
+            
+            UserDefaults.standard.removeObject(forKey: "currentUserEmail")
+            UserDefaults.standard.removeObject(forKey: "currentUserPassword")
+            
+            self.dismiss(animated: true)
         }
     }
 }

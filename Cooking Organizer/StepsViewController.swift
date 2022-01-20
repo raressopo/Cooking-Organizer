@@ -8,17 +8,27 @@
 
 import UIKit
 
+protocol CreateRecipeStepsProtocol: AnyObject {
+    func stepsAdded(steps: [String])
+}
+
 class StepsViewController: UIViewController {
     @IBOutlet weak var stepsTableView: UITableView!
     @IBOutlet weak var addStepButton: UIButton!
     
     @IBOutlet weak var stepsTableViewBottomToButtonConstraint: NSLayoutConstraint!
+    
     var stepsTableViewBottomToScreenBottomConstraint: NSLayoutConstraint?
     
-    var steps = [String]()
-    var stepsCopy = [String]()
+    lazy var steps = [String]()
+    lazy var stepsCopy = [String]()
+    lazy var createRecipeSteps = [String]()
     
     var recipe: Recipe?
+    
+    var createRecipeMode = false
+    
+    weak var delegate: CreateRecipeStepsProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,26 +36,59 @@ class StepsViewController: UIViewController {
         stepsTableView.delegate = self
         stepsTableView.dataSource = self
         
-        stepsTableViewBottomToButtonConstraint.isActive = false
-        addStepButton.isHidden = true
-        
-        stepsTableViewBottomToScreenBottomConstraint = stepsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        stepsTableViewBottomToScreenBottomConstraint?.isActive = true
-        
         stepsTableView.register(UINib(nibName: "RecipeStepCell", bundle: nil), forCellReuseIdentifier: "stepCell")
         stepsTableView.register(UINib(nibName: "ChangeRecipeStepCell", bundle: nil), forCellReuseIdentifier: "changeStepCell")
         
-        let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        if createRecipeMode {
+            let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
+            
+            self.navigationItem.hidesBackButton = true
+            self.navigationItem.rightBarButtonItem = editNavBarButton
+            
+            stepsTableView.setEditing(true, animated: false)
+        } else {
+            stepsTableViewBottomToButtonConstraint.isActive = false
+            addStepButton.isHidden = true
+            
+            stepsTableViewBottomToScreenBottomConstraint = stepsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            stepsTableViewBottomToScreenBottomConstraint?.isActive = true
+            
+            let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+            
+            self.navigationItem.rightBarButtonItem = editNavBarButton
+        }
         
-        self.navigationItem.rightBarButtonItem = editNavBarButton
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super .viewWillDisappear(animated)
+        
+        self.navigationItem.hidesBackButton = false
     }
     
     @IBAction func addStepPressed(_ sender: Any) {
         let step = String()
         
-        stepsCopy.append(step)
+        if createRecipeMode {
+            createRecipeSteps.append(step)
+        } else {
+            stepsCopy.append(step)
+        }
         
         stepsTableView.reloadData()
+    }
+    
+    @objc private func donePressed() {
+        validateChangedSteps { failed in
+            if failed {
+                AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                  title: "Incomplete Steps",
+                                                                  message: "Please complete all the info for all the steps you have or added.")
+            } else {
+                self.delegate?.stepsAdded(steps: self.createRecipeSteps)
+                
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
     
     @objc func editPressed() {
@@ -68,11 +111,17 @@ class StepsViewController: UIViewController {
                 
                 if self.areStepsChanged() {
                     self.stepsCopy.forEach { changedSteps["\(self.stepsCopy.firstIndex(of: $0) ?? 0)"] = $0 }
+                } else {
+                    self.setEditMode(editMode: false)
+                    
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editPressed))
+                    self.navigationItem.hidesBackButton = false
+                    
+                    return
                 }
                 
                 if let userId = UsersManager.shared.currentLoggedInUser?.loginData.id,
-                    let recipeId = self.recipe?.id,
-                    !changedSteps.isEmpty {
+                    let recipeId = self.recipe?.id {
                     
                     FirebaseAPIManager.sharedInstance.updateRecipe(froUserId: userId,
                                                                    andForRecipeId: recipeId,
@@ -107,35 +156,30 @@ class StepsViewController: UIViewController {
         stepsTableView.setEditing(editMode, animated: true)
         
         if editMode {
-            shouldHideAddStepButton(hide: false)
+            showAddStepButton()
             populateStepsCopy()
             
             stepsTableView.reloadData()
         } else {
-            shouldHideAddStepButton(hide: true)
+            hideAddStepButton()
             
             stepsTableView.reloadData()
         }
     }
     
-    private func shouldHideAddStepButton(hide: Bool) {
-        addStepButton.isHidden = hide
-        
-        stepsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = hide
-        stepsTableViewBottomToScreenBottomConstraint?.isActive = !hide
-    }
-    
-    private func setupAddStepButton() {
-        stepsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = false
-        
-        stepsTableViewBottomToButtonConstraint.isActive = true
-        addStepButton.isHidden = false
-    }
-    
-    private func removeAddStepButton() {
+    private func hideAddStepButton() {
         addStepButton.isHidden = true
         
-        stepsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        stepsTableViewBottomToButtonConstraint.isActive = false
+        stepsTableViewBottomToScreenBottomConstraint?.isActive = true
+    }
+    
+    private func showAddStepButton() {
+        addStepButton.isHidden = false
+        
+        stepsTableViewBottomToScreenBottomConstraint?.isActive = false
+        stepsTableViewBottomToButtonConstraint = stepsTableView.bottomAnchor.constraint(equalTo: addStepButton.topAnchor)
+        stepsTableViewBottomToButtonConstraint.isActive = true
     }
     
     private func populateStepsCopy() {
@@ -149,6 +193,8 @@ class StepsViewController: UIViewController {
     }
     
     private func validateChangedSteps(validationFailed completion: @escaping (Bool) -> Void) {
+        removeEmptySteps()
+        
         for step in stepsCopy where step.isEmpty {
             completion(true)
             
@@ -156,6 +202,30 @@ class StepsViewController: UIViewController {
         }
         
         completion(false)
+    }
+    
+    private func removeEmptySteps() {
+        if createRecipeMode {
+            createRecipeSteps.forEach({
+                if $0.isEmpty {
+                    let stepIndex = createRecipeSteps.lastIndex(of: $0)
+                    
+                    if let index = stepIndex {
+                        createRecipeSteps.remove(at: index)
+                    }
+                }
+            })
+        } else {
+            stepsCopy.forEach({
+                if $0.isEmpty {
+                    let stepIndex = stepsCopy.lastIndex(of: $0)
+                    
+                    if let index = stepIndex {
+                        stepsCopy.remove(at: index)
+                    }
+                }
+            })
+        }
     }
     
     private func areStepsChanged() -> Bool {
@@ -180,7 +250,11 @@ class StepsViewController: UIViewController {
 
 extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView.isEditing ? stepsCopy.count : steps.count
+        if createRecipeMode {
+            return createRecipeSteps.count
+        } else {
+            return tableView.isEditing ? stepsCopy.count : steps.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -194,7 +268,7 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
             cell.delegate = self
             
             cell.stepNrLabel.text = "\(indexPath.row + 1)"
-            cell.stepDetailsTextField.text = stepsCopy[indexPath.row]
+            cell.stepDetailsTextField.text = createRecipeMode ? createRecipeSteps[indexPath.row] : stepsCopy[indexPath.row]
             
             cell.selectionStyle = .none
             
@@ -218,16 +292,28 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedStep = stepsCopy[sourceIndexPath.row]
-        stepsCopy.remove(at: sourceIndexPath.row)
-        stepsCopy.insert(movedStep, at: destinationIndexPath.row)
+        if createRecipeMode {
+            let movedStep = createRecipeSteps[sourceIndexPath.row]
+            
+            createRecipeSteps.remove(at: sourceIndexPath.row)
+            createRecipeSteps.insert(movedStep, at: destinationIndexPath.row)
+        } else {
+            let movedStep = stepsCopy[sourceIndexPath.row]
+            
+            stepsCopy.remove(at: sourceIndexPath.row)
+            stepsCopy.insert(movedStep, at: destinationIndexPath.row)
+        }
         
         stepsTableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            stepsCopy.remove(at: indexPath.row)
+            if createRecipeMode {
+                createRecipeSteps.remove(at: indexPath.row)
+            } else {
+                stepsCopy.remove(at: indexPath.row)
+            }
             
             stepsTableView.reloadData()
         }
@@ -244,7 +330,7 @@ extension StepsViewController: ChangeRecipeStepCellDelegate {
         
         stepExtendedTextView.delegate = self
         
-        stepExtendedTextView.becomeFirstResponder()
+        //stepExtendedTextView.becomeFirstResponder()
         stepExtendedTextView.translatesAutoresizingMaskIntoConstraints = false
         stepExtendedTextView.stepDetailsTextView.text = text
         stepExtendedTextView.index = index
@@ -253,10 +339,16 @@ extension StepsViewController: ChangeRecipeStepCellDelegate {
                                      stepExtendedTextView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
                                      stepExtendedTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
                                      stepExtendedTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+        
+        stepExtendedTextView.stepDetailsTextView.becomeFirstResponder()
     }
     
     func stepChanged(withValue string: String?, atIndex index: Int) {
-        stepsCopy[index] = string ?? ""
+        if createRecipeMode {
+            createRecipeSteps[index] = string ?? ""
+        } else {
+            stepsCopy[index] = string ?? ""
+        }
     }
     
 }
@@ -264,7 +356,11 @@ extension StepsViewController: ChangeRecipeStepCellDelegate {
 extension StepsViewController: StepExtendedTextViewDelegate {
     
     func stepDetailsSaved(withText text: String?, atIndex index: Int) {
-        stepsCopy[index] = text ?? ""
+        if createRecipeMode {
+            createRecipeSteps[index] = text ?? ""
+        } else {
+            stepsCopy[index] = text ?? ""
+        }
         
         stepsTableView.reloadData()
     }

@@ -22,6 +22,8 @@ class RecipeDetailsViewControllerv2: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UserDataManager.shared.delegate = self
+        
         guard let recipe = recipe else { fatalError("recipe should exist!") }
         
         if let data = recipe.imageData {
@@ -47,17 +49,25 @@ class RecipeDetailsViewControllerv2: UIViewController {
             if let recipeIngredients = recipe?.ingredients, recipeIngredients.count > 0 {
                 destinationVC.ingredients = recipeIngredients
             }
+            
+            destinationVC.recipe = recipe
         } else if segue.identifier == "stepsSegue", let destinationVC = segue.destination as? StepsViewController {
             if let recipeSteps = recipe?.steps, recipeSteps.count > 0 {
                 destinationVC.steps = recipeSteps
-                destinationVC.recipe = recipe
             }
+            
+            destinationVC.recipe = recipe
         }
     }
     
-    @IBAction func ingredientsPressed(_ sender: Any) {
+}
+
+extension RecipeDetailsViewControllerv2: UserDataManagerDelegate {
+    
+    func recipeChanged() {
+        if let userRecipes = UsersManager.shared.currentLoggedInUser?.recipes {
+            recipe = userRecipes.first(where: { $0.id == recipe?.id })
+        }
     }
     
-    @IBAction func stepsPressed(_ sender: Any) {
-    }
 }
