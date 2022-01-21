@@ -1,19 +1,18 @@
 //
-//  HomeCollectionViewController.swift
+//  HomeViewController.swift
 //  Cooking Organizer
 //
-//  Created by Rares Soponar on 11/01/2022.
+//  Created by Rares Soponar on 20/01/2022.
 //  Copyright © 2022 Rares Soponar. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 enum HomeItems: Int, CaseIterable {
     case Recipes
     case Pantry
     case ShoppingLists
     case CookingCalendar
-    case Account
     
     var asString: String {
         switch self {
@@ -25,13 +24,13 @@ enum HomeItems: Int, CaseIterable {
             return "Liste"
         case .CookingCalendar:
             return "Calendar Rețete"
-        case .Account:
-            return "Cont"
         }
     }
 }
 
-class HomeCollectionViewController: UICollectionViewController {
+class HomeViewController: UIViewController {
+    
+    @IBOutlet weak var collectionView: UICollectionView!
     
     let inset: CGFloat = 10
     let minimumLineSpacing: CGFloat = 10
@@ -41,7 +40,10 @@ class HomeCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.contentInsetAdjustmentBehavior = .always
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.contentInsetAdjustmentBehavior = .always
         collectionView.register(UINib(nibName: "HomeCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "homeCell")
     }
     
@@ -57,15 +59,22 @@ class HomeCollectionViewController: UICollectionViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    @IBAction func accountPressed(_ sender: Any) {
+        performSegue(withIdentifier: "settingsSegue", sender: self)
+    }
+    
+}
+
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return HomeItems.allCases.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "homeCell", for: indexPath) as? HomeCollectionViewCell else {
             fatalError("Wrong cell!")
         }
@@ -75,7 +84,7 @@ class HomeCollectionViewController: UICollectionViewController {
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.row {
         case HomeItems.Recipes.rawValue:
             performSegue(withIdentifier: "recipesSegue", sender: self)
@@ -83,19 +92,12 @@ class HomeCollectionViewController: UICollectionViewController {
             performSegue(withIdentifier: "pantrySegue", sender: self)
         case HomeItems.ShoppingLists.rawValue:
             performSegue(withIdentifier: "listsSegue", sender: self)
-        case HomeItems.Account.rawValue:
-            performSegue(withIdentifier: "settingsSegue", sender: self)
         case HomeItems.CookingCalendar.rawValue:
             performSegue(withIdentifier: "cookingCalendarSegue", sender: self)
         default:
             fatalError("All Home Items need to have a destination screen")
         }
     }
-    
-}
-
-extension HomeCollectionViewController: UICollectionViewDelegateFlowLayout {
-    // for arranging nicer see https://stackoverflow.com/questions/14674986/uicollectionview-set-number-of-columns
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let widthMarginsAndInsets = inset * 2 + collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right + minimumInteritemSpacing
@@ -116,7 +118,8 @@ extension HomeCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let widthMarginsAndInsets = inset * 2 + collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right + minimumInteritemSpacing
-        let itemWidthAndHeight = (view.frame.width - widthMarginsAndInsets) / CGFloat(cellsPerRow)
+        let itemWidthAndHeight = (collectionView.frame.width - widthMarginsAndInsets) / CGFloat(cellsPerRow)
+        
         return CGSize(width: itemWidthAndHeight, height: itemWidthAndHeight)
     }
     
@@ -124,4 +127,5 @@ extension HomeCollectionViewController: UICollectionViewDelegateFlowLayout {
         collectionView?.collectionViewLayout.invalidateLayout()
         super.viewWillTransition(to: size, with: coordinator)
     }
+    
 }

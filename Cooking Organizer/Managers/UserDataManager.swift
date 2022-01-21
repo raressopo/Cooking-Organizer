@@ -125,9 +125,9 @@ class UserDataManager: NSObject {
     }
     
     func removeRecipe(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
-        FirebaseAPIManager.sharedInstance.removeHomeIngredient(withId: id,
-                                                               success: success,
-                                                               failure: failure)
+        FirebaseAPIManager.sharedInstance.removeRecipe(withId: id,
+                                                       success: success,
+                                                       failure: failure)
     }
     
     func getCustomIngredients() {

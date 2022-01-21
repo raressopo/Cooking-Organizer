@@ -18,6 +18,7 @@
 		8E0F01D0248A616D00CBA319 /* HomeIngredientDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0F01CF248A616D00CBA319 /* HomeIngredientDetailsView.swift */; };
 		8E0F01D2248A617700CBA319 /* HomeIngredientDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E0F01D1248A617700CBA319 /* HomeIngredientDetailsView.xib */; };
 		8E1AECE1247E75FF0041B6C4 /* Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1AECE0247E75FF0041B6C4 /* Categories.swift */; };
+		8E1F6E432799C359003053C0 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1F6E422799C359003053C0 /* HomeViewController.swift */; };
 		8E3142FF2510FCC700FCF59F /* RecipeStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3142FE2510FCC700FCF59F /* RecipeStepCell.swift */; };
 		8E3143012510FCD800FCF59F /* RecipeStepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E3143002510FCD800FCF59F /* RecipeStepCell.xib */; };
 		8E3143032510FD8C00FCF59F /* ChangeRecipeStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3143022510FD8C00FCF59F /* ChangeRecipeStepCell.swift */; };
@@ -86,7 +87,6 @@
 		8EE0BFAE255C3CAA002F91A8 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE0BFAD255C3CAA002F91A8 /* SignUpView.swift */; };
 		8EE3941C249795D000DE2C9B /* NewRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3941B249795D000DE2C9B /* NewRecipeViewController.swift */; };
 		8EE3941E2497A35900DE2C9B /* NewRecipeIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3941D2497A35900DE2C9B /* NewRecipeIngredient.swift */; };
-		8EE3D891278DD51500037C60 /* HomeCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3D890278DD51500037C60 /* HomeCollectionViewController.swift */; };
 		8EEC0BDA247F9D29005BFA24 /* UtilsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEC0BD9247F9D29005BFA24 /* UtilsManager.swift */; };
 		8EEC0BDD247FCE9C005BFA24 /* HomeIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEC0BDC247FCE9C005BFA24 /* HomeIngredient.swift */; };
 		8EEC0BE0247FD25A005BFA24 /* HomeIngredientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEC0BDF247FD25A005BFA24 /* HomeIngredientTableViewCell.swift */; };
@@ -113,6 +113,7 @@
 		8E0F01CF248A616D00CBA319 /* HomeIngredientDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngredientDetailsView.swift; sourceTree = "<group>"; };
 		8E0F01D1248A617700CBA319 /* HomeIngredientDetailsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeIngredientDetailsView.xib; sourceTree = "<group>"; };
 		8E1AECE0247E75FF0041B6C4 /* Categories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Categories.swift; sourceTree = "<group>"; };
+		8E1F6E422799C359003053C0 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		8E3142FE2510FCC700FCF59F /* RecipeStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeStepCell.swift; sourceTree = "<group>"; };
 		8E3143002510FCD800FCF59F /* RecipeStepCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecipeStepCell.xib; sourceTree = "<group>"; };
 		8E3143022510FD8C00FCF59F /* ChangeRecipeStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRecipeStepCell.swift; sourceTree = "<group>"; };
@@ -182,7 +183,6 @@
 		8EE0BFAD255C3CAA002F91A8 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		8EE3941B249795D000DE2C9B /* NewRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRecipeViewController.swift; sourceTree = "<group>"; };
 		8EE3941D2497A35900DE2C9B /* NewRecipeIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRecipeIngredient.swift; sourceTree = "<group>"; };
-		8EE3D890278DD51500037C60 /* HomeCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewController.swift; sourceTree = "<group>"; };
 		8EEC0BD9247F9D29005BFA24 /* UtilsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsManager.swift; sourceTree = "<group>"; };
 		8EEC0BDC247FCE9C005BFA24 /* HomeIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngredient.swift; sourceTree = "<group>"; };
 		8EEC0BDF247FD25A005BFA24 /* HomeIngredientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIngredientTableViewCell.swift; sourceTree = "<group>"; };
@@ -419,10 +419,10 @@
 				8E5B68D8253C47BD00B4BA19 /* SettingsViewController.swift */,
 				8E34D4952546EC0000AE1BCD /* ShoppingListsViewController.swift */,
 				8E3640C725470D9000ABC563 /* ShoppingListViewController.swift */,
-				8EE3D890278DD51500037C60 /* HomeCollectionViewController.swift */,
 				8E703E3E27970F1F00F7BD96 /* RecipeDetailsViewControllerv2.swift */,
 				8E5D3B86279845F400736DDE /* IngredientsViewController.swift */,
 				8E5D3B892798463E00736DDE /* StepsViewController.swift */,
+				8E1F6E422799C359003053C0 /* HomeViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -583,6 +583,7 @@
 				8EEC0BDA247F9D29005BFA24 /* UtilsManager.swift in Sources */,
 				8E9346972499F64C0048F5B1 /* CustomPickerView.swift in Sources */,
 				8E5D3B87279845F400736DDE /* IngredientsViewController.swift in Sources */,
+				8E1F6E432799C359003053C0 /* HomeViewController.swift in Sources */,
 				8E01E5E82795C34400DDDFBD /* HomeCollectionViewCell.swift in Sources */,
 				8EB02E70249CFECE0013D1B2 /* Checkbox.swift in Sources */,
 				8E0951C225543A9000D4550D /* GeneratedShoppingListItem.swift in Sources */,
@@ -600,7 +601,6 @@
 				8EE3941C249795D000DE2C9B /* NewRecipeViewController.swift in Sources */,
 				8E498AD12536FF5200900D61 /* FilterView.swift in Sources */,
 				8E3640C825470D9000ABC563 /* ShoppingListViewController.swift in Sources */,
-				8EE3D891278DD51500037C60 /* HomeCollectionViewController.swift in Sources */,
 				8E66F993255986B3008E15CE /* GeneratedRecipeTableViewCell.swift in Sources */,
 				8E8E203624756DFB00AF2F49 /* AlertManager.swift in Sources */,
 				8E5D3B8A2798463E00736DDE /* StepsViewController.swift in Sources */,

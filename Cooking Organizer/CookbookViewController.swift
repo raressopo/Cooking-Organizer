@@ -25,6 +25,7 @@ class CookbookViewController: UIViewController {
     var selectedSortOption: SortStackViewButtons?
     
     var sortView: SortView?
+    var sortViewDismissBackgroundButton: UIButton?
     
     // MARK: - View Lifecycle
     
@@ -283,7 +284,45 @@ class CookbookViewController: UIViewController {
         recipesTableView.reloadData()
     }
     
+    private func sortBackgroundButtonSetup() {
+        sortViewDismissBackgroundButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        
+        sortViewDismissBackgroundButton?.setTitle("", for: .normal)
+        sortViewDismissBackgroundButton?.alpha = 0.4
+        sortViewDismissBackgroundButton?.backgroundColor = .lightGray
+        
+        sortViewDismissBackgroundButton?.addTarget(self, action: #selector(dismissSortViewBackgroundPressed), for: .touchUpInside)
+        
+        view.addSubview(sortViewDismissBackgroundButton!)
+        
+        sortViewDismissBackgroundButton?.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([sortViewDismissBackgroundButton!.topAnchor.constraint(equalTo: view.topAnchor),
+                                     sortViewDismissBackgroundButton!.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                                     sortViewDismissBackgroundButton!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                     sortViewDismissBackgroundButton!.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+    }
+    
+    private func removeSortBackgroundButton() {
+        sortViewDismissBackgroundButton?.removeFromSuperview()
+        
+        sortViewDismissBackgroundButton = nil
+    }
+    
+    private func dismissSortView() {
+        sortView?.removeFromSuperview()
+        
+        sortView = nil
+        
+        removeSortBackgroundButton()
+    }
+    
     // MARK: - Private Selectors
+    
+    @objc
+    private func dismissSortViewBackgroundPressed() {
+        dismissSortView()
+    }
     
     @objc
     private func editPressed() {
@@ -292,11 +331,11 @@ class CookbookViewController: UIViewController {
     
     @objc
     private func sortPressed() {
-        if let sortView = sortView {
-            sortView.removeFromSuperview()
-            
-            self.sortView = nil
+        if let _ = sortView {
+            dismissSortView()
         } else {
+            sortBackgroundButtonSetup()
+            
             sortView = SortView(withButtons: [.recipeNameAscending,
                                               .recipeNameDescending,
                                               .cookingTimeAscending,
@@ -318,7 +357,7 @@ class CookbookViewController: UIViewController {
                     
                     self.sortRecipes(withSortOption: sortOption)
                     
-                    sortView.removeFromSuperview()
+                    self.dismissSortView()
                 }
                 
                 sortView.translatesAutoresizingMaskIntoConstraints = false
