@@ -99,6 +99,10 @@
 		8EF5BFDB2475231200C44646 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8EF5BFDA2475231200C44646 /* Assets.xcassets */; };
 		8EF5BFDE2475231200C44646 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8EF5BFDC2475231200C44646 /* LaunchScreen.storyboard */; };
 		8EF5BFE62475280E00C44646 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8EF5BFE52475280E00C44646 /* GoogleService-Info.plist */; };
+		8EF7EB96280449A50035CA7A /* AddNewRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7EB95280449A50035CA7A /* AddNewRecipeViewController.swift */; };
+		8EF7EB9B28044B620035CA7A /* NewRecipeSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7EB9A28044B620035CA7A /* NewRecipeSectionHeaderView.swift */; };
+		8EF7EB9E28044B6B0035CA7A /* NewRecipeSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EF7EB9D28044B6B0035CA7A /* NewRecipeSectionHeaderView.xib */; };
+		8EF7EBA128045A9C0035CA7A /* AddChangeRecipeCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7EBA028045A9C0035CA7A /* AddChangeRecipeCells.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -197,6 +201,10 @@
 		8EF5BFDD2475231200C44646 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8EF5BFDF2475231200C44646 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8EF5BFE52475280E00C44646 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8EF7EB95280449A50035CA7A /* AddNewRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewRecipeViewController.swift; sourceTree = "<group>"; };
+		8EF7EB9A28044B620035CA7A /* NewRecipeSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRecipeSectionHeaderView.swift; sourceTree = "<group>"; };
+		8EF7EB9D28044B6B0035CA7A /* NewRecipeSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewRecipeSectionHeaderView.xib; sourceTree = "<group>"; };
+		8EF7EBA028045A9C0035CA7A /* AddChangeRecipeCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddChangeRecipeCells.swift; sourceTree = "<group>"; };
 		A042F1FBF23B5F4C25AE6768 /* libPods-Cooking Organizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Cooking Organizer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA96B64C257E41F72BCC4D5C /* Pods-Cooking Organizer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cooking Organizer.release.xcconfig"; path = "Target Support Files/Pods-Cooking Organizer/Pods-Cooking Organizer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -346,6 +354,7 @@
 		8EEC0BDE247FD238005BFA24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8EF7EB9928044B470035CA7A /* New Recipe */,
 				8EE0BFA9255C3A56002F91A8 /* Login Signup */,
 				8E3640C02546F86000ABC563 /* Shopping Lists */,
 				8E402DA025272C2F00BC31A4 /* Cooking Calendar */,
@@ -423,8 +432,19 @@
 				8E5D3B86279845F400736DDE /* IngredientsViewController.swift */,
 				8E5D3B892798463E00736DDE /* StepsViewController.swift */,
 				8E1F6E422799C359003053C0 /* HomeViewController.swift */,
+				8EF7EB95280449A50035CA7A /* AddNewRecipeViewController.swift */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8EF7EB9928044B470035CA7A /* New Recipe */ = {
+			isa = PBXGroup;
+			children = (
+				8EF7EB9A28044B620035CA7A /* NewRecipeSectionHeaderView.swift */,
+				8EF7EB9D28044B6B0035CA7A /* NewRecipeSectionHeaderView.xib */,
+				8EF7EBA028045A9C0035CA7A /* AddChangeRecipeCells.swift */,
+			);
+			path = "New Recipe";
 			sourceTree = "<group>";
 		};
 		F2CA350C1E606C76A17FA94F /* Pods */ = {
@@ -512,6 +532,7 @@
 				8E01E5E52795C32300DDDFBD /* HomeCollectionViewCell.xib in Resources */,
 				8E5B68DF253C4DCE00B4BA19 /* RearrangeHomeScreenView.xib in Resources */,
 				8E93469D249A4DE20048F5B1 /* CategoriesView.xib in Resources */,
+				8EF7EB9E28044B6B0035CA7A /* NewRecipeSectionHeaderView.xib in Resources */,
 				8E71E65E250F8EB400C4E588 /* RecipeIngredientCell.xib in Resources */,
 				8E3640C52546F89000ABC563 /* CreateShoppingListView.xib in Resources */,
 				8E3FA85D2487C72300FDEB7D /* HomeIngredientTableViewCell.xib in Resources */,
@@ -580,6 +601,7 @@
 			files = (
 				8E8BDC3C2521E34F004B5269 /* StepsView.swift in Sources */,
 				8E9984362476BF4300C10B4F /* UserDataManager.swift in Sources */,
+				8EF7EB96280449A50035CA7A /* AddNewRecipeViewController.swift in Sources */,
 				8EEC0BDA247F9D29005BFA24 /* UtilsManager.swift in Sources */,
 				8E9346972499F64C0048F5B1 /* CustomPickerView.swift in Sources */,
 				8E5D3B87279845F400736DDE /* IngredientsViewController.swift in Sources */,
@@ -603,6 +625,7 @@
 				8E3640C825470D9000ABC563 /* ShoppingListViewController.swift in Sources */,
 				8E66F993255986B3008E15CE /* GeneratedRecipeTableViewCell.swift in Sources */,
 				8E8E203624756DFB00AF2F49 /* AlertManager.swift in Sources */,
+				8EF7EBA128045A9C0035CA7A /* AddChangeRecipeCells.swift in Sources */,
 				8E5D3B8A2798463E00736DDE /* StepsViewController.swift in Sources */,
 				8E8E203124753F7E00AF2F49 /* UsersManager.swift in Sources */,
 				8E59B1B6250BBA6A00DF3186 /* IngredientsView.swift in Sources */,
@@ -621,6 +644,7 @@
 				8E71E65C250F8EA400C4E588 /* RecipeIngredientCell.swift in Sources */,
 				8E52B6C325F79D91000582CD /* UIViewController+Keyboard.swift in Sources */,
 				8E0F01D0248A616D00CBA319 /* HomeIngredientDetailsView.swift in Sources */,
+				8EF7EB9B28044B620035CA7A /* NewRecipeSectionHeaderView.swift in Sources */,
 				8E95E52A249CBD2900ACCD44 /* Recipe.swift in Sources */,
 				8EA955432522234500645198 /* CookingCalendarViewController.swift in Sources */,
 				8EF5BFD42475230F00C44646 /* SceneDelegate.swift in Sources */,
