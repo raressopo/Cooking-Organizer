@@ -83,6 +83,20 @@ class Recipe: Codable {
             return cookingTime ?? "Undefined"
         }
     }
+    
+    var recipeCategories: [RecipeCategories] {
+        var originalRecipeCategories = [RecipeCategories]()
+        
+        if let originalCategories = self.categories {
+            RecipeCategories.allCases.forEach({
+                if originalCategories.contains($0.string) {
+                    originalRecipeCategories.append($0)
+                }
+            })
+        }
+        
+        return originalRecipeCategories
+    }
 }
 
 class ChangedRecipe {
@@ -91,6 +105,7 @@ class ChangedRecipe {
     var dificulty: String?
     var imageData: String?
     var name: String?
+    var cookingDates: [String]?
     var portions: Int = 0
     
     var ingredients: [NewRecipeIngredient]?

@@ -51,18 +51,6 @@ class CookingDatesView: UIView {
         datesTableView.dataSource = self
     }
     
-    private func setupAddDateButton() {
-        let button = UIButton()
-        
-        button.setTitle("Add Date", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = editButton.titleLabel?.font
-        
-        button.addTarget(self, action: #selector(addDatePressed), for: .touchUpInside)
-        
-        buttonsStackView.addArrangedSubview(button)
-    }
-    
     private func displayDatePickerView() {
         let datePickerView = LastCookDatePickerView()
         
@@ -85,9 +73,7 @@ class CookingDatesView: UIView {
             
             datesTableView.setEditing(true, animated: true)
             
-            datesCopy = dates.map { $0 } 
-            
-            setupAddDateButton()
+            datesCopy = dates.map { $0 }
             
             datesTableView.reloadData()
         } else {
@@ -101,11 +87,15 @@ class CookingDatesView: UIView {
         removeFromSuperview()
     }
     
+    @IBAction func addDatePressed(_ sender: Any) {
+        displayDatePickerView()
+    }
+    
     @IBAction func backgroundButtonPressed(_ sender: Any) {
         self.removeFromSuperview()
     }
     
-    @objc func addDatePressed() {
+    @objc func addDateEditModePressed() {
         displayDatePickerView()
     }
 }
@@ -144,7 +134,15 @@ extension CookingDatesView: UITableViewDelegate, UITableViewDataSource {
 extension CookingDatesView: LastCookDatePickerViewDelegate {
     func didSelectLastCookDate(date: Date?) {
         if let cookingDate = date {
-            datesCopy.append(UtilsManager.shared.dateFormatter.string(from: cookingDate))
+            if datesTableView.isEditing {
+                datesCopy.append(UtilsManager.shared.dateFormatter.string(from: cookingDate))
+            } else {
+                dates.append(UtilsManager.shared.dateFormatter.string(from: cookingDate))
+                
+                delegate?.cokingDatesChanged(withDates: dates)
+                
+                datesCopy = dates.map { $0 }
+            }
             
             datesTableView.reloadData()
         }

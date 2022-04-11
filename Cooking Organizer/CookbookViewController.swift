@@ -43,6 +43,10 @@ class CookbookViewController: UIViewController {
         let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
         
         navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         populateRecipes()
     }

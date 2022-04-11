@@ -1338,10 +1338,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xDe-JV-xCo">
-                                <rect key="frame" x="135" y="537" width="259" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="uQo-td-B85"/>
-                                </constraints>
+                                <rect key="frame" x="135" y="537" width="259" height="121"/>
                                 <state key="normal" title="Categories"/>
                                 <connections>
                                     <action selector="categoriesPressed:" destination="Y3m-Fb-1I9" eventType="touchUpInside" id="s3t-08-6Cp"/>
@@ -1360,6 +1357,7 @@
                             <constraint firstItem="Yhh-z3-vhl" firstAttribute="top" secondItem="hMO-Bt-Vep" secondAttribute="bottom" constant="15" id="7V2-XJ-dCr"/>
                             <constraint firstItem="kwT-39-R4U" firstAttribute="trailing" secondItem="AG5-nh-CBE" secondAttribute="trailing" constant="20" id="8KM-vx-KLm"/>
                             <constraint firstItem="AG5-nh-CBE" firstAttribute="leading" secondItem="kwT-39-R4U" secondAttribute="leading" constant="20" id="DSf-hW-Spl"/>
+                            <constraint firstItem="XMm-6b-cBX" firstAttribute="top" secondItem="xDe-JV-xCo" secondAttribute="bottom" constant="80" id="Dsr-td-JrS"/>
                             <constraint firstItem="YRe-8d-TF1" firstAttribute="top" secondItem="sq4-ua-8u9" secondAttribute="bottom" constant="20" id="EFt-PZ-TDI"/>
                             <constraint firstItem="V79-0U-29g" firstAttribute="top" secondItem="kwT-39-R4U" secondAttribute="top" constant="16" id="EWO-h3-xJH"/>
                             <constraint firstItem="kwT-39-R4U" firstAttribute="trailing" secondItem="u0v-hU-2cz" secondAttribute="trailing" constant="20" id="Ec2-3u-wPA"/>
@@ -1553,8 +1551,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="T8q-3g-iSZ"/>
-        <segue reference="bvo-wQ-NWI"/>
+        <segue reference="3Li-Qz-OlY"/>
+        <segue reference="ifT-Bc-uH6"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">

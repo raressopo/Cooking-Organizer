@@ -138,6 +138,7 @@ class RecipeDetailsViewControllerv2: UIViewController {
             
             portionsLabel.text = "Portions:"
             portionsTextField.text = "\(recipe.portions)"
+            portionsTextField.keyboardType = .numberPad
             
             durationLabel.text = "Duration:"
             durationButton.setTitle(recipe.formattedCookingTime, for: .normal)
@@ -147,16 +148,84 @@ class RecipeDetailsViewControllerv2: UIViewController {
             difficultyButton.setTitle(recipe.dificulty, for: .normal)
             difficultyButton.contentHorizontalAlignment = .right
             
-            lastCookLabel.text = "Last Cook:"
-            lastCookButton.setTitle(recipe.cookingDates?.first ?? "Never Cooked", for: .normal)
+            var cookingDatesButtonTitle = "Never Cooked"
+            
+            if let datesCount = recipe.cookingDates?.count, datesCount == 1 {
+                cookingDatesButtonTitle = recipe.cookingDates?.last ?? "Never Cooked"
+            } else if let datesCount = recipe.cookingDates?.count, datesCount > 1 {
+                cookingDatesButtonTitle = "See All Dates"
+            }
+            
+            lastCookLabel.text = "Cooking Dates:"
+            lastCookButton.setTitle(cookingDatesButtonTitle, for: .normal)
             lastCookButton.contentHorizontalAlignment = .right
+            changedRecipe.cookingDates = recipe.cookingDates
             
             categoriesLabel.text = "Categries:"
             categoriesButton.setTitle(recipe.categories, for: .normal)
             categoriesButton.contentHorizontalAlignment = .right
+            categoriesButton.contentVerticalAlignment = .top
+            categoriesButton.titleLabel?.numberOfLines = 10
         } else {
             setupRecipeDetails()
         }
+    }
+    
+    private func changedRecipeDictionary() -> [String: Any] {
+        var changedRecipeDictionary = [String: Any]()
+        
+        guard let recipe = recipe else { return changedRecipeDictionary }
+        
+        // Recipe Image
+        if let originalImage = recipe.imageData,
+           let changedImage = changedRecipe.imageData,
+           originalImage != changedImage {
+            
+            changedRecipeDictionary["imageData"] = changedImage
+            
+            recipe.imageData = changedImage
+        }
+        
+        // Recipe Name
+        if let name = recipeNameTextField.text,
+           !name.isEmpty,
+           name != recipe.name {
+            
+            changedRecipeDictionary["name"] = name
+        }
+        
+        // Portions
+        if let portions = portionsTextField.text,
+           !portions.isEmpty,
+           let portionsAsNumber = NumberFormatter().number(from: portions),
+           portionsAsNumber.intValue != recipe.portions {
+            
+            changedRecipeDictionary["portions"] = portionsAsNumber
+        }
+        
+        // Cooking Time
+        if (cookingTimeHours != 0 || cookingTimeMinutes != 0),
+           "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes" != recipe.cookingTime {
+            
+            changedRecipeDictionary["cookingTime"] = "\(cookingTimeHours) hours \(cookingTimeMinutes) minutes"
+        }
+        
+        // Dificulty
+        if let dificulty = dificulty, dificulty != recipe.dificulty {
+            changedRecipeDictionary["dificulty"] = dificulty
+        }
+        
+        // Cooking Dates
+        if let changedCookingDates = cookingDateChanges, !changedCookingDates.containsSameElements(as: recipe.cookingDates ?? []) {
+            changedRecipeDictionary["cookingDates"] = changedCookingDates
+        }
+        
+        // Categories
+        if let categories = categoriesAsString, categories != recipe.categories {
+            changedRecipeDictionary["categories"] = categories
+        }
+        
+        return changedRecipeDictionary
     }
     
     // MARK: - Selectors
@@ -175,14 +244,42 @@ class RecipeDetailsViewControllerv2: UIViewController {
     }
     
     @objc private func savePressed() {
-        navigationItem.hidesBackButton = false
-        navigationItem.leftBarButtonItem = nil
+        let changedRecipeDetails = self.changedRecipeDictionary()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
-                                                            target: self,
-                                                            action: #selector(editPressed))
-        
-        setScreenInEditMode(editMode: false)
+        if let userId = UsersManager.shared.currentLoggedInUser?.loginData.id,
+           let recipeId = self.recipe?.id,
+           !changedRecipeDetails.isEmpty {
+            
+            FirebaseAPIManager.sharedInstance.updateRecipe(froUserId: userId,
+                                                           andForRecipeId: recipeId,
+                                                           withDetails: changedRecipeDetails) { success in
+                if success {
+                    self.recipe = UsersManager.shared.currentLoggedInUser!.data.recipes?[recipeId]
+                    
+                    self.navigationItem.hidesBackButton = false
+                    self.navigationItem.leftBarButtonItem = nil
+                    
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                                        target: self,
+                                                                        action: #selector(self.editPressed))
+                    
+                    self.setScreenInEditMode(editMode: false)
+                } else {
+                    AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
+                                                                      title: "Update Failed",
+                                                                      message: "Something went wrong updating the recipe. Please try again later!")
+                }
+            }
+        } else {
+            navigationItem.hidesBackButton = false
+            navigationItem.leftBarButtonItem = nil
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                                target: self,
+                                                                action: #selector(editPressed))
+            
+            setScreenInEditMode(editMode: false)
+        }
     }
     
     @objc private func cancelPressed() {
@@ -240,7 +337,11 @@ class RecipeDetailsViewControllerv2: UIViewController {
     }
     
     @IBAction func lastCookPressed(_ sender: Any) {
-        let cookingDatesView = CookingDatesView(withFrame: CGRect(x: 0, y: 0, width: 100, height: 100), andCookingDates: recipe?.cookingDates ?? [String]())
+        let cookingDatesView = CookingDatesView(withFrame: CGRect(x: 0,
+                                                                  y: 0,
+                                                                  width: 100,
+                                                                  height: 100),
+                                                andCookingDates: changedRecipe.cookingDates ?? [String]())
         
         cookingDatesView.delegate = self
         
@@ -257,7 +358,7 @@ class RecipeDetailsViewControllerv2: UIViewController {
     @IBAction func categoriesPressed(_ sender: Any) {
         let categoriesView = RecipeCategoriesView()
         
-        categoriesView.copyOfSelectedCategories = selectedCategories
+        categoriesView.copyOfSelectedCategories = selectedCategories.count != 0 ? selectedCategories : (recipe?.recipeCategories ?? [RecipeCategories]())
         categoriesView.delegate = self
         
         view.addSubview(categoriesView)
@@ -285,7 +386,7 @@ extension RecipeDetailsViewControllerv2: UserDataManagerDelegate {
 // MARK: - Recipe Image
 
 extension RecipeDetailsViewControllerv2: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
- 
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let imageData = UtilsManager.resizeImageTo450x450AsData(image: image) {
@@ -339,8 +440,17 @@ extension RecipeDetailsViewControllerv2: CookingDatesViewDelegate {
     
     func cokingDatesChanged(withDates dates: [String]) {
         cookingDateChanges = dates
+        changedRecipe.cookingDates = dates
         
-        lastCookButton.setTitle(cookingDateChanges != nil ? "See Cooking Dates" : "Never Cooked", for: .normal)
+        var lastCookButtonTitle = "Never Cooked"
+        
+        if cookingDateChanges?.count == 1 {
+            lastCookButtonTitle = cookingDateChanges?.last ?? "Never Cooked"
+        } else if let datesCount = cookingDateChanges?.count, datesCount > 1 {
+            lastCookButtonTitle = "See All Dates"
+        }
+        
+        lastCookButton.setTitle(lastCookButtonTitle, for: .normal)
     }
     
 }

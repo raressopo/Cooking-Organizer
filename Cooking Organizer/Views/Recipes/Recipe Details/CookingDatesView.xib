@@ -41,17 +41,24 @@
                             <rect key="frame" x="8" y="287" width="286" height="61"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZ4-eZ-FND">
-                                    <rect key="frame" x="0.0" y="0.0" width="143" height="61"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="95.5" height="61"/>
                                     <state key="normal" title="Cancel"/>
                                     <connections>
                                         <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="3iq-Zz-JTZ"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q7r-2X-x8o">
-                                    <rect key="frame" x="143" y="0.0" width="143" height="61"/>
+                                    <rect key="frame" x="95.5" y="0.0" width="95" height="61"/>
                                     <state key="normal" title="Edit"/>
                                     <connections>
                                         <action selector="editOrSavePressed:" destination="-1" eventType="touchUpInside" id="tXw-rF-1pZ"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsq-va-eIR">
+                                    <rect key="frame" x="190.5" y="0.0" width="95.5" height="61"/>
+                                    <state key="normal" title="Add Date"/>
+                                    <connections>
+                                        <action selector="addDatePressed:" destination="-1" eventType="touchUpInside" id="gX1-FH-3CI"/>
                                     </connections>
                                 </button>
                             </subviews>
