@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol NewRecipeSectionHeaderViewDelegate: AnyObject {
+    func textFieldDidChanged(forSectionHeader section: NewRecipeSection, andText text: String)
+}
+
 class NewRecipeSectionHeaderView: UIView {
     
     @IBOutlet var contentView: UIView!
@@ -15,6 +19,10 @@ class NewRecipeSectionHeaderView: UIView {
     @IBOutlet weak var sectionTitleLabel: UILabel!
     @IBOutlet weak var headerTextfield: UITextField!
     @IBOutlet weak var changeAddButton: UIButton!
+    
+    weak var delegate: NewRecipeSectionHeaderViewDelegate?
+    
+    var section: NewRecipeSection?
     
     // MARK: - Initializers
     init(withFrame frame: CGRect) {
@@ -34,10 +42,19 @@ class NewRecipeSectionHeaderView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
+        
+        self.headerTextfield.delegate = self
     }
     
-    func configure(withNewRecipeSection section: NewRecipeSection) {
-        sectionTitleLabel.text = "\(section.rawValue):"
+    func configure(withNewRecipeSection section: NewRecipeSection,
+                   andDelegate delegate: NewRecipeSectionHeaderViewDelegate,
+                   withAddButton displayAddButton: Bool) {
+        self.section = section
+        self.delegate = delegate
+        
+        changeAddButton.setTitle(displayAddButton == true ? "Add" : "Change", for: .normal)
+        
+        self.sectionTitleLabel.text = "\(section.rawValue):"
         
         switch section {
         case .name:
@@ -51,4 +68,14 @@ class NewRecipeSectionHeaderView: UIView {
             changeAddButton.isHidden = false
         }
     }
+}
+
+extension NewRecipeSectionHeaderView: UITextFieldDelegate {
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if let section = self.section, let text = textField.text {
+            self.delegate?.textFieldDidChanged(forSectionHeader: section, andText: text)
+        }
+    }
+    
 }

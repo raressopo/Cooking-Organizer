@@ -8,14 +8,28 @@
 
 import Foundation
 
-class AddChangeRecipeTextFieldCell: UITableViewCell {
+protocol AddChangeRecipeTextFieldCellDelegate: AnyObject {
+    func textFieldDidChanged(forSection section: NewRecipeSection, andText text: String)
+}
+
+class AddChangeRecipeTextFieldCell: UITableViewCell, UITextFieldDelegate {
     
     @IBOutlet weak var textField: UITextField!
+    
+    weak var delegate: AddChangeRecipeTextFieldCellDelegate?
+    var section: NewRecipeSection?
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if let section = section, let text = textField.text {
+            self.delegate?.textFieldDidChanged(forSection: section, andText: text)
+        }
+    }
 }
 
 class AddChangeRecipeTextViewCell: UITableViewCell {
     
     @IBOutlet weak var textView: UITextView!
+    
 }
 
 class AddChangeRecipeImageCell: UITableViewCell {
