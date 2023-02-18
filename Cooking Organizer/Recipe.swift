@@ -16,7 +16,7 @@ class Recipe: Codable {
     var dificulty: String?
     var imageData: String?
     var name: String?
-    var portions: Int = 0
+    var portions: Int?
     
     var cookingDates: [String]?
     var ingredients: [NewRecipeIngredient]?
@@ -74,13 +74,13 @@ class Recipe: Codable {
         }
     }
     
-    var formattedCookingTime: String {
+    var formattedCookingTime: String? {
         if cookingTimeHours == 0 && cookingTimeMinutes != 0 {
             return "\(cookingTimeMinutes) minutes"
         } else if cookingTimeHours != 0 && cookingTimeMinutes == 0 {
             return "\(cookingTimeHours) hours"
         } else {
-            return cookingTime ?? "Undefined"
+            return cookingTime
         }
     }
     
@@ -96,6 +96,20 @@ class Recipe: Codable {
         }
         
         return originalRecipeCategories
+    }
+    
+    var recipeImage: UIImage? {
+        guard let imageData = self.imageData else { return nil }
+        
+        let dataDecode = Data(base64Encoded: imageData, options: .ignoreUnknownCharacters)
+        
+        if let imageAsData = dataDecode {
+            let decodedImage = UIImage(data: imageAsData)
+            
+            return decodedImage
+        } else {
+            return nil
+        }
     }
 }
 

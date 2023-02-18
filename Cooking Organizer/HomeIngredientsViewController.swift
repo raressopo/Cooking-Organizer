@@ -10,26 +10,38 @@ import UIKit
 import Firebase
 
 class HomeIngredientsViewController: UIViewController {
-    @IBOutlet weak var addHomeIngrButton: UIButton!
-    @IBOutlet weak var filterButton: UIButton!
-    @IBOutlet weak var generateRecipesButton: UIButton!
+    @IBOutlet weak var addHomeIngrButton: UIButton! {
+        didSet {
+            configureOnScreenButton(button: addHomeIngrButton, withFontSize: 15.0, fontName: "Proxima Nova Alt Regular")
+        }
+    }
+    @IBOutlet weak var filterButton: UIButton! {
+        didSet {
+            configureOnScreenButton(button: filterButton, withFontSize: 15.0, fontName: "Proxima Nova Alt Regular")
+        }
+    }
+    @IBOutlet weak var generateRecipesButton: UIButton! {
+        didSet {
+            configureOnScreenButton(button: generateRecipesButton, withFontSize: 17.0, fontName: "Proxima Nova Alt Bold")
+        }
+    }
     @IBOutlet weak var homeIngredientsTableView: UITableView!
     
     var homeIngredients = [HomeIngredient]()
-    
-    var widgetHomeIngredient: HomeIngredient?
     
     var deletedHomeIngredientsIds = [String]()
     
     var filteredHomeIngredients: [HomeIngredient]?
     var filterParams: HomeIngredientsFilterParams?
     
-    var selectedSortOption: SortStackViewButtons?
+    var selectedSortOption: PantrySortOption?
+    var isSortAscending = true
     
-    var sortView: SortView?
+    var sortView: PantrySortView?
     var sortViewDismissBackgroundButton: UIButton?
     
     var generatedRecipesView: GeneratedRecipesView?
+    var filterView: HomeIngredientsFilterView?
     
     // MARK: - View Lifecycle
     
@@ -38,6 +50,8 @@ class HomeIngredientsViewController: UIViewController {
         
         navigationItem.title = "Home Ingredients"
         
+        self.view.backgroundColor = UIColor.screenBackground()
+        
         homeIngredientsTableView.delegate = self
         homeIngredientsTableView.dataSource = self
         
@@ -45,19 +59,10 @@ class HomeIngredientsViewController: UIViewController {
         
         homeIngredientsTableView.register(UINib(nibName: "HomeIngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "homeIngredientCell")
         
-        let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
-        let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
-        
-        navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
-        
+        displayHINavButtons()
         populateHomeIngredients()
-        displayHomeScreenHomeIngredient()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         
-        widgetHomeIngredient = nil
+        self.navigationController?.navigationBar.tintColor = UIColor.buttonTitleColor()
     }
     
     // MARK: - IBActions
@@ -73,23 +78,6 @@ class HomeIngredientsViewController: UIViewController {
                                      ingredientDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
                                      ingredientDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
                                      ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
-    }
-    
-    @IBAction func filterPressed(_ sender: Any) {
-        let filterView = HomeIngredientsFilterView(withCriterias: [.availability, .category],
-                                                   filterParams: filterParams,
-                                                   andFrame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        
-        view.addSubview(filterView)
-        
-        filterView.delegate = self
-        
-        filterView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([filterView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
-                                     filterView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
-                                     filterView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
-                                     filterView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
     }
     
     @IBAction func generateRecipesPressed(_ sender: Any) {
@@ -192,6 +180,8 @@ class HomeIngredientsViewController: UIViewController {
                             item.isEnabled = true
                         }
                     }
+                    
+                    self.generatedRecipesView = nil
                 }
             }
         }
@@ -199,32 +189,18 @@ class HomeIngredientsViewController: UIViewController {
     
     // MARK: - Private Helpers
     
-    private func displayHomeScreenHomeIngredient() {
-        if let ingredient = widgetHomeIngredient {
-            let ingredientDetailsView = HomeIngredientDetailsView()
-            
-            ingredientDetailsView.populateFields(withIngredient: ingredient)
-            
-            view.addSubview(ingredientDetailsView)
-            
-            ingredientDetailsView.translatesAutoresizingMaskIntoConstraints = false
-            
-            NSLayoutConstraint.activate([ingredientDetailsView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0.0),
-                                         ingredientDetailsView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0.0),
-                                         ingredientDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0.0),
-                                         ingredientDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0.0)])
-            
-            ingredientDetailsView.createButton.setTitle("Change", for: .normal)
-        }
+    private func configureOnScreenButton(button: UIButton, withFontSize size: CGFloat, fontName: String) {
+        button.layer.cornerRadius = button.frame.height / 2
+        button.backgroundColor = UIColor.onScreenButton()
+        button.layer.borderWidth = 1.5
+        button.layer.borderColor = UIColor.buttonTitleColor().cgColor
+        button.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+        button.titleLabel?.font = UIFont(name: fontName, size: size)
     }
     
     private func populateHomeIngredients() {
-        if let params = filterParams {
-            filterHomeIngredients(withParams: params)
-        } else {
-            if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-                homeIngredients = ingredients
-            }
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            homeIngredients = ingredients
         }
         
         if let sortOption = selectedSortOption {
@@ -260,170 +236,40 @@ class HomeIngredientsViewController: UIViewController {
         deletedHomeIngredientsIds.removeAll()
     }
     
-    private func filterHomeIngredients(withParams params: HomeIngredientsFilterParams) {
-        filteredHomeIngredients = nil
+    private func displayHINavButtons() {
+        self.navigationItem.title = "Home Ingredients"
         
-        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
-            if let category = params.name {
-                filteredHomeIngredients = ingredients.filter({ hi -> Bool in
-                    if let hiCategory = hi.category {
-                        return category == hiCategory
-                    } else {
-                        return false
-                    }
-                })
-            }
-            
-            if params.available {
-                let hiIngredients = filteredHomeIngredients ?? ingredients
-                
-                filteredHomeIngredients = hiIngredients.filter({ hi -> Bool in
-                    if let expirationDateString = hi.expirationDate, let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString) {
-                        return UtilsManager.isSelectedDate(selectedDate: expirationDate, inFutureOrInPresentToGivenDate: Date())
-                    } else {
-                        return false
-                    }
-                })
-            }
-            
-            if params.expired {
-                let hiIngredients = filteredHomeIngredients ?? ingredients
-                
-                filteredHomeIngredients = hiIngredients.filter({ hi -> Bool in
-                    if let expirationDateString = hi.expirationDate, let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString) {
-                        return !UtilsManager.isSelectedDate(selectedDate: expirationDate, inFutureOrInPresentToGivenDate: Date())
-                    } else {
-                        return false
-                    }
-                })
-            }
+        if let font = UIFont(name: "Proxima Nova Alt Bold", size: 22.0) {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: font]
         }
         
-        if let selectedSortOption = selectedSortOption {
-            sortHomeIngredients(withSortOption: selectedSortOption)
-        }
-    }
-    
-    private func sortHomeIngredients(withSortOption option: SortStackViewButtons) {
-        var ingredients = filteredHomeIngredients ?? homeIngredients
+        let editNavBarButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editPressed))
+        let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
         
-        ingredients.sort(by: { (ingredient1, ingredient2) -> Bool in
-            switch option {
-            case .nameAscending:
-                if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
-                    return ingredient1Name.compare(ingredient2Name) == .orderedAscending
-                } else {
-                    return false
-                }
-            case .nameDescending:
-                if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
-                    return ingredient1Name.compare(ingredient2Name) == .orderedDescending
-                } else {
-                    return false
-                }
-            case .expirationDateAscending:
-                if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
-                    return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedAscending
-                } else {
-                    return false
-                }
-            case .expirationDateDescending:
-                if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
-                    return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedDescending
-                } else {
-                    return false
-                }
-            default:
-                return false
-            }
-        })
-        
-        if filteredHomeIngredients != nil {
-            filteredHomeIngredients = ingredients
-        } else {
-            homeIngredients = ingredients
+        if let cancelFont = UIFont(name: "Proxima Nova Alt Regular", size: 18.0) {
+            editNavBarButton.setTitleTextAttributes([NSAttributedString.Key.font: cancelFont,
+                                                     NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                    for: .normal)
+            editNavBarButton.setTitleTextAttributes([NSAttributedString.Key.font: cancelFont,
+                                                     NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                    for: .highlighted)
+            sortNavBarButton.setTitleTextAttributes([NSAttributedString.Key.font: cancelFont,
+                                                     NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                    for: .normal)
+            sortNavBarButton.setTitleTextAttributes([NSAttributedString.Key.font: cancelFont,
+                                                     NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                    for: .highlighted)
         }
         
-        homeIngredientsTableView.reloadData()
-    }
-    
-    private func sortBackgroundButtonSetup() {
-        sortViewDismissBackgroundButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        
-        sortViewDismissBackgroundButton?.setTitle("", for: .normal)
-        sortViewDismissBackgroundButton?.alpha = 0.4
-        sortViewDismissBackgroundButton?.backgroundColor = .lightGray
-        
-        sortViewDismissBackgroundButton?.addTarget(self, action: #selector(dismissSortViewBackgroundPressed), for: .touchUpInside)
-        
-        view.addSubview(sortViewDismissBackgroundButton!)
-        
-        sortViewDismissBackgroundButton?.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([sortViewDismissBackgroundButton!.topAnchor.constraint(equalTo: view.topAnchor),
-                                     sortViewDismissBackgroundButton!.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                                     sortViewDismissBackgroundButton!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                                     sortViewDismissBackgroundButton!.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
-    }
-    
-    private func removeSortBackgroundButton() {
-        sortViewDismissBackgroundButton?.removeFromSuperview()
-        
-        sortViewDismissBackgroundButton = nil
-    }
-    
-    private func dismissSortView() {
-        sortView?.removeFromSuperview()
-        
-        sortView = nil
-        
-        removeSortBackgroundButton()
-    }
-        
-    // MARK: - Private Selectors
-    
-    @objc
-    private func dismissSortViewBackgroundPressed() {
-        dismissSortView()
+        navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.hidesBackButton = false
+        navigationItem.backBarButtonItem?.tintColor = UIColor.buttonTitleColor()
     }
     
     @objc
     private func editPressed() {
         setupScreenMode(inEditMode: true)
-    }
-    
-    @objc
-    private func sortPressed() {
-        if let _ = sortView {
-            dismissSortView()
-        } else {
-            sortBackgroundButtonSetup()
-            
-            sortView = SortView(withButtons: [.nameAscending,
-                                              .nameDescending,
-                                              .expirationDateAscending,
-                                              .expirationDateDescending],
-                                andFrame: CGRect(x: 0, y: 0, width: 250, height: 140))
-            
-            if let sortView = sortView {
-                sortView.selectedSortOption = { sortOption in
-                    self.selectedSortOption = sortOption
-                    
-                    self.sortHomeIngredients(withSortOption: sortOption)
-                    
-                    self.dismissSortView()
-                }
-                
-                sortView.translatesAutoresizingMaskIntoConstraints = false
-                
-                view.addSubview(sortView)
-                
-                NSLayoutConstraint.activate([sortView.heightAnchor.constraint(equalToConstant: 200),
-                                             sortView.topAnchor.constraint(equalTo: homeIngredientsTableView.topAnchor, constant: 10),
-                                             sortView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-                                             sortView.widthAnchor.constraint(equalToConstant: 250)])
-            }
-        }
     }
     
     @objc
@@ -449,10 +295,11 @@ class HomeIngredientsViewController: UIViewController {
         }
     }
     
-    @objc
-    private func cancelPressed() {
+    @objc private func cancelPressed() {
         setupScreenMode(inEditMode: false)
     }
+    
+    
 }
 
 // MARK: - TableView Delegate and DataSource
@@ -496,7 +343,7 @@ extension HomeIngredientsViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 76
+        return 86
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -530,22 +377,7 @@ extension HomeIngredientsViewController: UserDataManagerDelegate {
     }
 }
 
-extension HomeIngredientsViewController: FilterViewDelegate {
-    func homeIngredientFilterPressed(withParams params: HomeIngredientsFilterParams) {
-        filterParams = params
-        
-        filterHomeIngredients(withParams: params)
-        
-        homeIngredientsTableView.reloadData()
-    }
-    
-    func homeIngredientResetFilterPressed() {
-        filterParams = nil
-        filteredHomeIngredients = nil
-        
-        homeIngredientsTableView.reloadData()
-    }
-}
+// MARK: - Generate Recipes Delegate
 
 extension HomeIngredientsViewController: GeneratedRecipesViewDelegate {
     func didSelectedRecipeToBeScheduled(recipe: GeneratedRecipe) {
@@ -564,6 +396,8 @@ extension HomeIngredientsViewController: GeneratedRecipesViewDelegate {
     }
 }
 
+// MARK: - Schedule Recipe after Generate Recipes Delegate
+
 extension HomeIngredientsViewController: ScheduleRecipeViewDelegate {
     func didScheduleRecipes() {
         generatedRecipesView?.removeFromSuperview()
@@ -572,6 +406,351 @@ extension HomeIngredientsViewController: ScheduleRecipeViewDelegate {
             for item in items {
                 item.isEnabled = true
             }
+            
+            self.generatedRecipesView = nil
         }
     }
+}
+
+// MARK: - Sorting
+
+extension HomeIngredientsViewController {
+    
+    // MARK: - Private helpers
+    
+    private func sortHomeIngredients(withSortOption option: PantrySortOption) {
+        var ingredients = filteredHomeIngredients ?? homeIngredients
+        
+        ingredients.sort(by: { (ingredient1, ingredient2) -> Bool in
+            switch (option, self.isSortAscending) {
+            case (.name, true):
+                if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
+                    return ingredient1Name.compare(ingredient2Name) == .orderedAscending
+                } else {
+                    return false
+                }
+            case (.name, false):
+                if let ingredient1Name = ingredient1.name, let ingredient2Name = ingredient2.name {
+                    return ingredient1Name.compare(ingredient2Name) == .orderedDescending
+                } else {
+                    return false
+                }
+            case (.expirationDate, true):
+                if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
+                    return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedAscending
+                } else {
+                    return false
+                }
+            case (.expirationDate, false):
+                if let ingredient1ExpirationDate = ingredient1.expirationDateAsDate, let ingredient2ExpirationDate = ingredient2.expirationDateAsDate {
+                    return ingredient1ExpirationDate.compare(ingredient2ExpirationDate) == .orderedDescending
+                } else {
+                    return false
+                }
+            }
+        })
+        
+        if filteredHomeIngredients != nil {
+            filteredHomeIngredients = ingredients
+        } else {
+            homeIngredients = ingredients
+        }
+        
+        homeIngredientsTableView.reloadData()
+    }
+    
+    private func sortBackgroundButtonSetup() {
+        sortViewDismissBackgroundButton = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        
+        sortViewDismissBackgroundButton?.setTitle("", for: .normal)
+        sortViewDismissBackgroundButton?.alpha = 0.4
+        sortViewDismissBackgroundButton?.backgroundColor = .lightGray
+        
+        sortViewDismissBackgroundButton?.addTarget(self, action: #selector(dismissSortViewBackgroundPressed), for: .touchUpInside)
+        
+        view.addSubview(sortViewDismissBackgroundButton!)
+        
+        sortViewDismissBackgroundButton?.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([sortViewDismissBackgroundButton!.topAnchor.constraint(equalTo: view.topAnchor),
+                                     sortViewDismissBackgroundButton!.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                                     sortViewDismissBackgroundButton!.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                     sortViewDismissBackgroundButton!.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
+    }
+    
+    private func removeSortBackgroundButton() {
+        sortViewDismissBackgroundButton?.removeFromSuperview()
+        
+        sortViewDismissBackgroundButton = nil
+    }
+    
+    private func dismissSortView(discardChanges: Bool) {
+        if discardChanges == false, let sortView = self.sortView {
+            self.selectedSortOption = sortView.selectedSortOption
+            self.isSortAscending = sortView.ascendingDescendingSegmentedControl.selectedSegmentIndex == 0
+        }
+        
+        self.sortView?.removeFromSuperview()
+        
+        self.sortView = nil
+        
+        removeSortBackgroundButton()
+        
+        let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        let sortNavBarButton = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortPressed))
+        
+        navigationItem.rightBarButtonItems = [sortNavBarButton, editNavBarButton]
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.setHidesBackButton(false, animated: false)
+        navigationItem.title = "Home Ingredients"
+        
+        if discardChanges == false, let option = self.selectedSortOption {
+            self.sortHomeIngredients(withSortOption: option)
+        }
+    }
+    
+    // MARK: - Private Selectors
+    
+    @objc private func sortPressed() {
+        sortBackgroundButtonSetup()
+        
+        sortView = PantrySortView(frame: CGRect(x: 0,
+                                                  y: 0,
+                                                  width: 200,
+                                                  height: 145))
+        
+        if let sortView = sortView {
+            sortView.selectedSortOption = self.selectedSortOption
+            sortView.ascendingDescendingSegmentedControl.selectedSegmentIndex = self.isSortAscending == true ? 0 : 1
+            
+            let sortDoneNavBarButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(sortDonePressed))
+            let resetSortNavBarButton = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetSortPressed))
+            let cancelSortNavBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelSortPressed))
+            
+            navigationItem.rightBarButtonItems = [sortDoneNavBarButton, resetSortNavBarButton]
+            navigationItem.setHidesBackButton(true, animated: false)
+            navigationItem.leftBarButtonItem = cancelSortNavBarButton
+            navigationItem.title = "Sort Recipes"
+            
+            sortView.translatesAutoresizingMaskIntoConstraints = false
+            
+            view.addSubview(sortView)
+            
+            NSLayoutConstraint.activate([sortView.heightAnchor.constraint(equalToConstant: 250),
+                                         sortView.topAnchor.constraint(equalTo: homeIngredientsTableView.topAnchor, constant: 8),
+                                         sortView.trailingAnchor.constraint(equalTo: homeIngredientsTableView.trailingAnchor, constant: -8),
+                                         sortView.widthAnchor.constraint(equalToConstant: 200)])
+        }
+    }
+    
+    @objc private func sortDonePressed() {
+        dismissSortView(discardChanges: false)
+    }
+    
+    @objc private func resetSortPressed() {
+        self.sortView?.selectedSortOption = nil
+        self.sortView?.ascendingDescendingSegmentedControl.selectedSegmentIndex = 0
+        
+        dismissSortView(discardChanges: false)
+    }
+    
+    @objc private func cancelSortPressed() {
+        dismissSortView(discardChanges: true)
+    }
+    
+    @objc private func dismissSortViewBackgroundPressed() {
+        dismissSortView(discardChanges: true)
+    }
+    
+}
+
+// MARK: - Filtering
+
+extension HomeIngredientsViewController: HomeIngredientsFilterViewDelegate {
+    
+    @IBAction func filterPressed(_ sender: Any) {
+        self.filterView = HomeIngredientsFilterView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        self.filterView?.configure(withFilterParams: self.filterParams)
+        guard let filterView = self.filterView else { return }
+        filterView.delegate = self
+        
+        displayFilterNavButton()
+        
+        view.addSubview(filterView)
+
+        filterView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([filterView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0),
+                                     filterView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
+                                     filterView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
+                                     filterView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
+    }
+    
+    
+    
+    // MARK: Private Helpers
+    
+    private func filterHomeIngredients(withParams params: HomeIngredientsFilterParams) {
+        filteredHomeIngredients = nil
+        
+        if let ingredients = UsersManager.shared.currentLoggedInUser?.homeIngredients {
+            if let category = params.categoryString {
+                filteredHomeIngredients = ingredients.filter({ hi -> Bool in
+                    if let hiCategory = hi.category {
+                        return category == hiCategory
+                    } else {
+                        return false
+                    }
+                })
+            }
+
+            switch params.expirationDate {
+            case .expired:
+                let hiIngredients = filteredHomeIngredients ?? ingredients
+
+                filteredHomeIngredients = hiIngredients.filter({ hi -> Bool in
+                    if let expirationDateString = hi.expirationDate, let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString) {
+                        return !UtilsManager.isSelectedDate(selectedDate: expirationDate, inFutureOrInPresentToGivenDate: Date())
+                    } else {
+                        return false
+                    }
+                })
+            case .oneWeek:
+                let calendar = Calendar.current
+                let addOneWeekToCurrentDate = calendar.date(byAdding: .weekOfYear, value: 1, to: Date())
+                let hiIngredients = filteredHomeIngredients ?? ingredients
+                
+                filteredHomeIngredients = hiIngredients.filter({ ingredient -> Bool in
+                    if let expirationDateString = ingredient.expirationDate,
+                       let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString),
+                       let oneWeekDate = addOneWeekToCurrentDate {
+                        return expirationDate <= oneWeekDate
+                    } else {
+                        return false
+                    }
+                })
+            case .twoWeeks:
+                let calendar = Calendar.current
+                let addTwoWeeksToCurrentDate = calendar.date(byAdding: .weekOfYear, value: 2, to: Date())
+                let hiIngredients = filteredHomeIngredients ?? ingredients
+                
+                filteredHomeIngredients = hiIngredients.filter({ ingredient -> Bool in
+                    if let expirationDateString = ingredient.expirationDate,
+                       let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString),
+                       let twoWeeksDate = addTwoWeeksToCurrentDate {
+                        return expirationDate <= twoWeeksDate
+                    } else {
+                        return false
+                    }
+                })
+            case .oneMonthPlus:
+                let calendar = Calendar.current
+                let addOneMonthToCurrentDate = calendar.date(byAdding: .month, value: 1, to: Date())
+                let hiIngredients = filteredHomeIngredients ?? ingredients
+                
+                filteredHomeIngredients = hiIngredients.filter({ ingredient -> Bool in
+                    if let expirationDateString = ingredient.expirationDate,
+                       let expirationDate = UtilsManager.shared.dateFormatter.date(from: expirationDateString),
+                       let oneMonthDate = addOneMonthToCurrentDate {
+                        return expirationDate <= oneMonthDate
+                    } else {
+                        return false
+                    }
+                })
+            default:
+                break
+            }
+        }
+        
+        if let selectedSortOption = selectedSortOption {
+            sortHomeIngredients(withSortOption: selectedSortOption)
+        }
+    }
+    
+    private func displayFilterNavButton() {
+        self.navigationItem.title = "Filter Home Ingredients"
+        
+        if let font = UIFont(name: "Proxima Nova Alt Bold", size: 22.0) {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: font]
+        }
+        
+        let cancelNavButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelFilterPressed))
+        
+        if let cancelFont = UIFont(name: "Proxima Nova Alt Light", size: 18.0) {
+            cancelNavButton.setTitleTextAttributes([NSAttributedString.Key.font: cancelFont,
+                                                    NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                   for: .normal)
+            cancelNavButton.setTitleTextAttributes([NSAttributedString.Key.font: cancelFont,
+                                                    NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                   for: .highlighted)
+        }
+        
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.leftBarButtonItem = cancelNavButton
+        
+        let resetFilterNavButton = UIBarButtonItem(title: "Reset",
+                                                   style: .plain,
+                                                   target: self,
+                                                   action: #selector(resetFilterPressed))
+        let doneFilteringNavButton = UIBarButtonItem(title: "Done",
+                                                     style: .plain,
+                                                     target: self,
+                                                     action: #selector(doneFilteringPressed))
+        
+        if let resetFont = UIFont(name: "Proxima Nova Alt Regular", size: 18.0),
+           let doneFont = UIFont(name: "Proxima Nova Alt Bold", size: 18.0) {
+            resetFilterNavButton.setTitleTextAttributes([NSAttributedString.Key.font: resetFont,
+                                                         NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                        for: .normal)
+            doneFilteringNavButton.setTitleTextAttributes([NSAttributedString.Key.font: doneFont,
+                                                           NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                          for: .normal)
+            resetFilterNavButton.setTitleTextAttributes([NSAttributedString.Key.font: resetFont,
+                                                         NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                        for: .highlighted)
+            doneFilteringNavButton.setTitleTextAttributes([NSAttributedString.Key.font: doneFont,
+                                                           NSAttributedString.Key.foregroundColor: UIColor.buttonTitleColor()],
+                                                          for: .highlighted)
+        }
+        
+        self.navigationItem.rightBarButtonItems = [doneFilteringNavButton, resetFilterNavButton]
+    }
+        
+    // MARK: Private Selectors
+    
+    @objc private func cancelFilterPressed() {
+        displayHINavButtons()
+        
+        self.filterView?.removeFromSuperview()
+    }
+    
+    @objc private func resetFilterPressed() {
+        displayHINavButtons()
+        
+        filterParams = nil
+        filteredHomeIngredients = nil
+        
+        self.filterView?.removeFromSuperview()
+        
+        homeIngredientsTableView.reloadData()
+    }
+    
+    @objc private func doneFilteringPressed() {
+        displayHINavButtons()
+        
+        if let params = self.filterView?.filterParams {
+            filterParams = params
+        
+            filterHomeIngredients(withParams: params)
+            
+            self.filterView?.removeFromSuperview()
+        
+            homeIngredientsTableView.reloadData()
+        }
+    }
+    
+    func filterCanceledPressed() {
+        displayHINavButtons()
+    }
+    
 }

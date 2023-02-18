@@ -10,12 +10,21 @@ import UIKit
 
 class CreateShoppingListView: UIView {
     @IBOutlet var contentView: UIView!
+    @IBOutlet weak var containerView: UIView! {
+        didSet {
+            containerView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+            containerView.layer.cornerRadius = 16.0
+        }
+    }
     
     @IBOutlet weak var listNameTextField: UITextField!
+    
     @IBOutlet weak var createButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     var invalidName: (() -> Void)?
     var creationFailed: (() -> Void)?
+    var viewDismissed: (() -> Void)?
     
     var oldName: String?
     var changeMode = false
@@ -47,13 +56,22 @@ class CreateShoppingListView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
+        
+        listNameTextField.configure()
+        
+        createButton.primaryButtonSetup()
+        cancelButton.lightPrimaryButtonSetup()
     }
     
     @IBAction func dismissViewPressed(_ sender: Any) {
+        self.viewDismissed?()
+        
         removeFromSuperview()
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
+        self.viewDismissed?()
+        
         removeFromSuperview()
     }
     
@@ -76,16 +94,22 @@ class CreateShoppingListView: UIView {
         
         if changeMode, let oldName = oldName, let newName = listNameTextField.text, oldName != newName {
             UserDataManager.shared.changeShoppingListName(listName: oldName, withNewName: newName) {
+                self.viewDismissed?()
+                
                 self.removeFromSuperview()
             } failure: {
+                self.viewDismissed?()
                 self.creationFailed?()
                 
                 self.removeFromSuperview()
             }
         } else {
             UserDataManager.shared.createShoppingList(withName: listName, andValues: ["name": listName]) {
+                self.viewDismissed?()
+                
                 self.removeFromSuperview()
             } failure: {
+                self.viewDismissed?()
                 self.creationFailed?()
                 
                 self.removeFromSuperview()

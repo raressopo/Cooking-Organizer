@@ -32,9 +32,28 @@ class CustomPickerView: UIView {
     @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var dismissUnitViewButton: UIButton!
-    @IBOutlet weak var picker: UIPickerView!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var buttonsStackView: UIStackView!
+    @IBOutlet weak var picker: UIPickerView! {
+        didSet {
+            self.picker.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        }
+    }
+    @IBOutlet weak var datePicker: UIDatePicker! {
+        didSet {
+            self.datePicker.clipsToBounds = true
+            self.datePicker.layer.cornerRadius = 8.0
+            self.datePicker.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+            self.datePicker.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        }
+    }
+    @IBOutlet weak var buttonsStackViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var buttonsStackView: UIStackView! {
+        didSet {
+            self.buttonsStackView.clipsToBounds = true
+            self.buttonsStackView.layer.cornerRadius = 8.0
+            self.buttonsStackView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            self.buttonsStackView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        }
+    }
     
     // MARK: - Initializers
     
@@ -60,14 +79,6 @@ class CustomPickerView: UIView {
         
         picker.isHidden = true
         datePicker.isHidden = true
-        
-        if self.traitCollection.userInterfaceStyle == .dark {
-            picker.backgroundColor = .black
-            datePicker.backgroundColor = .black
-        } else {
-            picker.backgroundColor = .white
-            datePicker.backgroundColor = .white
-        }
     }
     
     // MARK: - IBActions
@@ -89,10 +100,9 @@ class UnitPickerView: CustomPickerView {
         
         picker.delegate = self
         picker.dataSource = self
+        picker.layer.cornerRadius = 8.0
     }
 }
-
-// MARK: - Unit Picker View - Picker View Delegates and DataSource
 
 extension UnitPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -100,17 +110,37 @@ extension UnitPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return Units.allCases.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return Units.allCases[row].rawValue
+        return Units.allCases.count + 1
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        delegate?.didSelectUnit(unit: Units.allCases[row].rawValue)
+        if row > 0 {
+            delegate?.didSelectUnit(unit: Units.allCases[row - 1].rawValue)
+            
+            removeFromSuperview()
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
         
-        removeFromSuperview()
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 21.0)
+            pickerLabel?.textAlignment = .center
+        }
+        
+        var title = ""
+        
+        if row == 0 {
+            title = "Select a unit:"
+        } else {
+            title = Units.allCases[row - 1].rawValue
+        }
+        
+        pickerLabel?.text = title
+
+        return pickerLabel!
     }
 }
 
@@ -119,6 +149,22 @@ extension UnitPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
 class CookingTimePickerView: CustomPickerView {
     weak var delegate: CookingTimePickerViewDelegate?
     
+    var hoursSelected: Int? {
+        didSet {
+            if let hours = self.hoursSelected {
+                self.picker.selectRow(hours + 1, inComponent: 0, animated: true)
+            }
+        }
+    }
+    
+    var minutesSelected: Int? {
+        didSet {
+            if let minutes = self.minutesSelected {
+                self.picker.selectRow(minutes + 1, inComponent: 2, animated: true)
+            }
+        }
+    }
+    
     override func commonInit() {
         super.commonInit()
         
@@ -126,6 +172,10 @@ class CookingTimePickerView: CustomPickerView {
         
         picker.delegate = self
         picker.dataSource = self
+        
+        self.picker.clipsToBounds = true
+        self.picker.layer.cornerRadius = 8.0
+        self.picker.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
         setupSaveButton()
     }
@@ -138,9 +188,13 @@ class CookingTimePickerView: CustomPickerView {
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        saveButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#B46617"), for: .normal)
+        saveButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 18.0)
         
-        saveButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
+        saveButton.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        saveButton.clipsToBounds = true
+        saveButton.layer.cornerRadius = 8.0
+        saveButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         
         self.contentView.addSubview(saveButton)
         
@@ -155,40 +209,89 @@ class CookingTimePickerView: CustomPickerView {
     // MARK: - Selectors
     
     @objc func savePressed() {
-        delegate?.didSelectTime(hours: picker.selectedRow(inComponent: 0), minutes: picker.selectedRow(inComponent: 2))
+        let hours = picker.selectedRow(inComponent: 0) == 0 ? 0 : picker.selectedRow(inComponent: 0) - 1
+        let minutes = picker.selectedRow(inComponent: 2) == 0 ? 0 : picker.selectedRow(inComponent: 2) - 1
+        
+        delegate?.didSelectTime(hours: hours, minutes: minutes)
         
         removeFromSuperview()
     }
 }
 
-// MARK: - Cooking Time Picker View - Picker View Delegate and DataSource
-
 extension CookingTimePickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 4
+        return 3
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
-            return 24
+            return 25
         } else if component == 2 {
-            return 60
+            return 61
         } else {
             return 1
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        switch component {
+        case 0:
+            return 100
+        case 1:
+            return 30
+        case 2:
+            return 100
+        default:
+            return 0
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
         case 0, 2:
-            return "\(row)"
-        case 1:
-            return "h"
-        case 3:
-            return "min"
+            if row == 0 {
+                pickerView.selectRow(1, inComponent: component, animated: true)
+            }
         default:
-            return nil
+            break
         }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 21.0)
+            pickerLabel?.textAlignment = .center
+        }
+        
+        var title = ""
+        switch component {
+        case 0:
+            if row == 0 {
+                title = "hours"
+            } else if row < 11 {
+                title = "0\(row - 1)"
+            } else {
+                title = "\(row - 1)"
+            }
+        case 1:
+            title = ":"
+        case 2:
+            if row == 0 {
+                title = "minutes"
+            } else if row < 11 {
+                title = "0\(row - 1)"
+            } else {
+                title = "\(row - 1)"
+            }
+        default:
+            break
+        }
+        
+        pickerLabel?.text = title
+
+        return pickerLabel!
     }
 }
 
@@ -205,11 +308,11 @@ class DificultyPickerView: CustomPickerView {
         picker.delegate = self
         picker.dataSource = self
         
-        picker.isHidden = false
+        self.picker.isHidden = false
+        self.picker.clipsToBounds = true
+        self.picker.layer.cornerRadius = 8.0
     }
 }
-
-// MARK: - Dificulty Picker View - Picker View Delegate and DataSource
 
 extension DificultyPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -217,17 +320,35 @@ extension DificultyPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return dificulties.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return dificulties[row]
+        return dificulties.count + 1
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        delegate?.didSelectDificulty(dificulty: dificulties[row])
+        if row != 0 {
+            delegate?.didSelectDificulty(dificulty: dificulties[row - 1])
+        }
         
         removeFromSuperview()
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 21.0)
+            pickerLabel?.textAlignment = .center
+        }
+        
+        var title = ""
+        if row == 0 {
+            title = "Dificulties:"
+        } else {
+            title = dificulties[row - 1]
+        }
+        
+        pickerLabel?.text = title
+
+        return pickerLabel!
     }
 }
 
@@ -244,6 +365,7 @@ class LastCookDatePickerView: CustomPickerView {
         datePicker.isHidden = false
         buttonsStackView.isHidden = false
         buttonsStackView.distribution = .fillEqually
+        buttonsStackView.axis = .vertical
         
         setupSaveButton()
         setupNeverCookedButton()
@@ -256,9 +378,11 @@ class LastCookDatePickerView: CustomPickerView {
         
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         
+        saveButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#B46617"), for: .normal)
+        saveButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 20.0)
+        
+        saveButton.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        saveButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
         
         buttonsStackView.addArrangedSubview(saveButton)
         
@@ -269,10 +393,13 @@ class LastCookDatePickerView: CustomPickerView {
         neverCookedButton.translatesAutoresizingMaskIntoConstraints = false
         
         neverCookedButton.setTitle("Never Cooked", for: .normal)
-        neverCookedButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        neverCookedButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
+        neverCookedButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#B46617"), for: .normal)
+        neverCookedButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 20.0)
+        
+        neverCookedButton.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
         
         buttonsStackView.addArrangedSubview(neverCookedButton)
+        self.buttonsStackViewHeightConstraint.constant = 100.0
         
         neverCookedButton.addTarget(self, action: #selector(neverCookedPressed), for: .touchUpInside)
     }
@@ -292,7 +419,7 @@ class LastCookDatePickerView: CustomPickerView {
     }
 }
 
-class SelectDatePickerView: CustomPickerView {
+class SelectDatePickerView: CustomPickerView, UIPickerViewDelegate {
     weak var delegate: SelectDatePickerViewDelegate?
     
     var isStartDate = false
@@ -315,10 +442,7 @@ class SelectDatePickerView: CustomPickerView {
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(UIColor.systemBlue, for: .normal)
-        saveButton.backgroundColor = self.traitCollection.userInterfaceStyle == .dark ? .black : .white
-        
-        datePicker.backgroundColor = UIColor.white
+        saveButton.primaryButtonSetup()
         
         buttonsStackView.addArrangedSubview(saveButton)
         

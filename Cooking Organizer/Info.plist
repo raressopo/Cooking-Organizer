@@ -53,6 +53,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Proxima Nova Alt Bold.otf</string>
+		<string>Proxima Nova Alt Bold Italic.otf</string>
+		<string>Proxima Nova Alt Thin Italic.otf</string>
+		<string>Proxima Nova Alt Thin.otf</string>
+		<string>Proxima Nova Alt Light Italic.otf</string>
+		<string>Proxima Nova Alt Regular.otf</string>
+		<string>Proxima-Nova-Alt-Light.otf</string>
+	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

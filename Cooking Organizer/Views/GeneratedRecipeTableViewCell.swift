@@ -13,9 +13,25 @@ protocol GeneratedRecipeTableViewCellDelegate: AnyObject {
 }
 
 class GeneratedRecipeTableViewCell: UITableViewCell {
-    @IBOutlet weak var recipeNameLabel: UILabel!
-    @IBOutlet weak var nrOfIngredientsLabel: UILabel!
-    @IBOutlet weak var scheduleButton: UIButton!
+    @IBOutlet weak var recipeNameLabel: UILabel! {
+        didSet {
+            recipeNameLabel.adjustsFontSizeToFitWidth = true
+            recipeNameLabel.numberOfLines = 3
+            recipeNameLabel.font = UIFont(name: "Proxima Nova Alt Bold", size: 18.0)
+        }
+    }
+    @IBOutlet weak var nrOfIngredientsLabel: UILabel! {
+        didSet {
+            nrOfIngredientsLabel.font = UIFont(name: "Proxima Nova Alt Light", size: 15.0)
+        }
+    }
+    @IBOutlet weak var scheduleButton: UIButton! {
+        didSet {
+            scheduleButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            scheduleButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 15.0)
+            scheduleButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        }
+    }
     
     weak var delegate: GeneratedRecipeTableViewCellDelegate?
     
@@ -23,7 +39,11 @@ class GeneratedRecipeTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        
     }
+    
+    
     
     @IBAction func schedulePressed(_ sender: Any) {
         if let recipe = generatedRecipe {

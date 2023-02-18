@@ -10,6 +10,7 @@ import UIKit
 
 protocol RecipesTableViewDelegate: AnyObject {
     func recipeSelectedForSchedule(withRecipe recipe: CookingCalendarRecipe)
+    func recipeTableViewDismissed()
 }
 
 class RecipesTableView: UIView {
@@ -44,6 +45,8 @@ class RecipesTableView: UIView {
     }
     
     @IBAction func backgroundDismissPressed(_ sender: Any) {
+        self.delegate?.recipeTableViewDismissed()
+        
         removeFromSuperview()
     }
 }
@@ -58,6 +61,8 @@ extension RecipesTableView: UITableViewDelegate, UITableViewDataSource {
         
         cell.selectionStyle = .none
         cell.textLabel?.text = recipes[indexPath.row].name
+        cell.textLabel?.font = UIFont(name: FontName.bold.rawValue, size: 17.0)
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
         
         return cell
     }

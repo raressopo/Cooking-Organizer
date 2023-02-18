@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CustomPickerView" customModule="Cooking_Organizer" customModuleProvider="target">
             <connections>
                 <outlet property="buttonsStackView" destination="0Hw-lm-KHH" id="i0j-8I-RhB"/>
+                <outlet property="buttonsStackViewHeightConstraint" destination="ggM-up-P70" id="Vt8-0s-Bn7"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="f0s-Cq-9a0"/>
                 <outlet property="datePicker" destination="Ofo-c7-p4s" id="ZuG-Ch-bw6"/>
                 <outlet property="dismissUnitViewButton" destination="KWp-dC-P7W" id="PTI-iP-T2S"/>
@@ -30,25 +31,27 @@
                     </connections>
                 </button>
                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qck-ID-4O2">
-                    <rect key="frame" x="38.5" y="314.5" width="343" height="206"/>
+                    <rect key="frame" x="75" y="317.5" width="270" height="200"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="206" id="o9H-5b-e6n"/>
-                        <constraint firstAttribute="width" constant="343" id="xBu-9o-aOZ"/>
+                        <constraint firstAttribute="height" constant="200" id="o9H-5b-e6n"/>
+                        <constraint firstAttribute="width" constant="270" id="xBu-9o-aOZ"/>
                     </constraints>
                 </pickerView>
                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="Ofo-c7-p4s">
-                    <rect key="frame" x="25" y="311.5" width="370" height="212"/>
+                    <rect key="frame" x="75" y="317.5" width="270" height="200"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="212" id="wmz-bs-5cx"/>
+                        <constraint firstAttribute="width" constant="270" id="Rca-jT-iem"/>
+                        <constraint firstAttribute="height" constant="200" id="wmz-bs-5cx"/>
                     </constraints>
                     <locale key="locale" localeIdentifier="en_150"/>
                 </datePicker>
                 <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Hw-lm-KHH">
-                    <rect key="frame" x="25" y="523.5" width="370" height="50"/>
+                    <rect key="frame" x="75" y="517.5" width="270" height="50"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstAttribute="width" constant="270" id="LeJ-l9-Sah"/>
                         <constraint firstAttribute="height" constant="50" id="ggM-up-P70"/>
                     </constraints>
                 </stackView>
@@ -59,15 +62,12 @@
                 <constraint firstItem="qck-ID-4O2" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2bg-jh-yHg"/>
                 <constraint firstItem="KWp-dC-P7W" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="3ne-s1-Tce"/>
                 <constraint firstItem="KWp-dC-P7W" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="6G5-fc-yPQ"/>
-                <constraint firstItem="0Hw-lm-KHH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="25" id="GpS-Ts-gyu"/>
-                <constraint firstItem="Ofo-c7-p4s" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="25" id="HTA-EG-OZz"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="0Hw-lm-KHH" secondAttribute="trailing" constant="25" id="HfN-7L-y1g"/>
                 <constraint firstItem="KWp-dC-P7W" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Ij3-4y-VD8"/>
                 <constraint firstAttribute="bottom" secondItem="KWp-dC-P7W" secondAttribute="bottom" id="JxQ-Sj-HZ0"/>
                 <constraint firstItem="Ofo-c7-p4s" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ijC-tP-TMn"/>
                 <constraint firstItem="Ofo-c7-p4s" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="mUh-ns-1gO"/>
                 <constraint firstItem="0Hw-lm-KHH" firstAttribute="top" secondItem="Ofo-c7-p4s" secondAttribute="bottom" id="pFX-lU-rnr"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Ofo-c7-p4s" secondAttribute="trailing" constant="25" id="tyw-Zj-eyP"/>
+                <constraint firstItem="0Hw-lm-KHH" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="qU9-I2-kGq"/>
                 <constraint firstItem="qck-ID-4O2" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="x53-ja-TYg"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

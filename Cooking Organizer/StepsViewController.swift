@@ -14,11 +14,23 @@ protocol CreateRecipeStepsProtocol: AnyObject {
 
 class StepsViewController: UIViewController {
     @IBOutlet weak var stepsTableView: UITableView!
-    @IBOutlet weak var addStepButton: UIButton!
+    @IBOutlet weak var addStepButton: UIButton! {
+        didSet {
+            self.addStepButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#C17A03"), for: .normal)
+            self.addStepButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 21.0)
+        }
+    }
+    
+    @IBOutlet weak var noStepsAddedLabel: UILabel! {
+        didSet {
+            self.noStepsAddedLabel.font = UIFont(name: "Proxima Nova Alt Light Italic", size: 24.0)
+        }
+    }
     
     @IBOutlet weak var stepsTableViewBottomToButtonConstraint: NSLayoutConstraint!
     
     var stepsTableViewBottomToScreenBottomConstraint: NSLayoutConstraint?
+    @IBOutlet weak var addStepButtonBottomConstraint: NSLayoutConstraint!
     
     lazy var steps = [String]()
     lazy var stepsCopy = [String]()
@@ -41,6 +53,7 @@ class StepsViewController: UIViewController {
         
         if createRecipeMode {
             let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
+            editNavBarButton.tintColor = UIColor.hexStringToUIColor(hex: "#C17A03")
             
             self.navigationItem.hidesBackButton = true
             self.navigationItem.rightBarButtonItem = editNavBarButton
@@ -58,6 +71,27 @@ class StepsViewController: UIViewController {
             self.navigationItem.rightBarButtonItem = editNavBarButton
         }
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+        
+        self.stepsTableView.keyboardDismissMode = .onDrag
+        
+        self.view.backgroundColor = UIColor.hexStringToUIColor(hex: "#024B3C")
+        
+        if (createRecipeMode && self.createRecipeSteps.count > 0) ||
+            (self.stepsTableView.isEditing && self.stepsCopy.count > 0) ||
+            (self.steps.count > 0) {
+            self.noStepsAddedLabel.isHidden = true
+        }
     }
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(animated)
@@ -73,6 +107,8 @@ class StepsViewController: UIViewController {
         } else {
             stepsCopy.append(step)
         }
+        
+        self.noStepsAddedLabel.isHidden = true
         
         stepsTableView.reloadData()
     }
@@ -123,7 +159,7 @@ class StepsViewController: UIViewController {
                 if let userId = UsersManager.shared.currentLoggedInUser?.loginData.id,
                     let recipeId = self.recipe?.id {
                     
-                    FirebaseAPIManager.sharedInstance.updateRecipe(froUserId: userId,
+                    FirebaseRecipesService.shared.updateRecipe(froUserId: userId,
                                                                    andForRecipeId: recipeId,
                                                                    withDetails: ["steps":changedSteps]) { success in
                                                                     if success {
@@ -246,6 +282,17 @@ class StepsViewController: UIViewController {
         }
     }
     
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            self.addStepButtonBottomConstraint.constant = keyboardRectangle.height + 4
+        }
+    }
+    
+    @objc func keyboardWillHide() {
+        self.addStepButtonBottomConstraint.constant = 10
+    }
+    
 }
 
 extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -267,7 +314,7 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
             
             cell.delegate = self
             
-            cell.stepNrLabel.text = "\(indexPath.row + 1)"
+            cell.stepNrLabel.text = "\(indexPath.row + 1)."
             cell.stepDetailsTextField.text = createRecipeMode ? createRecipeSteps[indexPath.row] : stepsCopy[indexPath.row]
             
             cell.selectionStyle = .none
@@ -279,7 +326,7 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             cell.stepNrLabel.text = "\(indexPath.row + 1)"
-            cell.stepDetailsTextView.text = steps[indexPath.row]
+            cell.stepDetailLabel.text = steps[indexPath.row]
             
             cell.selectionStyle = .none
             
@@ -288,7 +335,11 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        if createRecipeMode {
+            return 100.0
+        } else {
+            return 60.0
+        }
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -315,8 +366,30 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
                 stepsCopy.remove(at: indexPath.row)
             }
             
+            if (createRecipeMode && self.createRecipeSteps.count == 0) ||
+                (self.stepsTableView.isEditing && self.stepsCopy.count == 0) ||
+                (self.steps.count == 0) {
+                self.noStepsAddedLabel.isHidden = true
+            }
+            
             stepsTableView.reloadData()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing == false {
+            if let selectedStepCell = tableView.cellForRow(at: indexPath) as? RecipeStepCell {
+                selectedStepCell.changeCheckedState(to: !selectedStepCell.checkbox.isChecked)
+            }
+        }
+    }
+    
+    // Change default icon (hamburger) for moving cells in UITableView
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let imageView = cell.subviews.first(where: { $0.description.contains("Reorder") })?.subviews[0] as? UIImageView
+        
+        let image = UIImage(systemName: "line.horizontal.3")?.withTintColor(UIColor.black, renderingMode: .alwaysOriginal)
+        imageView?.image = image
     }
     
 }
@@ -326,11 +399,16 @@ extension StepsViewController: ChangeRecipeStepCellDelegate {
     func stepDetailsFieldSelected(withText text: String?, atIndex index: Int) {
         let stepExtendedTextView = StepExtendedTextView()
         
-        view.addSubview(stepExtendedTextView)
+        UIView.animate(withDuration: 0.1) {
+            self.view.addSubview(stepExtendedTextView)
+        } completion: { finished in
+            stepExtendedTextView.stepDetailsTextView.becomeFirstResponder()
+            
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }
         
         stepExtendedTextView.delegate = self
         
-        //stepExtendedTextView.becomeFirstResponder()
         stepExtendedTextView.translatesAutoresizingMaskIntoConstraints = false
         stepExtendedTextView.stepDetailsTextView.text = text
         stepExtendedTextView.index = index
@@ -339,8 +417,6 @@ extension StepsViewController: ChangeRecipeStepCellDelegate {
                                      stepExtendedTextView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0),
                                      stepExtendedTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0.0),
                                      stepExtendedTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0.0)])
-        
-        stepExtendedTextView.stepDetailsTextView.becomeFirstResponder()
     }
     
     func stepChanged(withValue string: String?, atIndex index: Int) {
@@ -362,7 +438,13 @@ extension StepsViewController: StepExtendedTextViewDelegate {
             stepsCopy[index] = text ?? ""
         }
         
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
         stepsTableView.reloadData()
+    }
+    
+    func stepDetailsCanceled() {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
 }

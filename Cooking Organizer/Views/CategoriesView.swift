@@ -10,7 +10,7 @@ import UIKit
 
 protocol CategoriesViewDelegate: AnyObject {
     func didSelectCategories(categories: [RecipeCategories])
-    func didSelectRecipeCategory(withCategoryName name: String)
+    func didSelectRecipeCategory(withCategoryName name: String?)
     
     func didSelectHICategory(withCategoryName name: String)
     func didSelectIngredientCategory(withCategory category: IngredientCategories)
@@ -18,7 +18,7 @@ protocol CategoriesViewDelegate: AnyObject {
 
 extension CategoriesViewDelegate {
     func didSelectCategories(categories: [RecipeCategories]) {}
-    func didSelectRecipeCategory(withCategoryName name: String) {}
+    func didSelectRecipeCategory(withCategoryName name: String?) {}
     
     func didSelectHICategory(withCategoryName name: String) {}
     func didSelectIngredientCategory(withCategory category: IngredientCategories) {}
@@ -27,9 +27,36 @@ extension CategoriesViewDelegate {
 class CategoriesView: UIView {
     @IBOutlet var contentView: UIView!
     
-    @IBOutlet weak var categoriesTableView: UITableView!
-    @IBOutlet weak var buttonsStackView: UIStackView!
+    @IBOutlet weak var categoriesTableView: UITableView! {
+        didSet {
+            self.categoriesTableView.clipsToBounds = true
+            self.categoriesTableView.layer.cornerRadius = 8.0
+            self.categoriesTableView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        }
+    }
+    @IBOutlet weak var buttonsStackView: UIStackView! {
+        didSet {
+            self.buttonsStackView.clipsToBounds = true
+            self.buttonsStackView.layer.cornerRadius = 8.0
+            self.buttonsStackView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            self.buttonsStackView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        }
+    }
     
+    @IBOutlet weak var cancelButton: UIButton! {
+        didSet {
+            self.cancelButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#B46617"), for: .normal)
+            self.cancelButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 18.0)
+            self.cancelButton.backgroundColor = .clear
+        }
+    }
+    @IBOutlet weak var saveButton: UIButton! {
+        didSet {
+            self.saveButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#B46617"), for: .normal)
+            self.saveButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 18.0)
+            self.saveButton.backgroundColor = .clear
+        }
+    }
     var copyOfSelectedCategories = [RecipeCategories]()
     
     weak var delegate: CategoriesViewDelegate?
@@ -75,7 +102,18 @@ class CategoriesView: UIView {
 class RecipeCategoriesView: CategoriesView {
     var isRecipeCategorySelection = false {
         didSet {
-            buttonsStackView.isHidden = isRecipeCategorySelection
+            let resetCategoryButton = UIButton()
+            
+            resetCategoryButton.setTitle("Reset Selected Category", for: .normal)
+            resetCategoryButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            resetCategoryButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 18.0)
+            resetCategoryButton.addTarget(self, action: #selector(resetSelectedCategoryPressed), for: .touchUpInside)
+            
+            self.buttonsStackView.subviews.forEach { subview in
+                subview.removeFromSuperview()
+            }
+            
+            buttonsStackView.addArrangedSubview(resetCategoryButton)
         }
     }
     var selectedRecipeCategory: String?
@@ -89,6 +127,18 @@ class RecipeCategoriesView: CategoriesView {
         
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
+        
+        self.categoriesTableView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        
+        self.layer.cornerRadius = 8.0
+    }
+    
+    // MARK: - Private selectors
+    
+    @objc private func resetSelectedCategoryPressed() {
+        self.delegate?.didSelectRecipeCategory(withCategoryName: nil)
+        
+        removeFromSuperview()
     }
 }
 
@@ -100,6 +150,7 @@ extension RecipeCategoriesView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "categoryCell")
         
+        cell.textLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 17.0)
         cell.textLabel?.text = RecipeCategory.categoryNameForIndex(index: indexPath.row)
         cell.selectionStyle = .none
         
@@ -118,6 +169,9 @@ extension RecipeCategoriesView: UITableViewDelegate, UITableViewDataSource {
                 cell.accessoryType = .none
             }
         }
+        
+        cell.backgroundColor = .clear
+        cell.accessoryView?.tintColor = UIColor.hexStringToUIColor(hex: "#B46617")
         
         return cell
     }
@@ -165,6 +219,10 @@ class HomeIngredientsCategoriesView: CategoriesView {
         
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
+        
+        categoriesTableView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        categoriesTableView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
+        categoriesTableView.layer.cornerRadius = 14.0
     }
 }
 
@@ -177,12 +235,16 @@ extension HomeIngredientsCategoriesView: UITableViewDelegate, UITableViewDataSou
         let cell = UITableViewCell(style: .default, reuseIdentifier: "categoryCell")
         
         cell.textLabel?.text = IngredientCategory.categoryNameForIndex(index: indexPath.row)
+        cell.textLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 17.0)
         
         if let name = selectedCategoryName, name == IngredientCategory.categoryNameForIndex(index: indexPath.row) {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
         }
+        
+        cell.backgroundColor = .clear
+        cell.accessoryView?.tintColor = UIColor.buttonTitleColor()
         
         return cell
     }

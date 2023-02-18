@@ -11,11 +11,18 @@ import SearchTextField
 
 class AddShoppingListItemView: UIView {
     @IBOutlet var contentView: UIView!
+    @IBOutlet weak var containerView: UIView! {
+        didSet {
+            containerView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+            containerView.layer.cornerRadius = 16.0
+        }
+    }
     
     @IBOutlet weak var itemNameSearchTextField: SearchTextField!
     @IBOutlet weak var quantityTextField: UITextField!
     @IBOutlet weak var unitButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     var selectedUnit: String?
     var selectedShoppingList: ShoppingList?
@@ -65,6 +72,14 @@ class AddShoppingListItemView: UIView {
         contentView.frame = self.bounds
         
         itemNameSearchTextField.filterStrings(IngredientsManager.shared.allProducts)
+        
+        itemNameSearchTextField.configure()
+        quantityTextField.configure()
+        
+        unitButton.secondaryButtonSetup()
+        
+        saveButton.primaryButtonSetup(withFontName: .bold)
+        cancelButton.lightPrimaryButtonSetup()
     }
     
     @IBAction func dismissPressed(_ sender: Any) {

@@ -68,13 +68,13 @@ class UserDataManager: NSObject {
     }
     
     func observeRecipeRemoved() {
-        FirebaseAPIManager.sharedInstance.observeRecipeRemoved {
+        FirebaseRecipesService.shared.observeRecipeRemoved {
             self.delegate?.recipeRemoved()
         }
     }
     
     func observeRecipeAdded(forUserId id: String) {
-        FirebaseAPIManager.sharedInstance.observeRecipeAdded(forUserId: id) { recipe in
+        FirebaseRecipesService.shared.observeRecipeAdded(forUserId: id) { recipe in
             if let currentUser = UsersManager.shared.currentLoggedInUser, let newRecipe = recipe {
                 currentUser.data.recipes?[newRecipe.id] = newRecipe
                 
@@ -84,7 +84,7 @@ class UserDataManager: NSObject {
     }
     
     func observeRecipeChanged(forUserId id: String) {
-        FirebaseAPIManager.sharedInstance.observeRecipeChanged(forUserId: id) { recipe in
+        FirebaseRecipesService.shared.observeRecipeChanged(forUserId: id) { recipe in
             if let currentUser = UsersManager.shared.currentLoggedInUser, let changedRecipe = recipe {
                 currentUser.data.recipes?[changedRecipe.id] = changedRecipe
                 
@@ -125,7 +125,7 @@ class UserDataManager: NSObject {
     }
     
     func removeRecipe(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
-        FirebaseAPIManager.sharedInstance.removeRecipe(withId: id,
+        FirebaseRecipesService.shared.removeRecipe(withId: id,
                                                        success: success,
                                                        failure: failure)
     }

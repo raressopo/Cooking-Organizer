@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Proxima Nova Alt Regular.otf">
+            <string>ProximaNovaA-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CookbookSortView" customModule="Cooking_Organizer" customModuleProvider="target">
+            <connections>
+                <outlet property="ascendingDescendingSegmentedControl" destination="Mj0-5N-SaB" id="WTf-AZ-yEe"/>
+                <outlet property="contentView" destination="kSG-kg-Fj4" id="1W1-Uv-KlN"/>
+                <outlet property="cookingTimeCheckbox" destination="wFa-8x-O5B" id="EAY-8q-n87"/>
+                <outlet property="cookingTimeOptionView" destination="OA7-Zy-Ixf" id="Gvn-kH-jUB"/>
+                <outlet property="dificultyCheckbox" destination="RX4-tg-zwP" id="Mr1-ZC-kff"/>
+                <outlet property="dificultyOptionView" destination="BwW-66-ZTF" id="OWp-Yg-biv"/>
+                <outlet property="lastCookingCheckbox" destination="eHC-BY-0Wa" id="O5G-gl-kc6"/>
+                <outlet property="lastCookingOptionView" destination="DU3-yZ-d6y" id="v1M-vx-x7n"/>
+                <outlet property="nameCheckbox" destination="Gcc-EA-5cY" id="Rs5-D8-ulg"/>
+                <outlet property="nameOptionView" destination="FJ2-We-543" id="O0i-hm-HuP"/>
+                <outlet property="portionsCheckbox" destination="gvD-zy-37u" id="wVG-oF-tz6"/>
+                <outlet property="portionsOptionView" destination="3Zn-QK-ePW" id="c5G-aD-G8S"/>
+                <outlet property="sortOptionsStackView" destination="SEu-6O-W2P" id="mNH-j8-ewM"/>
+                <outletCollection property="checkboxes" destination="Gcc-EA-5cY" collectionClass="NSMutableArray" id="cJw-kn-1Hi"/>
+                <outletCollection property="checkboxes" destination="wFa-8x-O5B" collectionClass="NSMutableArray" id="CeP-yO-JhQ"/>
+                <outletCollection property="checkboxes" destination="RX4-tg-zwP" collectionClass="NSMutableArray" id="PuD-qV-Kzn"/>
+                <outletCollection property="checkboxes" destination="gvD-zy-37u" collectionClass="NSMutableArray" id="1sp-yv-dUG"/>
+                <outletCollection property="checkboxes" destination="eHC-BY-0Wa" collectionClass="NSMutableArray" id="MBM-8l-ITf"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view alpha="0.94999999999999996" contentMode="scaleToFill" id="kSG-kg-Fj4">
+            <rect key="frame" x="0.0" y="0.0" width="272" height="286"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="SEu-6O-W2P">
+                    <rect key="frame" x="4" y="46" width="264" height="236"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FJ2-We-543">
+                            <rect key="frame" x="0.0" y="0.0" width="264" height="47"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wHy-Lj-Mrw">
+                                    <rect key="frame" x="109" y="13" width="46" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="Uxj-A1-5IZ"/>
+                                        <constraint firstAttribute="width" constant="46" id="Ydz-mv-HMQ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gcc-EA-5cY" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="90" y="16" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="15" id="BA6-Ns-bPR"/>
+                                        <constraint firstAttribute="height" constant="15" id="HdU-FG-lL7"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="nameCheckboxSelected:" destination="-1" eventType="valueChanged" id="rqg-1N-X0r"/>
+                                    </connections>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="wHy-Lj-Mrw" firstAttribute="leading" secondItem="Gcc-EA-5cY" secondAttribute="trailing" constant="4" id="PpA-MA-wVt"/>
+                                <constraint firstItem="wHy-Lj-Mrw" firstAttribute="centerX" secondItem="FJ2-We-543" secondAttribute="centerX" id="bnx-ey-ecF"/>
+                                <constraint firstItem="Gcc-EA-5cY" firstAttribute="centerY" secondItem="wHy-Lj-Mrw" secondAttribute="centerY" id="jgM-IZ-EB7"/>
+                                <constraint firstItem="wHy-Lj-Mrw" firstAttribute="centerY" secondItem="FJ2-We-543" secondAttribute="centerY" id="xKk-cJ-FzR"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OA7-Zy-Ixf">
+                            <rect key="frame" x="0.0" y="47" width="264" height="47.5"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wFa-8x-O5B" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="60.5" y="16.5" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="15" id="keb-Es-1wc"/>
+                                        <constraint firstAttribute="width" constant="15" id="meR-wC-npP"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="cookingTimeCheckboxSelected:" destination="-1" eventType="valueChanged" id="k7D-Y7-0rH"/>
+                                    </connections>
+                                </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cooking Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ju-wY-u7R">
+                                    <rect key="frame" x="79.5" y="13.5" width="105" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="105" id="L5g-16-IZM"/>
+                                        <constraint firstAttribute="height" constant="21" id="m7b-PE-aCS"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="3Ju-wY-u7R" firstAttribute="centerX" secondItem="OA7-Zy-Ixf" secondAttribute="centerX" id="Auf-vI-lbw"/>
+                                <constraint firstItem="3Ju-wY-u7R" firstAttribute="centerY" secondItem="OA7-Zy-Ixf" secondAttribute="centerY" id="Dgv-di-bbe"/>
+                                <constraint firstItem="wFa-8x-O5B" firstAttribute="centerY" secondItem="3Ju-wY-u7R" secondAttribute="centerY" id="HJf-aF-Vn7"/>
+                                <constraint firstItem="3Ju-wY-u7R" firstAttribute="leading" secondItem="wFa-8x-O5B" secondAttribute="trailing" constant="4" id="VCL-xa-Lc1"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BwW-66-ZTF">
+                            <rect key="frame" x="0.0" y="94.5" width="264" height="47"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dificulty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnu-10-JtT">
+                                    <rect key="frame" x="100" y="13" width="64" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="eC7-8o-yHg"/>
+                                        <constraint firstAttribute="width" constant="64" id="v5R-zF-IUx"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RX4-tg-zwP" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="81" y="16" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="15" id="4QG-Ju-ajY"/>
+                                        <constraint firstAttribute="width" constant="15" id="9Fa-sW-Bck"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="dificultyCheckboxSelected:" destination="-1" eventType="valueChanged" id="ori-XF-NxH"/>
+                                    </connections>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="RX4-tg-zwP" firstAttribute="centerY" secondItem="fnu-10-JtT" secondAttribute="centerY" id="1f9-Az-MDY"/>
+                                <constraint firstItem="fnu-10-JtT" firstAttribute="centerX" secondItem="BwW-66-ZTF" secondAttribute="centerX" id="gYW-Sw-KrB"/>
+                                <constraint firstItem="fnu-10-JtT" firstAttribute="leading" secondItem="RX4-tg-zwP" secondAttribute="trailing" constant="4" id="t42-pL-mLs"/>
+                                <constraint firstItem="fnu-10-JtT" firstAttribute="centerY" secondItem="BwW-66-ZTF" secondAttribute="centerY" id="tlg-Mg-4Nn"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Zn-QK-ePW">
+                            <rect key="frame" x="0.0" y="141.5" width="264" height="47.5"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Portions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kaX-tx-hOE">
+                                    <rect key="frame" x="99" y="13" width="66" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="66" id="SPy-IN-ixh"/>
+                                        <constraint firstAttribute="height" constant="21" id="jYw-oV-4Rb"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvD-zy-37u" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="80" y="16" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="15" id="B7o-3M-Hmz"/>
+                                        <constraint firstAttribute="height" constant="15" id="p0M-0b-lX8"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="portionsCheckboxSelected:" destination="-1" eventType="valueChanged" id="Hfz-zx-HW5"/>
+                                    </connections>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="kaX-tx-hOE" firstAttribute="leading" secondItem="gvD-zy-37u" secondAttribute="trailing" constant="4" id="B9W-Ki-LXI"/>
+                                <constraint firstItem="kaX-tx-hOE" firstAttribute="centerY" secondItem="3Zn-QK-ePW" secondAttribute="centerY" id="aFS-jJ-wYw"/>
+                                <constraint firstItem="gvD-zy-37u" firstAttribute="centerY" secondItem="kaX-tx-hOE" secondAttribute="centerY" id="ar4-1E-zv6"/>
+                                <constraint firstItem="kaX-tx-hOE" firstAttribute="centerX" secondItem="3Zn-QK-ePW" secondAttribute="centerX" id="knD-nJ-Vcz"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DU3-yZ-d6y">
+                            <rect key="frame" x="0.0" y="189" width="264" height="47"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Cooking" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IOO-bH-Se9">
+                                    <rect key="frame" x="81" y="13" width="102" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="c3v-Ug-1d4"/>
+                                        <constraint firstAttribute="width" constant="102" id="fpS-p9-eK6"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eHC-BY-0Wa" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="62" y="16" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="15" id="cyw-8V-RA9"/>
+                                        <constraint firstAttribute="height" constant="15" id="yeL-zP-fJk"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="lastCookingCheckboxSelected:" destination="-1" eventType="valueChanged" id="ljL-5T-qpI"/>
+                                    </connections>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="IOO-bH-Se9" firstAttribute="leading" secondItem="eHC-BY-0Wa" secondAttribute="trailing" constant="4" id="2TR-cC-bqN"/>
+                                <constraint firstItem="eHC-BY-0Wa" firstAttribute="centerY" secondItem="IOO-bH-Se9" secondAttribute="centerY" id="DJO-V4-49F"/>
+                                <constraint firstItem="IOO-bH-Se9" firstAttribute="centerX" secondItem="DU3-yZ-d6y" secondAttribute="centerX" id="ogZ-QA-CrP"/>
+                                <constraint firstItem="IOO-bH-Se9" firstAttribute="centerY" secondItem="DU3-yZ-d6y" secondAttribute="centerY" id="tTl-e1-8H4"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </stackView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Mj0-5N-SaB">
+                    <rect key="frame" x="8" y="8" width="256" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="R8t-0F-cmB"/>
+                    </constraints>
+                    <segments>
+                        <segment title="Ascending"/>
+                        <segment title="Descending"/>
+                    </segments>
+                </segmentedControl>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="uYX-rI-9y8"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Mj0-5N-SaB" firstAttribute="top" secondItem="kSG-kg-Fj4" secondAttribute="top" constant="8" id="3Im-v2-YFz"/>
+                <constraint firstAttribute="trailing" secondItem="Mj0-5N-SaB" secondAttribute="trailing" constant="8" id="GBl-oK-8rP"/>
+                <constraint firstItem="uYX-rI-9y8" firstAttribute="trailing" secondItem="SEu-6O-W2P" secondAttribute="trailing" constant="4" id="IMq-WA-ddB"/>
+                <constraint firstItem="SEu-6O-W2P" firstAttribute="leading" secondItem="uYX-rI-9y8" secondAttribute="leading" constant="4" id="U23-cy-VfV"/>
+                <constraint firstItem="uYX-rI-9y8" firstAttribute="bottom" secondItem="SEu-6O-W2P" secondAttribute="bottom" constant="4" id="eXH-8a-m1G"/>
+                <constraint firstItem="Mj0-5N-SaB" firstAttribute="leading" secondItem="kSG-kg-Fj4" secondAttribute="leading" constant="8" id="naD-0L-xCU"/>
+                <constraint firstItem="SEu-6O-W2P" firstAttribute="top" secondItem="Mj0-5N-SaB" secondAttribute="bottom" constant="8" id="upq-uf-X4x"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-586.95652173913049" y="471.42857142857139"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -14,8 +14,37 @@ protocol ScheduleRecipeViewDelegate: AnyObject {
 
 class ScheduleRecipeView: UIView {
     @IBOutlet var contentView: UIView!
+    @IBOutlet weak var containerView: UIView! {
+        didSet {
+            containerView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+            containerView.layer.cornerRadius = 16.0
+        }
+    }
     
-    @IBOutlet weak var scheduleDateButton: UIButton!
+    @IBOutlet weak var recipeNameLabel: UILabel! {
+        didSet {
+            recipeNameLabel.adjustsFontSizeToFitWidth = true
+            recipeNameLabel.font = UIFont(name: "Proxima Nova Alt Bold", size: 19.0)
+        }
+    }
+    @IBOutlet weak var scheduleDateButton: UIButton! {
+        didSet {
+            scheduleDateButton.setTitleColor(UIColor.secondaryButtonColor(), for: .normal)
+            scheduleDateButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 16.0)
+        }
+    }
+    @IBOutlet weak var cancelButton: UIButton! {
+        didSet {
+            cancelButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            cancelButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Light", size: 17.0)
+        }
+    }
+    @IBOutlet weak var scheduleButton: UIButton! {
+        didSet {
+            scheduleButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            scheduleButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 17.0)
+        }
+    }
     
     weak var delegate: ScheduleRecipeViewDelegate?
     
@@ -41,6 +70,8 @@ class ScheduleRecipeView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
+        
+        recipeNameLabel.text = selectedRecipe?.name ?? "Recipe"
     }
     
     @IBAction func dismissedPressed(_ sender: Any) {

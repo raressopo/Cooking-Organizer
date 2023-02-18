@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Proxima Nova Alt Regular.otf">
+            <string>ProximaNovaA-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PantrySortView" customModule="Cooking_Organizer" customModuleProvider="target">
+            <connections>
+                <outlet property="ascendingDescendingSegmentedControl" destination="bgb-dw-2er" id="4L4-32-FC0"/>
+                <outlet property="contentView" destination="HdW-pc-6Nf" id="waJ-9F-FRf"/>
+                <outlet property="expirationDateCheckbox" destination="QgJ-2e-8RD" id="6lY-Vs-YvP"/>
+                <outlet property="expirationDateOptionView" destination="0A9-hu-ctr" id="MlF-Pe-7mw"/>
+                <outlet property="nameCheckbox" destination="u33-IL-OGV" id="GJL-zT-qXT"/>
+                <outlet property="nameOptionView" destination="uop-be-i3R" id="Xbf-rh-uv6"/>
+                <outlet property="sortOptionsStackView" destination="Jxl-KN-Lhz" id="n6W-Ax-3pc"/>
+                <outletCollection property="checkboxes" destination="u33-IL-OGV" collectionClass="NSMutableArray" id="lkZ-WE-1yi"/>
+                <outletCollection property="checkboxes" destination="QgJ-2e-8RD" collectionClass="NSMutableArray" id="mCI-Lo-OV6"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view alpha="0.94999998807907104" contentMode="scaleToFill" id="HdW-pc-6Nf">
+            <rect key="frame" x="0.0" y="0.0" width="272" height="145"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Jxl-KN-Lhz">
+                    <rect key="frame" x="4" y="46" width="264" height="95"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uop-be-i3R">
+                            <rect key="frame" x="0.0" y="0.0" width="264" height="47.5"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PE7-tz-Gsl">
+                                    <rect key="frame" x="109" y="13.5" width="46" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="UHf-hW-OFb"/>
+                                        <constraint firstAttribute="width" constant="46" id="kks-M6-sfA"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u33-IL-OGV" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="90" y="16.5" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="15" id="E7p-qt-5nk"/>
+                                        <constraint firstAttribute="width" constant="15" id="cNt-O8-HbZ"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="nameCheckboxSelected:" destination="-1" eventType="valueChanged" id="mV2-DR-rta"/>
+                                    </connections>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="PE7-tz-Gsl" firstAttribute="centerY" secondItem="uop-be-i3R" secondAttribute="centerY" id="50S-Fx-nxl"/>
+                                <constraint firstItem="u33-IL-OGV" firstAttribute="centerY" secondItem="PE7-tz-Gsl" secondAttribute="centerY" id="9Ji-Nf-VDq"/>
+                                <constraint firstItem="PE7-tz-Gsl" firstAttribute="leading" secondItem="u33-IL-OGV" secondAttribute="trailing" constant="4" id="SRW-OW-aHU"/>
+                                <constraint firstItem="PE7-tz-Gsl" firstAttribute="centerX" secondItem="uop-be-i3R" secondAttribute="centerX" id="wlD-9w-nI4"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0A9-hu-ctr">
+                            <rect key="frame" x="0.0" y="47.5" width="264" height="47.5"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgJ-2e-8RD" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                    <rect key="frame" x="55" y="16.5" width="15" height="15"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="15" id="E37-S0-mVf"/>
+                                        <constraint firstAttribute="width" constant="15" id="NsC-ke-JEB"/>
+                                    </constraints>
+                                    <connections>
+                                        <action selector="expirationDateCheckboxSelected:" destination="-1" eventType="valueChanged" id="8Xa-6p-dCy"/>
+                                    </connections>
+                                </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expiration Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cCD-cU-VKa">
+                                    <rect key="frame" x="74" y="13.5" width="116" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="5Aa-7W-IOl"/>
+                                        <constraint firstAttribute="width" constant="116" id="lEJ-J7-CVf"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="ProximaNovaA-Regular" family="Proxima Nova Alt" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="cCD-cU-VKa" firstAttribute="centerX" secondItem="0A9-hu-ctr" secondAttribute="centerX" id="3wl-9z-4Vg"/>
+                                <constraint firstItem="QgJ-2e-8RD" firstAttribute="centerY" secondItem="cCD-cU-VKa" secondAttribute="centerY" id="AUK-fv-08z"/>
+                                <constraint firstItem="cCD-cU-VKa" firstAttribute="leading" secondItem="QgJ-2e-8RD" secondAttribute="trailing" constant="4" id="ZU8-3C-3vf"/>
+                                <constraint firstItem="cCD-cU-VKa" firstAttribute="centerY" secondItem="0A9-hu-ctr" secondAttribute="centerY" id="aOw-IF-Mwi"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </stackView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bgb-dw-2er">
+                    <rect key="frame" x="8" y="8" width="256" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="41Z-FX-hUc"/>
+                    </constraints>
+                    <segments>
+                        <segment title="Ascending"/>
+                        <segment title="Descending"/>
+                    </segments>
+                </segmentedControl>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="JiD-3Q-DV3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="bgb-dw-2er" firstAttribute="leading" secondItem="HdW-pc-6Nf" secondAttribute="leading" constant="8" id="8Yx-MV-gY8"/>
+                <constraint firstItem="JiD-3Q-DV3" firstAttribute="bottom" secondItem="Jxl-KN-Lhz" secondAttribute="bottom" constant="4" id="E6v-vY-jZR"/>
+                <constraint firstItem="Jxl-KN-Lhz" firstAttribute="top" secondItem="bgb-dw-2er" secondAttribute="bottom" constant="8" id="Jnd-el-Ou1"/>
+                <constraint firstItem="JiD-3Q-DV3" firstAttribute="trailing" secondItem="Jxl-KN-Lhz" secondAttribute="trailing" constant="4" id="SXX-QJ-0vb"/>
+                <constraint firstItem="Jxl-KN-Lhz" firstAttribute="leading" secondItem="JiD-3Q-DV3" secondAttribute="leading" constant="4" id="aAb-w6-REh"/>
+                <constraint firstAttribute="trailing" secondItem="bgb-dw-2er" secondAttribute="trailing" constant="8" id="fVM-Jj-xgh"/>
+                <constraint firstItem="bgb-dw-2er" firstAttribute="top" secondItem="HdW-pc-6Nf" secondAttribute="top" constant="8" id="rLa-Rl-vEx"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-586.95652173913049" y="471.42857142857139"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

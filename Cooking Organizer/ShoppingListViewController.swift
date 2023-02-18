@@ -10,7 +10,16 @@ import UIKit
 
 class ShoppingListViewController: UIViewController {
     @IBOutlet weak var itemsTableView: UITableView!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var addButton: UIButton! {
+        didSet {
+            addButton.layer.cornerRadius = addButton.frame.height / 2
+            addButton.backgroundColor = UIColor.onScreenButton()
+            addButton.layer.borderWidth = 1.5
+            addButton.layer.borderColor = UIColor.buttonTitleColor().cgColor
+            addButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            addButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 15.0)
+        }
+    }
     
     var selectedShoppingList: ShoppingList?
     
@@ -42,6 +51,8 @@ class ShoppingListViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
         navigationItem.title = selectedShoppingList?.name ?? "Shopping List"
+        
+        view.backgroundColor = UIColor.screenBackground()
     }
     
     @IBAction func addPressed(_ sender: Any) {

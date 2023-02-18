@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddShoppingListItemView" customModule="Cooking_Organizer" customModuleProvider="target">
             <connections>
+                <outlet property="cancelButton" destination="vd1-cM-bgT" id="Qa5-E0-lMk"/>
+                <outlet property="containerView" destination="3iC-Uz-ExP" id="Hi6-zi-CXb"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="AW1-xb-E1L"/>
                 <outlet property="itemNameSearchTextField" destination="H5N-Z0-JRp" id="79Z-Ah-aIj"/>
                 <outlet property="quantityTextField" destination="xiQ-KS-pNy" id="eJ0-DY-G91"/>

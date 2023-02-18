@@ -30,6 +30,13 @@ class ShoppingListsViewController: UIViewController {
         listsTableView.allowsSelectionDuringEditing = true
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
+        
+        listsTableView.register(UINib(nibName: "ShoppingListTableViewCell", bundle: nil), forCellReuseIdentifier: "shoppingListCell")
+        
+        self.view.backgroundColor = UIColor.screenBackground()
+        self.navigationController?.navigationBar.tintColor = UIColor.buttonTitleColor()
+        
+        addButton.onScreenButtonSetup(withFontName: .bold)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +105,9 @@ class ShoppingListsViewController: UIViewController {
     }
     
     @IBAction func addPressed(_ sender: Any) {
+        self.tabBarController?.tabBar.isHidden = true
+        addButton.isHidden = true
+        
         let createListView = CreateShoppingListView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         createListView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +122,11 @@ class ShoppingListsViewController: UIViewController {
             AlertManager.showAlertWithTitleMessageAndOKButton(onPresenter: self,
                                                               title: "Creation Failed",
                                                               message: "Something went wrong creating the shopping list")
+        }
+        
+        createListView.viewDismissed = {
+            self.tabBarController?.tabBar.isHidden = false
+            self.addButton.isHidden = false
         }
         
         view.addSubview(createListView)
@@ -129,13 +144,15 @@ extension ShoppingListsViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "shoppingListCell") as? ShoppingListTableViewCell else {
+            fatalError("Cell type is not ShoppingListTableViewCell")
+        }
         
-        cell.textLabel?.text = tableView.isEditing ? copyOfShoppingLists?[indexPath.row].name : shoppingLists?[indexPath.row].name
+        cell.listName.text = tableView.isEditing ? copyOfShoppingLists?[indexPath.row].name : shoppingLists?[indexPath.row].name
         
         let itemsCount = tableView.isEditing ? copyOfShoppingLists?[indexPath.row].items?.count ?? 0 : shoppingLists?[indexPath.row].items?.count ?? 0
         
-        cell.detailTextLabel?.text = "\(itemsCount) items"
+        cell.nrOfIngredientsToBuy.text = "\(itemsCount) items"
         cell.selectionStyle = .none
         
         return cell

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="shoppingListCell" rowHeight="113" id="UpF-qY-uFb" customClass="ShoppingListTableViewCell" customModule="Cooking_Organizer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="455" height="113"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UpF-qY-uFb" id="nOa-Vv-hf9">
+                <rect key="frame" x="0.0" y="0.0" width="455" height="113"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fcS-eH-3x4">
+                        <rect key="frame" x="8" y="16" width="439" height="97"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nKr-pB-LaD">
+                                <rect key="frame" x="16" y="8" width="407" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2EB-GV-Deq">
+                                <rect key="frame" x="16" y="64" width="407" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="A4J-cf-CaR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="2EB-GV-Deq" firstAttribute="leading" secondItem="fcS-eH-3x4" secondAttribute="leading" constant="16" id="0e8-5d-JqJ"/>
+                            <constraint firstItem="nKr-pB-LaD" firstAttribute="top" secondItem="fcS-eH-3x4" secondAttribute="top" constant="8" id="6ug-BV-tdY"/>
+                            <constraint firstItem="2EB-GV-Deq" firstAttribute="top" secondItem="nKr-pB-LaD" secondAttribute="bottom" constant="8" id="AY9-Eh-xDz"/>
+                            <constraint firstAttribute="bottom" secondItem="2EB-GV-Deq" secondAttribute="bottom" constant="8" id="HGJ-Aa-PKm"/>
+                            <constraint firstAttribute="trailing" secondItem="nKr-pB-LaD" secondAttribute="trailing" constant="16" id="f9L-FU-Itj"/>
+                            <constraint firstAttribute="trailing" secondItem="2EB-GV-Deq" secondAttribute="trailing" constant="16" id="pfX-3u-xUP"/>
+                            <constraint firstItem="nKr-pB-LaD" firstAttribute="leading" secondItem="fcS-eH-3x4" secondAttribute="leading" constant="16" id="ros-iR-EIm"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="fcS-eH-3x4" firstAttribute="top" secondItem="nOa-Vv-hf9" secondAttribute="top" constant="16" id="A6s-pc-Zcy"/>
+                    <constraint firstItem="fcS-eH-3x4" firstAttribute="leading" secondItem="nOa-Vv-hf9" secondAttribute="leading" constant="8" id="drQ-k8-bqm"/>
+                    <constraint firstAttribute="bottom" secondItem="fcS-eH-3x4" secondAttribute="bottom" id="lng-mW-mTn"/>
+                    <constraint firstAttribute="trailing" secondItem="fcS-eH-3x4" secondAttribute="trailing" constant="8" id="nhR-De-QmY"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="listName" destination="nKr-pB-LaD" id="L8f-Oj-EW8"/>
+                <outlet property="nrOfIngredientsToBuy" destination="2EB-GV-Deq" id="thZ-ff-bsQ"/>
+            </connections>
+            <point key="canvasLocation" x="-42.753623188405797" y="127.56696428571428"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

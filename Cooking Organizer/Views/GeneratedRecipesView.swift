@@ -15,6 +15,18 @@ protocol GeneratedRecipesViewDelegate: AnyObject {
 class GeneratedRecipesView: UIView {
     @IBOutlet var contentView: UIView!
     
+    @IBOutlet weak var containerView: UIView! {
+        didSet {
+            containerView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+            containerView.layer.cornerRadius = 16.0
+        }
+    }
+    @IBOutlet weak var cancelButton: UIButton! {
+        didSet {
+            cancelButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            cancelButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Regular", size: 18.0)
+        }
+    }
     @IBOutlet weak var generatedRecipesTableView: UITableView!
     
     weak var delegate: GeneratedRecipesViewDelegate?

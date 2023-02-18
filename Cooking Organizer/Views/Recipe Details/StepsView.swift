@@ -192,7 +192,7 @@ extension StepsView: UITableViewDelegate, UITableViewDataSource {
             }
             
             cell.stepNrLabel.text = "\(indexPath.row + 1)"
-            cell.stepDetailsTextView.text = steps[indexPath.row]
+            cell.stepDetailLabel.text = steps[indexPath.row]
             
             cell.selectionStyle = .none
             

@@ -19,6 +19,7 @@ class HomeIngredientDetailsView: UIView {
     @IBOutlet weak var unitButton: UIButton!
     @IBOutlet weak var categoriesButton: UIButton!
     
+    @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var createButton: UIButton!
     
     var selectedCategory: IngredientCategories?
@@ -56,6 +57,23 @@ class HomeIngredientDetailsView: UIView {
         
         ingredientNameTextField.filterStrings(IngredientsManager.shared.allProducts)
         ingredientNameTextField.delegate = self
+        
+        configureUI()
+    }
+    
+    private func configureUI() {
+        self.ingredientDetailsView.layer.cornerRadius = 14.0
+        self.ingredientDetailsView.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.95)
+        
+        ingredientNameTextField.configure()
+        quantityTextField.configure()
+        
+        expirationDateButton.secondaryButtonSetup()
+        unitButton.secondaryButtonSetup()
+        categoriesButton.secondaryButtonSetup()
+        
+        createButton.primaryButtonSetup(withFontName: .bold)
+        cancelButton.primaryButtonSetup(withFontName: .light)
     }
     
     private func validateNewIngredientsDetails(completion: @escaping ([String: Any]) -> Void) {

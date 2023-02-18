@@ -10,8 +10,16 @@ import UIKit
 
 class ShoppingListItemTableViewCell: UITableViewCell {
     @IBOutlet weak var checkbox: Checkbox!
-    @IBOutlet weak var itemNameLabel: UILabel!
-    @IBOutlet weak var itemQuantityAndUnitLabel: UILabel!
+    @IBOutlet weak var itemNameLabel: UILabel! {
+        didSet {
+            itemNameLabel.font = UIFont(name: "Proxima Nova Alt Bold", size: 18.0)
+        }
+    }
+    @IBOutlet weak var itemQuantityAndUnitLabel: UILabel! {
+        didSet {
+            itemQuantityAndUnitLabel.font = UIFont(name: "Proxima Nova Alt Light", size: 15.0)
+        }
+    }
     @IBOutlet weak var boughtView: UIView!
     
     override func awakeFromNib() {
@@ -19,7 +27,8 @@ class ShoppingListItemTableViewCell: UITableViewCell {
         
         checkbox.checkmarkStyle = .tick
         checkbox.borderStyle = .circle
-        checkbox.checkedBorderColor = .systemGray5
-        checkbox.checkedBorderColor = .darkGray
+        checkbox.checkedBorderColor = UIColor.buttonTitleColor()
+        checkbox.uncheckedBorderColor = UIColor.buttonTitleColor()
+        checkbox.checkmarkColor = UIColor.buttonTitleColor()
     }
 }

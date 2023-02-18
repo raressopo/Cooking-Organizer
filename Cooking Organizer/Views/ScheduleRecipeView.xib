@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,7 +11,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScheduleRecipeView" customModule="Cooking_Organizer" customModuleProvider="target">
             <connections>
+                <outlet property="cancelButton" destination="1TC-eI-5om" id="PC5-17-eST"/>
+                <outlet property="containerView" destination="B5y-pm-SDF" id="jly-xf-63B"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="krp-NZ-rtG"/>
+                <outlet property="recipeNameLabel" destination="LoG-Pe-QPd" id="ESe-TA-0wZ"/>
+                <outlet property="scheduleButton" destination="WyH-6y-lHq" id="V72-dk-524"/>
                 <outlet property="scheduleDateButton" destination="H9q-TY-Nwa" id="zk6-OX-kJU"/>
             </connections>
         </placeholder>

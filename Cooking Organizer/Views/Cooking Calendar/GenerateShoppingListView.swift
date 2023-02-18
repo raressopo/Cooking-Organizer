@@ -9,14 +9,27 @@
 import UIKit
 import CodableFirebase
 
+protocol GenerateShoppingListViewDelegate: AnyObject {
+    func viewDismissed()
+}
+
 class GenerateShoppingListView: UIView {
     @IBOutlet var contentView: UIView!
     
     @IBOutlet weak var startDateButton: UIButton!
     @IBOutlet weak var endDateButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel! {
+        didSet {
+            titleLabel.font = UIFont(name: "Proxima Nova Alt Regular", size: 17.0)
+        }
+    }
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var generateButton: UIButton!
     
     var startDate: Date?
     var endDate: Date?
+    
+    weak var delegate: GenerateShoppingListViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,13 +48,23 @@ class GenerateShoppingListView: UIView {
         
         addSubview(contentView)
         contentView.frame = self.bounds
+        
+        cancelButton.primaryButtonSetup(withFontName: .regular)
+        generateButton.primaryButtonSetup(withFontName: .bold)
+        
+        startDateButton.secondaryButtonSetup()
+        endDateButton.secondaryButtonSetup()
     }
     
     @IBAction func dismissPressed(_ sender: Any) {
+        delegate?.viewDismissed()
+        
         removeFromSuperview()
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
+        delegate?.viewDismissed()
+        
         removeFromSuperview()
     }
     
@@ -116,8 +139,12 @@ class GenerateShoppingListView: UIView {
                 UserDataManager.shared.createShoppingList(withName: UtilsManager.isSelectedDate(selectedDate: sDate, equalToGivenDate: eDate) ? "\(startDateString)" : "\(startDateString) - \(endDateString)",
                                                           andValues: ["name": UtilsManager.isSelectedDate(selectedDate: sDate, equalToGivenDate: eDate) ? "\(startDateString)" : "\(startDateString) - \(endDateString)",
                                                                       "items": data as Any]) {
+                    self.delegate?.viewDismissed()
+                    
                     self.removeFromSuperview()
                 } failure: {
+                    self.delegate?.viewDismissed()
+                    
                     self.removeFromSuperview()
                 }
 

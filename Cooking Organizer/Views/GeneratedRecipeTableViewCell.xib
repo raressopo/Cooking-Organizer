@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -43,6 +43,7 @@
                         </connections>
                     </button>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="mS9-ar-AiU" secondAttribute="bottom" constant="15" id="SJf-5P-eNv"/>
                     <constraint firstItem="ZLD-Hx-nZz" firstAttribute="centerY" secondItem="Sg1-MB-F90" secondAttribute="centerY" id="cxs-of-Tvw"/>
@@ -54,6 +55,7 @@
                     <constraint firstItem="ZLD-Hx-nZz" firstAttribute="leading" secondItem="66S-uD-sfP" secondAttribute="trailing" constant="20" id="zkf-fB-bK9"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="nrOfIngredientsLabel" destination="mS9-ar-AiU" id="4jj-9V-kRO"/>
                 <outlet property="recipeNameLabel" destination="66S-uD-sfP" id="z0H-QR-RGU"/>

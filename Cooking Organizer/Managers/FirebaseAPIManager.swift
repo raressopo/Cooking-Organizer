@@ -122,14 +122,6 @@ class FirebaseAPIManager {
         }
     }
     
-    func observeRecipeRemoved(completion: @escaping () -> Void) {
-        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else { return }
-        
-        usersDataRef.child(loggedInUserId).child("recipes").observe(.childRemoved) { _ in
-            completion()
-        }
-    }
-    
     private func parseHomeIngredientDetails(fromSnapshot snapshot: DataSnapshot, withCompletionHandler completion: @escaping (HomeIngredient?) -> Void) {
         guard let homeIngredientDetails = snapshot.value else {
             completion(nil)
@@ -145,45 +137,6 @@ class FirebaseAPIManager {
             completion(nil)
             
             print(error)
-        }
-    }
-    
-    func observeRecipeAdded(forUserId id: String, completion: @escaping (Recipe?) -> Void) {
-        usersDataRef.child(id).child("recipes").observe(.childAdded) { snapshot in
-            self.parseRecipeDetails(fromSnapshot: snapshot, withCompletionHandler: completion)
-        }
-    }
-    
-    func observeRecipeChanged(forUserId id: String, completion: @escaping (Recipe?) -> Void) {
-        usersDataRef.child(id).child("recipes").observe(.childChanged) { snapshot in
-            self.parseRecipeDetails(fromSnapshot: snapshot, withCompletionHandler: completion)
-        }
-    }
-    
-    private func parseRecipeDetails(fromSnapshot snapshot: DataSnapshot, withCompletionHandler completion: @escaping (Recipe?) -> Void) {
-        guard let recipeDetails = snapshot.value else {
-            completion(nil)
-            
-            return
-        }
-        
-        do {
-            let recipe = try FirebaseDecoder().decode(Recipe.self, from: recipeDetails)
-            
-            completion(recipe)
-        } catch let error {
-            completion(nil)
-            
-            print(error)
-        }
-    }
-    
-    func updateRecipe(froUserId id: String,
-                      andForRecipeId recipeId: String,
-                      withDetails details: [String: Any],
-                      andCompletionHandler completion: @escaping (Bool) -> Void) {
-        usersDataRef.child(id).child("recipes").child(recipeId).updateChildValues(details) { (error, _) in
-            completion(error == nil)
         }
     }
     
@@ -249,22 +202,6 @@ class FirebaseAPIManager {
         }
         
         usersDataRef.child(loggedInUserId).child("homeIngredients").child(id).removeValue { (error, _) in
-            if error == nil {
-                success()
-            } else {
-                failure()
-            }
-        }
-    }
-    
-    func removeRecipe(withId id: String, success: @escaping () -> Void, failure: @escaping () -> Void) {
-        guard let loggedInUserId = UsersManager.shared.currentLoggedInUser?.loginData.id else {
-            failure()
-            
-            return
-        }
-        
-        usersDataRef.child(loggedInUserId).child("recipes").child(id).removeValue { (error, _) in
             if error == nil {
                 success()
             } else {

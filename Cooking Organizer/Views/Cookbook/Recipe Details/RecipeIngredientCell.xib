@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ingredientCell" rowHeight="118" id="7TD-Rw-F5H" customClass="RecipeIngredientCell" customModule="Cooking_Organizer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="447" height="118"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7TD-Rw-F5H" id="dzH-4V-Ln1">
+                <rect key="frame" x="0.0" y="0.0" width="447" height="118"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zjw-Bj-FuJ">
+                        <rect key="frame" x="8" y="8" width="431" height="102"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0o1-EB-Jtt" customClass="Checkbox" customModule="Cooking_Organizer" customModuleProvider="target">
+                                <rect key="frame" x="8" y="41" width="20" height="20"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="J6H-Ro-SHj"/>
+                                    <constraint firstAttribute="width" constant="20" id="Ree-zl-42e"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KeS-MK-Uvr">
+                                <rect key="frame" x="36" y="31" width="271" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="UPE-fV-G3U"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vI6-MY-1pH">
+                                <rect key="frame" x="315" y="31" width="100" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="0Zb-dY-Jbb"/>
+                                    <constraint firstAttribute="height" constant="40" id="2cF-V3-e04"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="0o1-EB-Jtt" firstAttribute="centerY" secondItem="Zjw-Bj-FuJ" secondAttribute="centerY" id="DcU-m8-Gy2"/>
+                            <constraint firstItem="vI6-MY-1pH" firstAttribute="leading" secondItem="KeS-MK-Uvr" secondAttribute="trailing" constant="8" id="JhI-R3-eKL"/>
+                            <constraint firstAttribute="trailing" secondItem="vI6-MY-1pH" secondAttribute="trailing" constant="16" id="K5x-AR-bU1"/>
+                            <constraint firstItem="vI6-MY-1pH" firstAttribute="centerY" secondItem="Zjw-Bj-FuJ" secondAttribute="centerY" id="TQs-k8-qsQ"/>
+                            <constraint firstItem="0o1-EB-Jtt" firstAttribute="leading" secondItem="Zjw-Bj-FuJ" secondAttribute="leading" constant="8" id="hVj-5Z-MXG"/>
+                            <constraint firstItem="KeS-MK-Uvr" firstAttribute="centerY" secondItem="Zjw-Bj-FuJ" secondAttribute="centerY" id="isW-nK-f5R"/>
+                            <constraint firstItem="KeS-MK-Uvr" firstAttribute="leading" secondItem="0o1-EB-Jtt" secondAttribute="trailing" constant="8" id="uqe-Xo-GYf"/>
+                        </constraints>
+                    </view>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ikF-lP-ZpO">
+                        <rect key="frame" x="8" y="8" width="431" height="102"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="14"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Zjw-Bj-FuJ" secondAttribute="bottom" constant="8" id="Ln7-WX-5Xe"/>
+                    <constraint firstAttribute="trailing" secondItem="Zjw-Bj-FuJ" secondAttribute="trailing" constant="8" id="c5c-jO-zDm"/>
+                    <constraint firstAttribute="bottom" secondItem="ikF-lP-ZpO" secondAttribute="bottom" constant="8" id="ccm-HK-fOW"/>
+                    <constraint firstItem="Zjw-Bj-FuJ" firstAttribute="leading" secondItem="dzH-4V-Ln1" secondAttribute="leading" constant="8" id="fWg-tn-0iK"/>
+                    <constraint firstItem="ikF-lP-ZpO" firstAttribute="top" secondItem="dzH-4V-Ln1" secondAttribute="top" constant="8" id="i8I-ft-Xi8"/>
+                    <constraint firstItem="ikF-lP-ZpO" firstAttribute="leading" secondItem="dzH-4V-Ln1" secondAttribute="leading" constant="8" id="kyD-Cu-3ub"/>
+                    <constraint firstItem="Zjw-Bj-FuJ" firstAttribute="top" secondItem="dzH-4V-Ln1" secondAttribute="top" constant="8" id="p28-mM-KfM"/>
+                    <constraint firstAttribute="trailing" secondItem="ikF-lP-ZpO" secondAttribute="trailing" constant="8" id="vyc-lu-xdJ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="checkbox" destination="0o1-EB-Jtt" id="9EF-tJ-vwC"/>
+                <outlet property="checkedStateView" destination="ikF-lP-ZpO" id="mZx-hH-T8Y"/>
+                <outlet property="containerView" destination="Zjw-Bj-FuJ" id="3V0-II-DAf"/>
+                <outlet property="nameLabel" destination="KeS-MK-Uvr" id="qcd-nC-k5G"/>
+                <outlet property="quantityUnitLabel" destination="vI6-MY-1pH" id="mgQ-YV-53P"/>
+            </connections>
+            <point key="canvasLocation" x="16.666666666666668" y="170.75892857142856"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

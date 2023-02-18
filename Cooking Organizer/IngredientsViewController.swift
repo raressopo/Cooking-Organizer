@@ -14,7 +14,20 @@ protocol CreateRecipeIngredientsProtocol: AnyObject {
 
 class IngredientsViewController: UIViewController {
     @IBOutlet weak var ingredientsTableView: UITableView!
-    @IBOutlet weak var addIngredientButton: UIButton!
+    @IBOutlet weak var addIngredientButton: UIButton! {
+        didSet {
+            self.addIngredientButton.setTitleColor(UIColor.hexStringToUIColor(hex: "#C17A03"), for: .normal)
+            self.addIngredientButton.titleLabel?.font = UIFont(name: "Proxima Nova Alt Bold", size: 21.0)
+        }
+    }
+    
+    @IBOutlet weak var noIngredientsAddedLabel: UILabel! {
+        didSet {
+            self.noIngredientsAddedLabel.font = UIFont(name: "Proxima Nova Alt Light Italic", size: 24.0)
+        }
+    }
+    
+    @IBOutlet weak var addIngredientButtonBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var ingredientsTableViewBottomToButtonConstraint: NSLayoutConstraint!
     
@@ -41,6 +54,7 @@ class IngredientsViewController: UIViewController {
         
         if createRecipeMode {
             let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(donePressed))
+            editNavBarButton.tintColor = UIColor.hexStringToUIColor(hex: "#C17A03")
             
             self.navigationItem.hidesBackButton = true
             self.navigationItem.rightBarButtonItem = editNavBarButton
@@ -56,6 +70,31 @@ class IngredientsViewController: UIViewController {
             let editNavBarButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPressed))
             
             self.navigationItem.rightBarButtonItem = editNavBarButton
+        }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+        
+        self.ingredientsTableView.keyboardDismissMode = .onDrag
+        self.ingredientsTableView.backgroundColor = .clear
+        
+        self.view.backgroundColor = UIColor.hexStringToUIColor(hex: "#024B3C")
+        
+        if createRecipeMode, self.createRecipeIngredients.count > 0 {
+            self.noIngredientsAddedLabel.isHidden = true
+        } else if self.ingredientsTableView.isEditing, self.ingredientsCopy.count > 0 {
+            self.noIngredientsAddedLabel.isHidden = true
+        } else if ingredients.count > 0 {
+            self.noIngredientsAddedLabel.isHidden = true
         }
     }
     
@@ -73,6 +112,8 @@ class IngredientsViewController: UIViewController {
         } else {
             ingredientsCopy.append(ingredient)
         }
+        
+        self.noIngredientsAddedLabel.isHidden = true
         
         ingredientsTableView.reloadData()
     }
@@ -122,7 +163,7 @@ class IngredientsViewController: UIViewController {
                 if let userId = UsersManager.shared.currentLoggedInUser?.loginData.id,
                     let recipeId = self.recipe?.id {
                     
-                    FirebaseAPIManager.sharedInstance.updateRecipe(froUserId: userId,
+                    FirebaseRecipesService.shared.updateRecipe(froUserId: userId,
                                                                    andForRecipeId: recipeId,
                                                                    withDetails: ["ingredients":changedIngredients]) { success in
                                                                     if success {
@@ -253,6 +294,16 @@ class IngredientsViewController: UIViewController {
         }
     }
     
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            self.addIngredientButtonBottomConstraint.constant = keyboardRectangle.height + 4
+        }
+    }
+    
+    @objc func keyboardWillHide() {
+        self.addIngredientButtonBottomConstraint.constant = 10
+    }
 }
 
 extension IngredientsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -303,8 +354,20 @@ extension IngredientsViewController: UITableViewDelegate, UITableViewDataSource 
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing == false {
+            if let selectedCell = tableView.cellForRow(at: indexPath) as? RecipeIngredientCell {
+                selectedCell.changeCheckedState(to: !selectedCell.checkbox.isChecked)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        if createRecipeMode {
+            return 80.0
+        } else {
+            return 60.0
+        }
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -327,8 +390,24 @@ extension IngredientsViewController: UITableViewDelegate, UITableViewDataSource 
                 ingredientsCopy.remove(at: indexPath.row)
             }
             
+            if createRecipeMode, self.createRecipeIngredients.count == 0 {
+                self.noIngredientsAddedLabel.isHidden = false
+            } else if tableView.isEditing, self.ingredientsCopy.count == 0 {
+                self.noIngredientsAddedLabel.isHidden = false
+            } else if ingredients.count == 0 {
+                self.noIngredientsAddedLabel.isHidden = false
+            }
+            
             tableView.reloadData()
         }
+    }
+    
+    // Change default icon (hamburger) for moving cells in UITableView
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let imageView = cell.subviews.first(where: { $0.description.contains("Reorder") })?.subviews[0] as? UIImageView
+        
+        let image = UIImage(systemName: "line.horizontal.3")?.withTintColor(UIColor.black, renderingMode: .alwaysOriginal)
+        imageView?.image = image
     }
     
 }
