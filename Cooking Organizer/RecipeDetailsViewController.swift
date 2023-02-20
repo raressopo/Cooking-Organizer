@@ -45,23 +45,25 @@ class RecipeDetailsViewController: UIViewController {
     
     @IBOutlet weak var removePhotoButton: UIButton! {
         didSet {
-            self.removePhotoButton.layer.cornerRadius = 15.0
-            self.removePhotoButton.backgroundColor = UIColor.systemBackground
             self.removePhotoButton.setTitleColor(UIColor.deleteButtonTitleColor(), for: .normal)
-            self.removePhotoButton.layer.borderWidth = 2.0
-            self.removePhotoButton.layer.borderColor = UIColor.deleteButtonTitleColor().cgColor
+            self.removePhotoButton.titleLabel?.font = UIFont(name: FontName.bold.rawValue, size: 18.0)
         }
     }
     @IBOutlet weak var changePhotoButton: UIButton! {
         didSet {
-            self.changePhotoButton.layer.cornerRadius = 15.0
-            self.changePhotoButton.backgroundColor = UIColor.systemBackground
             self.changePhotoButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
-            self.changePhotoButton.layer.borderWidth = 2.0
-            self.changePhotoButton.layer.borderColor = UIColor.buttonTitleColor().cgColor
+            self.changePhotoButton.titleLabel?.font = UIFont(name: FontName.bold.rawValue, size: 18.0)
         }
     }
-
+    
+    @IBOutlet weak var addPhotoButton: UIButton! {
+        didSet {
+            self.addPhotoButton.setTitleColor(UIColor.buttonTitleColor(), for: .normal)
+            self.addPhotoButton.titleLabel?.font = UIFont(name: FontName.bold.rawValue, size: 18.0)
+            
+        }
+    }
+    
     @IBOutlet weak var editPhotoButtonsStackView: UIStackView!
     @IBOutlet weak var ingredientsAndStepsStackView: UIStackView!
     
@@ -120,8 +122,7 @@ class RecipeDetailsViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var recipeDetailsTopConstraintWithNoImage: NSLayoutConstraint!
-    @IBOutlet weak var recipeDetailsTopConstraintWithImage: NSLayoutConstraint!
+    @IBOutlet weak var recipeDetailsTopConstraint: NSLayoutConstraint!
     
     // MARK: Normal Mode Props
     var recipe: Recipe?
@@ -145,6 +146,10 @@ class RecipeDetailsViewController: UIViewController {
             self.mainContainerView.layer.cornerRadius = 24.0
             self.mainContainerView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         }
+    }
+    
+    deinit {
+        print("RRR")
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -227,10 +232,14 @@ class RecipeDetailsViewController: UIViewController {
                 
                 imageView.image = decodedImage
                 
+                recipeDetailsTopConstraint.constant = 175.0
+                
                 self.mainContainerView.layer.cornerRadius = 24.0
             }
         } else {
             imageView.isHidden = true
+            
+            recipeDetailsTopConstraint.constant = 0.0
             
             mainContainerView.layer.cornerRadius = 0.0
         }
@@ -241,9 +250,7 @@ class RecipeDetailsViewController: UIViewController {
         
         recipeTitle.isHidden = editMode
         ingredientsAndStepsStackView.isHidden = editMode
-        self.editPhotoButtonsStackView.isHidden = !editMode
         
-        changePhotoButton.isHidden = !editMode
         recipeNameTextField.isHidden = !editMode
         portionsTextField.isHidden = !editMode
         durationButton.isHidden = !editMode
@@ -278,6 +285,15 @@ class RecipeDetailsViewController: UIViewController {
         } else {
             setupRecipeDetails()
         }
+        
+        if editMode == true {
+            editPhotoButtonsStackView.isHidden = imageView.image == nil
+            addPhotoButton.isHidden = imageView.image != nil
+        } else {
+            editPhotoButtonsStackView.isHidden = true
+            addPhotoButton.isHidden = true
+        }
+        
     }
     
     private func changedRecipeDictionary() -> [String: Any] {
@@ -398,6 +414,9 @@ class RecipeDetailsViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
                                                             target: self,
                                                             action: #selector(editPressed))
+        if recipe?.recipeImage == nil {
+            imageView.image = nil
+        }
         
         setScreenInEditMode(editMode: false)
     }
@@ -416,7 +435,20 @@ class RecipeDetailsViewController: UIViewController {
     }
     
     @IBAction func removePhotoPressed(_ sender: Any) {
+        changedRecipe.imageData = nil
+        
+        imageView.image = nil
+        
+        recipeDetailsTopConstraint.constant = 0.0
+        
+        editPhotoButtonsStackView.isHidden = true
+        addPhotoButton.isHidden = false
     }
+    
+    @IBAction func addPhotoPressed(_ sender: Any) {
+        self.changePhotoPressed(sender)
+    }
+    
     @IBAction func difficultyPressed(_ sender: Any) {
         let dificultyPickerView = DificultyPickerView()
         
@@ -504,6 +536,11 @@ extension RecipeDetailsViewController: UIImagePickerControllerDelegate, UINaviga
                 changedRecipe.imageData = imageData.base64EncodedString()
                 
                 imageView.image = image
+                
+                recipeDetailsTopConstraint.constant = 175.0
+                
+                editPhotoButtonsStackView.isHidden = false
+                addPhotoButton.isHidden = true
             }
             
             picker.dismiss(animated: true, completion: nil)
