@@ -98,10 +98,17 @@ class IngredientsViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(animated)
         
         self.navigationItem.hidesBackButton = false
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     @IBAction func addIngredientPressed(_ sender: Any) {

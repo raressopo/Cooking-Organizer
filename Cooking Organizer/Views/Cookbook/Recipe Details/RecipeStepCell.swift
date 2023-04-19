@@ -24,6 +24,9 @@ class RecipeStepCell: UITableViewCell {
         checkbox.uncheckedBorderColor = UIColor.buttonTitleColor()
         checkbox.checkedBorderColor = UIColor.buttonTitleColor()
         checkbox.checkmarkColor = UIColor.buttonTitleColor()
+        
+        stepNrLabel.font = UIFont(name: FontName.bold.rawValue, size: 17.0)
+        stepDetailLabel.font = UIFont(name: FontName.regular.rawValue, size: 16.0)
     }
     
     func changeCheckedState(to checked: Bool) {

@@ -1206,7 +1206,7 @@
             <objects>
                 <viewController id="BJT-sn-UAr" customClass="IngredientsViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eu7-Wr-QEG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sTP-I4-PYu">
@@ -1277,7 +1277,7 @@
             <objects>
                 <viewController id="TYV-uc-wN1" customClass="StepsViewController" customModule="Cooking_Organizer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wcv-P7-l6g">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Y6m-S3-vDE">
@@ -1403,8 +1403,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="T8q-3g-iSZ"/>
-        <segue reference="bvo-wQ-NWI"/>
+        <segue reference="b2q-PZ-7Jm"/>
+        <segue reference="AtY-x0-etT"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="book" catalog="system" width="128" height="102"/>

@@ -93,10 +93,18 @@ class StepsViewController: UIViewController {
             self.noStepsAddedLabel.isHidden = true
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        super .viewWillDisappear(animated)
+        super.viewWillDisappear(animated)
         
         self.navigationItem.hidesBackButton = false
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     @IBAction func addStepPressed(_ sender: Any) {
@@ -325,7 +333,7 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
                 fatalError("cell should be RecipeStepCell type")
             }
             
-            cell.stepNrLabel.text = "\(indexPath.row + 1)"
+            cell.stepNrLabel.text = "\(indexPath.row + 1)."
             cell.stepDetailLabel.text = steps[indexPath.row]
             
             cell.selectionStyle = .none
@@ -338,6 +346,11 @@ extension StepsViewController: UITableViewDelegate, UITableViewDataSource {
         if createRecipeMode {
             return 100.0
         } else {
+            if let font = UIFont(name: FontName.regular.rawValue, size: 16.0) {
+                return steps[indexPath.row].height(withConstrainedWidth: self.stepsTableView.frame.width - 152,
+                                                   font: font) + 32
+            }
+            
             return 60.0
         }
     }
@@ -445,6 +458,27 @@ extension StepsViewController: StepExtendedTextViewDelegate {
     
     func stepDetailsCanceled() {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+}
+
+extension String {
+    
+    func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect,
+                                            options: .usesLineFragmentOrigin,
+                                            attributes: [.font: font],
+                                            context: nil)
+    
+        return ceil(boundingBox.height)
+    }
+
+    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
+
+        return ceil(boundingBox.width)
     }
     
 }
